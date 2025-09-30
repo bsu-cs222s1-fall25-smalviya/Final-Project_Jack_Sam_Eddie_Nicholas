@@ -5,7 +5,7 @@ Write summary here
 
 ## Team Members
 - Jack Wagner 
-- (Replace With Your Name)
+- Sam Allen
 - (Replace With Your Name)
 - (Replace With Your Name)
 
