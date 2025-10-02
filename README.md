@@ -6,7 +6,7 @@ Write summary here
 ## Team Members
 - Jack Wagner 
 - Sam Allen
-- (Replace With Your Name)
+- Eddie Julian-Caballero
 - (Replace With Your Name)
 
 ## Build Instructions
