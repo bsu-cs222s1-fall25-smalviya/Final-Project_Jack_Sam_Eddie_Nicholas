@@ -7,7 +7,7 @@ Write summary here
 - Jack Wagner 
 - Sam Allen
 - Eddie Julian-Caballero
-- (Replace With Your Name)
+- Nicholas Braeman
 
 ## Build Instructions
 1. Clone the repository
