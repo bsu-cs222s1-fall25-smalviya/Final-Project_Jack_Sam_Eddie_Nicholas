@@ -1,19 +1,19 @@
 package edu.bsu.cs;
 
 public class Pair {
-    String left;
-    String right;
+    String name;
+    String latLong;
 
-    public Pair(String left, String right){
-        this.left = left;
-        this.right = right;
+    public Pair(String name, String latLong){
+        this.name = name;
+        this.latLong = latLong;
     }
 
-    protected String getLeft(){
-        return this.left;
+    protected String getName(){
+        return this.name;
     }
 
-    protected String getRight(){
-        return this.right;
+    protected String getLatLong(){
+        return this.latLong;
     }
 }

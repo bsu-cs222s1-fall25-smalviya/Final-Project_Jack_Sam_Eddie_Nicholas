@@ -17,8 +17,8 @@ public class Converter {
     public String locationToLatLong(String name){
         int i;
         for(i=0; i<this.locationPairs.size(); i++){
-            if(name.equals(this.locationPairs.get(i).getLeft())){
-                return this.locationPairs.get(i).getRight();
+            if(name.equals(this.locationPairs.get(i).getName())){
+                return this.locationPairs.get(i).getLatLong();
             }
         }
         return null;
