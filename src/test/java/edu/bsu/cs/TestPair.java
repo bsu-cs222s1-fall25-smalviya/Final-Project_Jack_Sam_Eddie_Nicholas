@@ -8,13 +8,13 @@ public class TestPair {
 
     @Test
     public void testGetLeft(){
-        String city = locationLatLong.getLeft();
+        String city = locationLatLong.getName();
         Assertions.assertEquals("Muncie", city);
     }
 
     @Test
     public void testGetRight(){
-        String latLong = locationLatLong.getRight();
+        String latLong = locationLatLong.getLatLong();
         Assertions.assertEquals("40.1933,-85.3863", latLong);
     }
 }
