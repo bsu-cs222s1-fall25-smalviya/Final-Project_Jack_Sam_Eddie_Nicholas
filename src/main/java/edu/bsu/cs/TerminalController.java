@@ -6,31 +6,29 @@ public class TerminalController {
 
     protected String getPreferencePreferences(){
         Scanner scanner = new Scanner(System.in);
-        String preferences;
 
         System.out.println("Would you like to set default preferences? (Y/N) ");
         String response = scanner.nextLine();
         scanner.close();
 
         if (response.equalsIgnoreCase("Y")){
-            return preferences;
+            return "true";
         } else if (response.equalsIgnoreCase("N")){
-            return "blank";
+            return "false";
         } else {
             System.out.println("Invalid response. Defaulted to no preferences. ");
-            return "blank";
+            return "false";
         }
     }
 
     /*protected String getLocationPreference(){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Would you like to set a default location? (Y/N");
+        System.out.println("What would you like your default location to be? ";
+        System.out.println("Choose from these options: ");
+        ///for
         String response = scanner.nextLine();
 
-        if (response.equalsIgnoreCase("Y")){
-
-        return "";
     }*/
 
     protected String getTempPreference() {
