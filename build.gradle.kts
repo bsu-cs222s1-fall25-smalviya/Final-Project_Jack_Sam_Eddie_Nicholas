@@ -13,6 +13,8 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("net.minidev:json-smart:2.6.0")
+    implementation("com.jayway.jsonpath:json-path:2.9.0")
 }
 
 tasks.test {

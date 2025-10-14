@@ -16,7 +16,10 @@ public class APIDataFormaterTest {
 
         APIDataFormater apiDataFormater = new APIDataFormater();
         InputStream weatherData = Thread.currentThread().getContextClassLoader().getResourceAsStream("hourlyWeather.json");
-        ArrayList<String> actualArray = apiDataFormater.WeatherApiParser(weatherData);
+        ArrayList<String> actualArray = null;
+        if (weatherData != null) {
+            actualArray = apiDataFormater.WeatherApiParser(weatherData);
+        }
         Assertions.assertEquals(trueArray, actualArray);
     }
 }
