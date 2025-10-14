@@ -10,8 +10,9 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.ReadContext;
+import net.minidev.json.JSONArray;
 
-public class APIDataFormater {
+public class APIDataParser {
 
     protected ArrayList<String> WeatherApiParser(InputStream weatherData) throws IOException {
         String json = new String(weatherData.readAllBytes(), StandardCharsets.UTF_8);
@@ -34,5 +35,15 @@ public class APIDataFormater {
                 humidity,
                 windSpeed + " " + windDirection
         ));
+    }
+
+
+    //Searches for proper JsonPath based on the query you request
+    //forecast; forecastHourly
+    protected String weatherAPILinkParser(InputStream weatherData, String weatherQuery) throws IOException {
+        String searchQuery = "$..properties." + weatherQuery;
+        JSONArray queryResult;
+        queryResult = JsonPath.read(weatherData, searchQuery);
+        return queryResult.getFirst().toString();
     }
 }
