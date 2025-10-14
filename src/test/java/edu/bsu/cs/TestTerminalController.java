@@ -9,16 +9,22 @@ public class TestTerminalController {
     TerminalController terminalController = new TerminalController();
 
     @Test
-    public void testGetPreferences(){
+    public void testGetPreferencePreferences(){
         String simulatedInput = "nothing";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-        String preferences = terminalController.getPreferences();
-        Assertions.assertEquals("blank", preferences);
+        String preference = terminalController.getPreferencePreferences();
+        Assertions.assertEquals("false", preference);
 
         simulatedInput = "Y";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-        preferences = terminalController.getPreferences();
-        Assertions.assertEquals("")
+        preference = terminalController.getPreferencePreferences();
+        Assertions.assertEquals("true", preference);
+
+        simulatedInput = "N";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        preference = terminalController.getPreferencePreferences();
+        Assertions.assertEquals("false", preference);
+
     }
 
     @Test
