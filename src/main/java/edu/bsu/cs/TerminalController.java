@@ -1,5 +1,6 @@
 package edu.bsu.cs;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TerminalController {
@@ -21,15 +22,23 @@ public class TerminalController {
         }
     }
 
-    /*protected String getLocationPreference(){
+    protected String getLocationPreference(ArrayList<Pair> locations){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("What would you like your default location to be? ";
+        System.out.println("What would you like your default location to be? ");
         System.out.println("Choose from these options: ");
-        ///for
+        for (Pair i: locations){
+            System.out.println(i.getName());
+        }
         String response = scanner.nextLine();
-
-    }*/
+        for (Pair i: locations){
+            if (response.equalsIgnoreCase(i.getName())){
+                return response.toLowerCase();
+            }
+        }
+        System.out.println("Invalid response. Defaulted to Muncie. ");
+        return "muncie";
+    }
 
     protected String getUnitPreference() {
         Scanner scanner = new Scanner(System.in);
