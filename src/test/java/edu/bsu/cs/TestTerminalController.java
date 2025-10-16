@@ -28,20 +28,20 @@ public class TestTerminalController {
     }
 
     @Test
-    public void testGetTempPreference(){
+    public void testGetUnitPreference(){
         String simulatedInput = "nothing";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-        String preference = terminalController.getTempPreference();
+        String preference = terminalController.getUnitPreference();
         Assertions.assertEquals("fahrenheit", preference);
 
         simulatedInput = "f";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-        preference = terminalController.getTempPreference();
+        preference = terminalController.getUnitPreference();
         Assertions.assertEquals("fahrenheit", preference);
 
         simulatedInput = "c";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-        preference = terminalController.getTempPreference();
+        preference = terminalController.getUnitPreference();
         Assertions.assertEquals("celsius", preference);
     }
 }

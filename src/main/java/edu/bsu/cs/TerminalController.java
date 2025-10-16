@@ -31,20 +31,20 @@ public class TerminalController {
 
     }*/
 
-    protected String getTempPreference() {
+    protected String getUnitPreference() {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Would you like temperature to be in Fahrenheit or Celsius? (F/C)");
+        System.out.println("Would you like units to be in Imperial or Metric? (I/M)");
         String unitPreference = scanner.nextLine();
         scanner.close();
 
-        if (unitPreference.equalsIgnoreCase("F")) {
-            return "fahrenheit";
-        } else if (unitPreference.equalsIgnoreCase("C")) {
-            return "celsius";
+        if (unitPreference.equalsIgnoreCase("I")) {
+            return "imperial";
+        } else if (unitPreference.equalsIgnoreCase("M")) {
+            return "metric";
         } else {
-            System.out.println("Invalid response. Defaulted to Fahrenheit");
-            return "fahrenheit";
+            System.out.println("Invalid response. Defaulted to Imperial");
+            return "imperial";
         }
     }
 }
