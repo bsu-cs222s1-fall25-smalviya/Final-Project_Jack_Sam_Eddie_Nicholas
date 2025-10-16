@@ -32,16 +32,16 @@ public class TestTerminalController {
         String simulatedInput = "nothing";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         String preference = terminalController.getUnitPreference();
-        Assertions.assertEquals("fahrenheit", preference);
+        Assertions.assertEquals("imperial", preference);
 
-        simulatedInput = "f";
+        simulatedInput = "i";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         preference = terminalController.getUnitPreference();
-        Assertions.assertEquals("fahrenheit", preference);
+        Assertions.assertEquals("imperial", preference);
 
-        simulatedInput = "c";
+        simulatedInput = "m";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         preference = terminalController.getUnitPreference();
-        Assertions.assertEquals("celsius", preference);
+        Assertions.assertEquals("metric", preference);
     }
 }
