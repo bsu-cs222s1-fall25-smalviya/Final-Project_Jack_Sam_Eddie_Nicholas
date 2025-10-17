@@ -14,13 +14,14 @@ public class APIDataFormatterTest {
     public void testFormatWeatherData() {
         APIDataFormatter dataFormatter = new APIDataFormatter();
         ArrayList<String> weatherData = new ArrayList<>(Arrays.asList("71", "0%", "5", "34%", "7 mph NNE"));
-        String expectedOutput =
-                "Current Weather:\n" +
-                        "  • Temperature: 71°F\n" +
-                        "  • Precipitation: 0%\n" +
-                        "  • Dew Point: 5°C\n" +
-                        "  • Humidity: 34%\n" +
-                        "  • Wind: 7 mph NNE\n";
+        String expectedOutput = """
+        Current Weather:
+          • Temperature: 71°F
+          • Precipitation: 0%
+          • Dew Point: 5°C
+          • Humidity: 34%
+          • Wind: 7 mph NNE
+        """;
         String actualOutput = dataFormatter.formatWeatherData(weatherData);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
@@ -39,9 +40,8 @@ public class APIDataFormatterTest {
     public void testTooFewDataPoints() {
         APIDataFormatter dataFormatter = new APIDataFormatter();
         ArrayList<String> weatherData = new ArrayList<>(Arrays.asList("71", "0%", "5", "34%"));
-        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            dataFormatter.formatWeatherData(weatherData);
-        });
+        Exception exception = Assertions.assertThrows(IllegalArgumentException.class,
+                () -> dataFormatter.formatWeatherData(weatherData));
         String expectedMessage = "Weather data must contain exactly 5 data points.";
         String actualMessage = exception.getMessage();
         Assertions.assertTrue(actualMessage.contains(expectedMessage));
@@ -51,9 +51,8 @@ public class APIDataFormatterTest {
     public void testTooManyDataPoints() {
         APIDataFormatter dataFormatter = new APIDataFormatter();
         ArrayList<String> weatherData = new ArrayList<>(Arrays.asList("71", "0%", "5", "34%", "7 mph NNE", "extra"));
-        Exception exception = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            dataFormatter.formatWeatherData(weatherData);
-        });
+        Exception exception = Assertions.assertThrows(IllegalArgumentException.class,
+                () -> dataFormatter.formatWeatherData(weatherData));
         String expectedMessage = "Weather data must contain exactly 5 data points.";
         String actualMessage = exception.getMessage();
         Assertions.assertTrue(actualMessage.contains(expectedMessage));
