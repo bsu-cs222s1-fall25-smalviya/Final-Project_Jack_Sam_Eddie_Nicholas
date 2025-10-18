@@ -1,2 +1,4 @@
-muncie;40.1933,-85.3863;
-indianapolis;39.791,-86.148;
+Muncie, IN;40.1933,-85.3863;
+Indianapolis, IN;39.791,-86.148;
+Hoboken, NJ;40.7128,-74.006;
+Florida City, FL;25.45,-80.49;

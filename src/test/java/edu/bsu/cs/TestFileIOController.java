@@ -31,8 +31,10 @@ public class TestFileIOController {
     @Test
     public void testLoadCities() throws FileNotFoundException {
         ArrayList<Pair> expectedCitiesList = new ArrayList<>();
-        expectedCitiesList.add(new Pair("muncie", "40.1933,-85.3863"));
-        expectedCitiesList.add(new Pair("indianapolis", "39.791,-86.148"));
+        expectedCitiesList.add(new Pair("Muncie, IN", "40.1933,-85.3863"));
+        expectedCitiesList.add(new Pair("Indianapolis, IN", "39.791,-86.148"));
+        expectedCitiesList.add(new Pair("Hoboken, NJ", "40.7128,-74.006"));
+        expectedCitiesList.add(new Pair("Florida City, FL", "25.45,-80.49"));
 
         ArrayList<Pair> actualCitiesList = fileIO.loadCities();
 
