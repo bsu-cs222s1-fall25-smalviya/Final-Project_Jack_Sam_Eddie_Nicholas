@@ -7,8 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class TestFileIOController {
-    FileIOController fileIO = new FileIOController();
+public class TestFileController {
+    FileController fileIO = new FileController();
 
     @Test
     public void testSavePreferences() throws IOException {

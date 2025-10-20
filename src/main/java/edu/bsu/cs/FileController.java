@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class FileIOController {
+public class FileController {
     protected void savePreferences(String preferences) throws IOException {
         File file = new File("src/main/resources/edu/bsu/cs/Preferences.txt");
         FileWriter fw = new FileWriter(file.getAbsoluteFile());
