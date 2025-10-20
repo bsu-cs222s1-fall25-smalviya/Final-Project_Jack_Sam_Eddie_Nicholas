@@ -4,10 +4,29 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class TestTerminalController {
     TerminalController terminalController = new TerminalController();
+    FileController fileController = new FileController();
+
+    //TODO: figure out how to assert this
+    @Test
+    public void testPrintWelcomeMessage(){
+        String expectedPrinted = "Welcome to the CS220 Weather App!";
+        terminalController.printWelcomeMessage();
+        //Assertions.assert;
+    }
+
+    //TODO: figure out how to assert this
+    @Test
+    public void testPrintLocations() throws FileNotFoundException {
+        ArrayList<Pair> locations = fileController.loadCities();
+        terminalController.printLocations(locations);
+        //Assertions.assert;
+    }
 
     @Test
     public void testGetPreferencePreferences(){
