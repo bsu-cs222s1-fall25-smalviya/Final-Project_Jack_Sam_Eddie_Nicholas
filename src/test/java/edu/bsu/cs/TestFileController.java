@@ -12,20 +12,27 @@ public class TestFileController {
 
     @Test
     public void testSavePreferences() throws IOException {
-        String expectedPreferences = "false, indianapolis, metric";
+        String[] expectedPreferences = {"false", "indianapolis", "metric"};
         fileIO.savePreferences(expectedPreferences);
-        String actualPreferences = fileIO.loadPreferences();
-        Assertions.assertEquals(expectedPreferences, actualPreferences);
+        String[] actualPreferences = fileIO.loadPreferences();
 
-        String defaultPreferences = "true, muncie, imperial";
+        int i;
+        for (i=0;i<actualPreferences.length;i++) {
+            Assertions.assertEquals(expectedPreferences[i], actualPreferences[i]);
+        }
+
+        String[] defaultPreferences = {"false", "muncie", "imperial"};
         fileIO.savePreferences(defaultPreferences);
     }
 
     @Test
     public void testLoadPreferences() throws FileNotFoundException {
-        String expectedPreferences = "true, muncie, imperial";
-        String actualPreferences = fileIO.loadPreferences();
-        Assertions.assertEquals(expectedPreferences, actualPreferences);
+        String[] expectedPreferences = {"false", "muncie", "imperial"};
+        String[] actualPreferences = fileIO.loadPreferences();
+        int i;
+        for (i=0; i< actualPreferences.length; i++) {
+            Assertions.assertEquals(expectedPreferences[i], actualPreferences[i]);
+        }
     }
 
     @Test
