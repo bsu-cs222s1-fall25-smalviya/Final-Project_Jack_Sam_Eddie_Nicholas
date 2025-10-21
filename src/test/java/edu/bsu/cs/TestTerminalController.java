@@ -30,15 +30,6 @@ public class TestTerminalController {
         Assertions.assertEquals(simulatedInput, choice);
     }
 
-    //TODO: figure out how to assert this
-    @Test
-    public void testPrintLocations() throws FileNotFoundException {
-        ArrayList<Pair> locations = fileController.loadCities();
-        //Assertions.assert;
-    }
-
-
-
     @Test
     public void testGetPreferencePreferences(){
         String simulatedInput = "nothing";
