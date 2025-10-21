@@ -1,6 +1,6 @@
 package edu.bsu.cs;
 
-
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -15,78 +15,89 @@ public class TerminalMain {
     ArrayList<Pair> locations;
     String[] preferences;
 
-    //TODO: separate into main with preferences and main without
+    public TerminalMain() throws FileNotFoundException {
+        this.locations = this.fileController.loadCities();
+        this.preferences = this.fileController.loadPreferences();
+    }
+
     static void main() throws IOException {
         TerminalMain tm = new TerminalMain();
+        boolean keepGoing = true;
 
-        //TODO: remove
+        //TODO: remove this line
         tm.resetPreferences();
 
-        tm.locations = tm.fileController.loadCities();
-        tm.preferences = tm.fileController.loadPreferences();
-        InputStream weatherData;
-
         tm.terminalController.printWelcomeMessage();
-
-        if (tm.preferences[0].equals("true")){
-            weatherData = tm.getInitialWeatherDataFromPreferences();
-        } else {
-            String response = tm.terminalController.getPreferencePreferences();
-            if (response.equals("true")){
-                tm.preferences = tm.getPreferences();
-                tm.fileController.savePreferences(tm.preferences);
-                weatherData = tm.getInitialWeatherDataFromPreferences();
+        while (keepGoing) {
+            String choice = tm.terminalController.getUserChoice();
+            if (choice.equals("0")) {
+                keepGoing = false;
+            } else if (choice.equals("1")) {
+                tm.setPreferences();
+            } else if (choice.equals("2")) {
+                tm.getHourlyForecast();
+            } else if (choice.equals("3")) {
+                tm.getDailyForecast();
             } else {
-                weatherData = tm.getInitialWeatherData();
+                tm.terminalController.printInvalidResponse();
             }
         }
-
-        //hourly forecast
-        String hourlyForcastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
-        InputStream hourlyForecastData = tm.api.getConnectionFromURL(hourlyForcastURLString).getInputStream();
-        tm.dataParser.setWeatherData(hourlyForecastData);
-        tm.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> hourlyForecast = tm.dataParser.getDailyForecast();
-        int i;
-        for (i=1;i<7;i++){
-            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
-            System.out.println(tm.dataFormatter.formatWeatherData(forecast));
-        }
-
-
-        weatherData = tm.getInitialWeatherData();
-
-        //current forecast
-        String forecastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecast");
-        InputStream forecastData = tm.api.getConnectionFromURL(forecastURLString).getInputStream();
-        tm.dataParser.setWeatherData(forecastData);
-        tm.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> dailyForecast = tm.dataParser.getDailyForecast();
-        ArrayList<String> actualArray2 = dailyForecast.get("1");
-        System.out.println(actualArray2);
-
-        //TODO: remove
+        //TODO: remove this line
         tm.resetPreferences();
     }
 
-    private String[] getPreferences(){
+    private void setPreferences() throws IOException {
         String location = terminalController.getLocationPreference(this.locations);
         String units = terminalController.getUnitPreference();
-        return new String[]{"true", location, units};
+        fileController.savePreferences(new String[] {"true",location,units});
+    }
+
+    private void getHourlyForecast() throws IOException {
+        InputStream weatherData;
+        if (this.preferences[0].equals("true")) {
+            String link = api.createURLString(this.preferences[1]);
+            weatherData = api.getInputStreamFromURL(link);
+        } else {
+            String location = terminalController.getLocationPreference(this.locations);
+            String units = terminalController.getUnitPreference();
+            String link = api.createURLString(location);
+            weatherData = api.getInputStreamFromURL(link);
+        }
+
+        String hourlyForcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
+        InputStream hourlyForecastData = this.api.getInputStreamFromURL(hourlyForcastURLString);
+        this.dataParser.setWeatherData(hourlyForecastData);
+        this.dataParser.forecastData();
+        HashMap<String, ArrayList<String>> hourlyForecast = this.dataParser.getDailyForecast();
+        int i;
+        for (i=1;i<7;i++){
+            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
+            System.out.println(this.dataFormatter.formatWeatherData(forecast));
+        }
+    }
+
+    private void getDailyForecast() throws IOException {
+        InputStream weatherData;
+        if (this.preferences[0].equals("true")) {
+            String link = api.createURLString(this.preferences[1]);
+            weatherData = api.getInputStreamFromURL(link);
+        } else {
+            String location = terminalController.getLocationPreference(this.locations);
+            String units = terminalController.getUnitPreference();
+            String link = api.createURLString(location);
+            weatherData = api.getInputStreamFromURL(link);
+        }
+
+        String forecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
+        InputStream forecastData = this.api.getInputStreamFromURL(forecastURLString);
+        this.dataParser.setWeatherData(forecastData);
+        this.dataParser.forecastData();
+        HashMap<String, ArrayList<String>> dailyForecast = this.dataParser.getDailyForecast();
+        ArrayList<String> actualArray = dailyForecast.get("1");
+        System.out.println(actualArray);
     }
 
     private void resetPreferences() throws IOException {
         fileController.savePreferences(new String[] {"false","muncie, in","imperial"});
-    }
-
-    private InputStream getInitialWeatherDataFromPreferences() throws IOException {
-        String link = api.createURLString(this.preferences[2]);
-        return api.getConnectionFromURL(link).getInputStream();
-    }
-
-    private InputStream getInitialWeatherData() throws IOException {
-        String latLong = terminalController.getLocationPreference(this.locations);
-        String link = api.createURLString(latLong);
-        return api.getConnectionFromURL(link).getInputStream();
     }
 }
