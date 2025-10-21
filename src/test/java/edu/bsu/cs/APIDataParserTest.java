@@ -49,9 +49,9 @@ public class APIDataParserTest {
         Assertions.assertNotNull(weatherData);
         APIDataParser apiDataParser = new APIDataParser();
         ArrayList<String> trueArray = new ArrayList<>(Arrays.asList(
-                "Temperature 44",
+                "Temperature: 73",
                 "Precipitation: 0%",
-                "Wind Speed & Direction: 5mph NE"
+                "Wind Speed & Direction: 5 mph ENE"
         ));
         apiDataParser.setWeatherData(weatherData);
         apiDataParser.forecastData();

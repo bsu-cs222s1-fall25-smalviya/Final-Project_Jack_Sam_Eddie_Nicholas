@@ -1,5 +1,7 @@
+package edu.bsu.cs;
+
 public class OutfitRecommender {
-    //temperature, probabilityofPercipitation, windSpeed, winDirection, shortForecast
+    /*//temperature, probabilityofPercipitation, windSpeed, winDirection, shortForecast
     //t: \(F=(C\times 9/5)+32\) and Fahrenheit to Celsius: \(C=(F-32)\times 5/9\)
     protected void temperatureFahrenheitOutfitRecommender(){
         if (0<=fahrenheit && fahrenheit <= 5) {
@@ -18,5 +20,5 @@ public class OutfitRecommender {
         if (Boolean.parseBoolean(shortForecast = "sunny")){
             shortForecastOutfitRecommender = ""
         }
-    }
+    }*/
 }

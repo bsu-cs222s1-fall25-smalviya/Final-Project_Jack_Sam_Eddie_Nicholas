@@ -1,47 +1,71 @@
 package edu.bsu.cs;
 
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TerminalMain {
     TerminalController terminalController = new TerminalController();
     FileController fileController = new FileController();
     WeatherServiceAPI api = new WeatherServiceAPI();
     APIDataParser dataParser = new APIDataParser();
+    //APIDataFormatter dataFormatter = new APIDataFormatter();
+    ArrayList<Pair> locations;
+    String[] preferences;
 
     //TODO: separate into main with preferences and main without
-    public static void main(String[] args) throws IOException {
+    static void main() throws IOException {
         TerminalMain tm = new TerminalMain();
-        ArrayList<Pair> locations = tm.fileController.loadCities();
-        String[] preferences = tm.fileController.loadPreferences();
-        tm.terminalController.printWelcomeMessage();
+
+        //TODO: remove
+        tm.resetPreferences();
+
+        tm.locations = tm.fileController.loadCities();
+        tm.preferences = tm.fileController.loadPreferences();
         InputStream weatherData;
 
-        if (preferences[0].equals("true")){
-            System.out.println("Got weather data from preferences. ");
-            weatherData = tm.getWeatherDataFromPreferences(preferences);
+        tm.terminalController.printWelcomeMessage();
+
+        if (tm.preferences[0].equals("true")){
+            weatherData = tm.getInitialWeatherDataFromPreferences();
         } else {
             String response = tm.terminalController.getPreferencePreferences();
             if (response.equals("true")){
-                preferences = tm.getPreferences(locations);
-                tm.fileController.savePreferences(preferences);
-                System.out.println("Got Weather data from preferences. ");
-                weatherData = tm.getWeatherDataFromPreferences(preferences);
+                tm.preferences = tm.getPreferences();
+                tm.fileController.savePreferences(tm.preferences);
+                weatherData = tm.getInitialWeatherDataFromPreferences();
             } else {
-                tm.terminalController.printLocations(locations);
-                System.out.println("Got weather data.");
-                weatherData = tm.getWeatherData(locations);
+                weatherData = tm.getInitialWeatherData();
             }
         }
-        tm.dataParser.WeatherApiParser(weatherData);
+        //hourly forecast
+        String hourlyForcastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
+        InputStream hourlyForecastData = tm.api.getConnectionFromURL(hourlyForcastURLString).getInputStream();
+        tm.dataParser.setWeatherData(hourlyForecastData);
+        tm.dataParser.forecastData();
+        HashMap<String, ArrayList<String>> hourlyForecast = tm.dataParser.getDailyForecast();
+        ArrayList<String> actualArray1 = hourlyForecast.get("1");
+        System.out.println(actualArray1);
 
+        weatherData = tm.getInitialWeatherData();
+
+        //current forecast
+        String forecastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecast");
+        InputStream forecastData = tm.api.getConnectionFromURL(forecastURLString).getInputStream();
+        tm.dataParser.setWeatherData(forecastData);
+        tm.dataParser.forecastData();
+        HashMap<String, ArrayList<String>> dailyForecast = tm.dataParser.getDailyForecast();
+        ArrayList<String> actualArray2 = dailyForecast.get("1");
+        System.out.println(actualArray2);
+
+        //TODO: remove
         tm.resetPreferences();
     }
 
-    private String[] getPreferences(ArrayList<Pair> locations){
-        String location = terminalController.getLocationPreference(locations);
+    private String[] getPreferences(){
+        String location = terminalController.getLocationPreference(this.locations);
         String units = terminalController.getUnitPreference();
         return new String[]{"true", location, units};
     }
@@ -50,14 +74,14 @@ public class TerminalMain {
         fileController.savePreferences(new String[] {"false","muncie, in","imperial"});
     }
 
-    private InputStream getWeatherDataFromPreferences(String[] preferences){
-        String link = api.createURLString(preferences[1]);
-        return api.getConnctionFromURL(link);
+    private InputStream getInitialWeatherDataFromPreferences() throws IOException {
+        String link = api.createURLString(this.preferences[2]);
+        return api.getConnectionFromURL(link).getInputStream();
     }
 
-    private InputStream getWeatherData(ArrayList<Pair> locations){
-        String location = terminalController.getLocationPreference(locations);
-        String link = api.createURLString(location);
-        return api.getConnctionFromURL(link);
+    private InputStream getInitialWeatherData() throws IOException {
+        String latLong = terminalController.getLocationPreference(this.locations);
+        String link = api.createURLString(latLong);
+        return api.getConnectionFromURL(link).getInputStream();
     }
 }
