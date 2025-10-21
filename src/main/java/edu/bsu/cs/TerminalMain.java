@@ -16,7 +16,7 @@ public class TerminalMain {
     String[] preferences;
 
     //TODO: separate into main with preferences and main without
-    public static void main(String[] args) throws IOException {
+    static void main() throws IOException {
         TerminalMain tm = new TerminalMain();
 
         //TODO: remove
