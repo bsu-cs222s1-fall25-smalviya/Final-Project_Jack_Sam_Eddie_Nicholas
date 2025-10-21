@@ -13,19 +13,31 @@ public class TestTerminalController {
 
     //TODO: figure out how to assert this
     @Test
-    public void testPrintWelcomeMessage(){
-        String expectedPrinted = "Welcome to the CS220 Weather App!";
+    public void testPrintMessages() throws FileNotFoundException {
+        ArrayList<Pair> locations = fileController.loadCities();
+
         terminalController.printWelcomeMessage();
-        //Assertions.assert;
+        terminalController.printLocations(locations);
+    }
+
+    @Test
+    public void testGetUserChoice(){
+        String simulatedInput = "0";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+
+        String choice = terminalController.getUserChoice();
+
+        Assertions.assertEquals(simulatedInput, choice);
     }
 
     //TODO: figure out how to assert this
     @Test
     public void testPrintLocations() throws FileNotFoundException {
         ArrayList<Pair> locations = fileController.loadCities();
-        terminalController.printLocations(locations);
         //Assertions.assert;
     }
+
+
 
     @Test
     public void testGetPreferencePreferences(){

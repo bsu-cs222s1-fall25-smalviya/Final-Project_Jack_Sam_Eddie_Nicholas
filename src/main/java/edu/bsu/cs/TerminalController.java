@@ -8,6 +8,21 @@ public class TerminalController {
         System.out.println("Welcome to the CS220 Weather App!");
     }
 
+    protected String getUserChoice(){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("""
+                0: Exit the program.
+                1: Set preferences.
+                2: Get hourly weather conditions
+                3: Get daily weather conditions""");
+        return scanner.nextLine();
+    }
+
+    protected void printInvalidResponse(){
+        System.out.println("Invalid response. ");
+    }
+
     protected void printLocations(ArrayList<Pair> locations){
         for (int i = 0; i<locations.size(); i++){
             System.out.println(locations.get(i).getName());
