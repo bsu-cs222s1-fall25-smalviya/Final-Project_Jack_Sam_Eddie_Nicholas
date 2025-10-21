@@ -11,7 +11,7 @@ public class TerminalMain {
     FileController fileController = new FileController();
     WeatherServiceAPI api = new WeatherServiceAPI();
     APIDataParser dataParser = new APIDataParser();
-    //APIDataFormatter dataFormatter = new APIDataFormatter();
+    FormatData dataFormatter = new FormatData();
     ArrayList<Pair> locations;
     String[] preferences;
 
@@ -40,14 +40,19 @@ public class TerminalMain {
                 weatherData = tm.getInitialWeatherData();
             }
         }
+
         //hourly forecast
         String hourlyForcastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
         InputStream hourlyForecastData = tm.api.getConnectionFromURL(hourlyForcastURLString).getInputStream();
         tm.dataParser.setWeatherData(hourlyForecastData);
         tm.dataParser.forecastData();
         HashMap<String, ArrayList<String>> hourlyForecast = tm.dataParser.getDailyForecast();
-        ArrayList<String> actualArray1 = hourlyForecast.get("1");
-        System.out.println(actualArray1);
+        int i;
+        for (i=1;i<7;i++){
+            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
+            System.out.println(tm.dataFormatter.formatWeatherData(forecast));
+        }
+
 
         weatherData = tm.getInitialWeatherData();
 
