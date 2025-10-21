@@ -25,46 +25,33 @@ public class TerminalMain {
         tm.locations = tm.fileController.loadCities();
         tm.preferences = tm.fileController.loadPreferences();
         InputStream weatherData;
+        boolean keepGoing = true;
 
         tm.terminalController.printWelcomeMessage();
 
-        if (tm.preferences[0].equals("true")){
-            weatherData = tm.getInitialWeatherDataFromPreferences();
-        } else {
-            String response = tm.terminalController.getPreferencePreferences();
-            if (response.equals("true")){
-                tm.preferences = tm.getPreferences();
-                tm.fileController.savePreferences(tm.preferences);
+        while (keepGoing) {
+            if (tm.preferences[0].equals("true")) {
                 weatherData = tm.getInitialWeatherDataFromPreferences();
             } else {
-                weatherData = tm.getInitialWeatherData();
+                String response = tm.terminalController.getPreferencePreferences();
+                if (response.equals("true")) {
+                    tm.preferences = tm.getPreferences();
+                    tm.fileController.savePreferences(tm.preferences);
+                    weatherData = tm.getInitialWeatherDataFromPreferences();
+                } else {
+                    weatherData = tm.getInitialWeatherData();
+                }
+            }
+            String forecastType = tm.terminalController.getForecastType();
+            if (forecastType.equalsIgnoreCase("hourly")) {
+                tm.tempGetHourlyForecast(weatherData);
+            } else if (forecastType.equalsIgnoreCase("daily")) {
+                tm.tempGetDailyForecast(weatherData);
+            }
+            if (tm.terminalController.isUserDone()){
+                keepGoing = false;
             }
         }
-
-        //hourly forecast
-        String hourlyForcastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
-        InputStream hourlyForecastData = tm.api.getConnectionFromURL(hourlyForcastURLString).getInputStream();
-        tm.dataParser.setWeatherData(hourlyForecastData);
-        tm.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> hourlyForecast = tm.dataParser.getDailyForecast();
-        int i;
-        for (i=1;i<7;i++){
-            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
-            System.out.println(tm.dataFormatter.formatWeatherData(forecast));
-        }
-
-
-        weatherData = tm.getInitialWeatherData();
-
-        //current forecast
-        String forecastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecast");
-        InputStream forecastData = tm.api.getConnectionFromURL(forecastURLString).getInputStream();
-        tm.dataParser.setWeatherData(forecastData);
-        tm.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> dailyForecast = tm.dataParser.getDailyForecast();
-        ArrayList<String> actualArray2 = dailyForecast.get("1");
-        System.out.println(actualArray2);
-
         //TODO: remove
         tm.resetPreferences();
     }
@@ -88,5 +75,29 @@ public class TerminalMain {
         String latLong = terminalController.getLocationPreference(this.locations);
         String link = api.createURLString(latLong);
         return api.getConnectionFromURL(link).getInputStream();
+    }
+
+    private void tempGetHourlyForecast(InputStream weatherData) throws IOException {
+        String hourlyForcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
+        InputStream hourlyForecastData = this.api.getConnectionFromURL(hourlyForcastURLString).getInputStream();
+        this.dataParser.setWeatherData(hourlyForecastData);
+        this.dataParser.forecastData();
+        HashMap<String, ArrayList<String>> hourlyForecast = this.dataParser.getDailyForecast();
+        int i;
+        for (i=1;i<7;i++){
+            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
+            System.out.println(this.dataFormatter.formatWeatherData(forecast));
+        }
+    }
+
+    private void tempGetDailyForecast(InputStream weatherData) throws IOException {
+        String forecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
+        InputStream forecastData = this.api.getConnectionFromURL(forecastURLString).getInputStream();
+        this.dataParser.setWeatherData(forecastData);
+        this.dataParser.forecastData();
+        HashMap<String, ArrayList<String>> dailyForecast = this.dataParser.getDailyForecast();
+        ArrayList<String> actualArray2 = dailyForecast.get("1");
+        System.out.println(actualArray2);
+
     }
 }
