@@ -12,8 +12,6 @@ public class WeatherServiceAPI {
     protected InputStream getInputStreamFromURL(String urlString) throws IOException {
         URI uri = URI.create(urlString);
         URLConnection connection = uri.toURL().openConnection();
-        //TODO: connection.connect(); potentially redundant
-        connection.connect();
         return connection.getInputStream();
     }
 }

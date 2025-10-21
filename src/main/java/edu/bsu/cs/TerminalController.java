@@ -27,7 +27,6 @@ public class TerminalController {
         for (Pair i: locations) {
             System.out.println(i.getName());
         }
-        System.out.println();
     }
 
     protected String getPreferencePreferences(){
