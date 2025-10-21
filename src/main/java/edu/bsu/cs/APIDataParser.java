@@ -3,15 +3,11 @@ package edu.bsu.cs;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import com.jayway.jsonpath.*;
 
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
-import com.jayway.jsonpath.ReadContext;
-import net.minidev.json.JSONArray;
 
 public class APIDataParser {
 
@@ -19,7 +15,7 @@ public class APIDataParser {
     protected HashMap<String, ArrayList<String>> forecast = new HashMap<>();
 
     private ReadContext ctx;
-    private Configuration conf = Configuration.builder()
+    private final Configuration conf = Configuration.builder()
             .options(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS)
             .build();
 
@@ -47,13 +43,16 @@ public class APIDataParser {
         String windSpeed     = ("Wind Speed & Direction: " + ctx.read(base + ".windSpeed"));
         String windDirection = (ctx.read(base + ".windDirection")).toString();
 
-        return new ArrayList<>(List.of(
-                temperature,
-                precipitation,
-                dewPoint,
-                humidity,
-                windSpeed + " " + windDirection
-        ));
+
+        return Stream.of(
+                        temperature,
+                        precipitation,
+                        dewPoint,
+                        humidity,
+                        windSpeed + " " + windDirection
+                )
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 
