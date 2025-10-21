@@ -24,8 +24,8 @@ public class TerminalController {
     }
 
     protected void printLocations(ArrayList<Pair> locations){
-        for (int i = 0; i<locations.size(); i++){
-            System.out.println(locations.get(i).getName());
+        for (Pair i: locations) {
+            System.out.println(i.getName());
         }
         System.out.println();
     }
