@@ -16,29 +16,29 @@ import net.minidev.json.JSONArray;
 public class APIDataParser {
 
     protected HashMap<String, ArrayList<String>> hourlyForecast = new HashMap<>();
+    protected HashMap<String, ArrayList<String>> forecast = new HashMap<>();
 
-    private String jsonFile;
     private ReadContext ctx;
-
-    public APIDataParser(InputStream weatherDataStream) {
-        setWeatherData(weatherDataStream);
-    }
-
+    private Configuration conf = Configuration.builder()
+            .options(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS)
+            .build();
 
     protected void HourlyForecastData() throws IOException {
         for (int i = 1; i <= 7; i++){
-            hourlyForecast.put(String.valueOf(i), WeatherApiParser(weatherDataStream, i - 1));
+            hourlyForecast.put(String.valueOf(i), WeatherApiParser( i - 1));
+        }
+    }
+
+    protected void forecastData() throws IOException {
+        for (int i = 0; i <= 9; i++){
+            forecast.put(String.valueOf(i + 1), WeatherApiParser( i));
         }
     }
 
 
 
-    protected ArrayList<String> WeatherApiParser(InputStream weatherData, int periodQuery) throws IOException {
-        String json = new String(weatherData.readAllBytes(), StandardCharsets.UTF_8);
+    protected ArrayList<String> WeatherApiParser( int periodQuery) throws IOException {
         String base = "$.properties.periods[" + periodQuery + "]";
-
-        Configuration conf = Configuration.builder().options(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS).build();
-        ReadContext ctx = JsonPath.using(conf).parse(json);
 
         String temperature   = ("Temperature: " + ctx.read(base + ".temperature"));
         String precipitation = ("Precipitation: " + ctx.read(base + ".probabilityOfPrecipitation.value") + "%");
@@ -60,15 +60,16 @@ public class APIDataParser {
     //Searches for proper JsonPath based on the query you request
     //forecast; forecastHourly
     protected String weatherAPILinkParser(InputStream weatherData, String weatherQuery) throws IOException {
-        String searchQuery = "$..properties." + weatherQuery;
-        JSONArray queryResult;
-        queryResult = JsonPath.read(weatherData, searchQuery);
-        return queryResult.getFirst().toString();
+        String searchQuery = "$.properties." + weatherQuery;
+        return JsonPath.read(weatherData, searchQuery);
     }
 
     protected HashMap<String, ArrayList<String>> getHourlyForecast() {
         return hourlyForecast;
     }
 
-    public void set
+    public void setWeatherData(InputStream weatherDataStream) throws IOException{
+        String jsonFile = new String(weatherDataStream.readAllBytes(), StandardCharsets.UTF_8);
+        this.ctx = JsonPath.using(conf).parse(jsonFile);
+    }
 }
