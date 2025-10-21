@@ -4,13 +4,22 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TerminalController {
+    protected void printWelcomeMessage(){
+        System.out.println("Welcome to the CS220 Weather App!");
+    }
+
+    protected void printLocations(ArrayList<Pair> locations){
+        for (int i = 0; i<locations.size(); i++){
+            System.out.println(locations.get(i).getName());
+        }
+        System.out.println();
+    }
 
     protected String getPreferencePreferences(){
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Would you like to set default preferences? (Y/N) ");
         String response = scanner.nextLine();
-        scanner.close();
 
         if (response.equalsIgnoreCase("Y")){
             return "true";
@@ -23,13 +32,13 @@ public class TerminalController {
     }
 
     protected String getLocationPreference(ArrayList<Pair> locations){
-        Scanner scanner = new Scanner(System.in);
 
         System.out.println("What would you like your default location to be? ");
         System.out.println("Choose from these options: ");
-        for (Pair i: locations){
-            System.out.println(i.getName());
-        }
+        this.printLocations(locations);
+
+
+        Scanner scanner = new Scanner(System.in);
         String response = scanner.nextLine();
         for (Pair i: locations){
             if (response.equalsIgnoreCase(i.getName())){
