@@ -26,16 +26,15 @@ public class APIDataParserTest {
         apiDataParser.setWeatherData(weatherData);
         apiDataParser.HourlyForecastData();
         HashMap<String, ArrayList<String>> hourlyForecast = apiDataParser.getHourlyForecast();
-        System.out.println(hourlyForecast);
         ArrayList<String> actualArray = hourlyForecast.get("1");
         Assertions.assertEquals(trueArray, actualArray);
     }
 
     @Test
-    public void WeatherAPILinkParserTest() throws IOException {
+    public void parseWeatherAPILinkTest() throws IOException {
         InputStream weatherData = getClass().getResourceAsStream("/weatherContext.json");
         APIDataParser apiDataParser = new APIDataParser();
-        String actualUrl = apiDataParser.weatherAPILinkParser(weatherData, "forecastHourly");
+        String actualUrl = apiDataParser.parseWeatherAPILink(weatherData, "forecastHourly");
         String expectedUrl = "https://api.weather.gov/gridpoints/IND/83,90/forecast/hourly";
         Assertions.assertEquals(
                 expectedUrl,
@@ -45,7 +44,19 @@ public class APIDataParserTest {
     }
 
     @Test
-    public void WeatherInformationForecastTest() {
-
+    public void WeatherInformationForecastTest() throws IOException {
+        InputStream weatherData = getClass().getResourceAsStream("/dailyWeatherForecast.json");
+        Assertions.assertNotNull(weatherData);
+        APIDataParser apiDataParser = new APIDataParser();
+        ArrayList<String> trueArray = new ArrayList<>(Arrays.asList(
+                "Temperature 44",
+                "Precipitation: 0%",
+                "Wind Speed & Direction: 5mph NE"
+        ));
+        apiDataParser.setWeatherData(weatherData);
+        apiDataParser.forecastData();
+        HashMap<String, ArrayList<String>> dailyForecast = apiDataParser.getDailyForecast();
+        ArrayList<String> actualArray = dailyForecast.get("1");
+        Assertions.assertEquals(trueArray, actualArray);
     }
 }
