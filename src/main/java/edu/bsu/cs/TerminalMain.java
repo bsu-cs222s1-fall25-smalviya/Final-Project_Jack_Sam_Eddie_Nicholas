@@ -48,9 +48,7 @@ public class TerminalMain {
             } else if (forecastType.equalsIgnoreCase("daily")) {
                 tm.tempGetDailyForecast(weatherData);
             }
-            if (tm.terminalController.isUserDone()){
-                keepGoing = false;
-            }
+            keepGoing = !tm.terminalController.isUserDone();
         }
         //TODO: remove
         tm.resetPreferences();

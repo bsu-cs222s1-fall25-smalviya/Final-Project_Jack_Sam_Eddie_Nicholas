@@ -48,18 +48,18 @@ public class TestTerminalController {
     @Test
     public void testGetLocationPreference(){
         ArrayList<Pair> locations = new ArrayList<>();
-        Pair indianapolis = new Pair("Indianapolis", "");
+        Pair indianapolis = new Pair("Indianapolis", "39.791,-86.148");
         locations.add(indianapolis);
 
         String simulatedInput = "nothing";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         String preference = terminalController.getLocationPreference(locations);
-        Assertions.assertEquals("muncie", preference);
+        Assertions.assertEquals("40.1933,-85.3863", preference);
 
         simulatedInput = "indianapolis";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         preference = terminalController.getLocationPreference(locations);
-        Assertions.assertEquals("indianapolis", preference);
+        Assertions.assertEquals("39.791,-86.148", preference);
     }
 
     @Test
@@ -78,5 +78,41 @@ public class TestTerminalController {
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         preference = terminalController.getUnitPreference();
         Assertions.assertEquals("metric", preference);
+    }
+
+    @Test
+    public void testGetForecastType(){
+        String simulatedInput = "nothing";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        String preference = terminalController.getForecastType();
+        Assertions.assertEquals("daily", preference);
+
+        simulatedInput = "d";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        preference = terminalController.getForecastType();
+        Assertions.assertEquals("daily", preference);
+
+        simulatedInput = "h";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        preference = terminalController.getForecastType();
+        Assertions.assertEquals("hourly", preference);
+    }
+
+    @Test
+    public void testIsUserDone(){
+        String simulatedInput = "nothing";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        boolean preference = terminalController.isUserDone();
+        Assertions.assertFalse(preference);
+
+        simulatedInput = "y";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        preference = terminalController.isUserDone();
+        Assertions.assertTrue(preference);
+
+        simulatedInput = "n";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        preference = terminalController.isUserDone();
+        Assertions.assertFalse(preference);
     }
 }
