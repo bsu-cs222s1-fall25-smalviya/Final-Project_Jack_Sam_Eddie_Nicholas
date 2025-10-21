@@ -29,23 +29,36 @@ public class TerminalMain {
         tm.terminalController.printWelcomeMessage();
 
         if (tm.preferences[0].equals("true")){
-            weatherData = tm.getWeatherDataFromPreferences();
+            weatherData = tm.getInitialWeatherDataFromPreferences();
         } else {
             String response = tm.terminalController.getPreferencePreferences();
             if (response.equals("true")){
                 tm.preferences = tm.getPreferences();
                 tm.fileController.savePreferences(tm.preferences);
-                weatherData = tm.getWeatherDataFromPreferences();
+                weatherData = tm.getInitialWeatherDataFromPreferences();
             } else {
-                weatherData = tm.getWeatherData();
+                weatherData = tm.getInitialWeatherData();
             }
         }
+        //hourly forecast
+        String hourlyForcastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
+        InputStream hourlyForecastData = tm.api.getConnectionFromURL(hourlyForcastURLString).getInputStream();
+        tm.dataParser.setWeatherData(hourlyForecastData);
+        tm.dataParser.forecastData();
+        HashMap<String, ArrayList<String>> hourlyForecast = tm.dataParser.getDailyForecast();
+        ArrayList<String> actualArray1 = hourlyForecast.get("1");
+        System.out.println(actualArray1);
 
-        tm.dataParser.setWeatherData(weatherData);
+        weatherData = tm.getInitialWeatherData();
+
+        //current forecast
+        String forecastURLString = tm.dataParser.parseWeatherAPILink(weatherData, "forecast");
+        InputStream forecastData = tm.api.getConnectionFromURL(forecastURLString).getInputStream();
+        tm.dataParser.setWeatherData(forecastData);
         tm.dataParser.forecastData();
         HashMap<String, ArrayList<String>> dailyForecast = tm.dataParser.getDailyForecast();
-        ArrayList<String> actualArray = dailyForecast.get("1");
-        System.out.println(actualArray);
+        ArrayList<String> actualArray2 = dailyForecast.get("1");
+        System.out.println(actualArray2);
 
         //TODO: remove
         tm.resetPreferences();
@@ -61,12 +74,12 @@ public class TerminalMain {
         fileController.savePreferences(new String[] {"false","muncie, in","imperial"});
     }
 
-    private InputStream getWeatherDataFromPreferences() throws IOException {
+    private InputStream getInitialWeatherDataFromPreferences() throws IOException {
         String link = api.createURLString(this.preferences[2]);
         return api.getConnectionFromURL(link).getInputStream();
     }
 
-    private InputStream getWeatherData() throws IOException {
+    private InputStream getInitialWeatherData() throws IOException {
         String latLong = terminalController.getLocationPreference(this.locations);
         String link = api.createURLString(latLong);
         return api.getConnectionFromURL(link).getInputStream();
