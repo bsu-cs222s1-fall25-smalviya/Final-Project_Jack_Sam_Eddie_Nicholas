@@ -19,13 +19,13 @@ public class APIDataParser {
             .options(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS)
             .build();
 
-    protected void HourlyForecastData() throws IOException {
+    protected void HourlyForecastData(){
         for (int i = 1; i <= 7; i++){
             hourlyForecast.put(String.valueOf(i), WeatherApiParser( i - 1));
         }
     }
 
-    protected void forecastData() throws IOException {
+    protected void forecastData(){
         for (int i = 0; i <= 9; i++){
             forecast.put(String.valueOf(i + 1), WeatherApiParser( i));
         }
@@ -33,7 +33,7 @@ public class APIDataParser {
 
 
 
-    protected ArrayList<String> WeatherApiParser( int periodQuery) throws IOException {
+    protected ArrayList<String> WeatherApiParser( int periodQuery){
         String base = "$.properties.periods[" + periodQuery + "]";
 
         String temperature   = ("Temperature: " + ctx.read(base + ".temperature"));

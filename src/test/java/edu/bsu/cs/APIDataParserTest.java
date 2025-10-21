@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class APIDataParserTest {
 
     @Test
-    public void WeatherInformationParserTest() throws IOException {
+    public void WeatherInformationHourlyForecastTest() throws IOException {
         ArrayList<String> trueArray = new ArrayList<>(Arrays.asList("Temperature: 71",
                 "Precipitation: 0%",
                 "Dew Point: 5",
@@ -26,6 +26,7 @@ public class APIDataParserTest {
         apiDataParser.setWeatherData(weatherData);
         apiDataParser.HourlyForecastData();
         HashMap<String, ArrayList<String>> hourlyForecast = apiDataParser.getHourlyForecast();
+        System.out.println(hourlyForecast);
         ArrayList<String> actualArray = hourlyForecast.get("1");
         Assertions.assertEquals(trueArray, actualArray);
     }
@@ -40,6 +41,11 @@ public class APIDataParserTest {
                 expectedUrl,
                 actualUrl.replace("\\/", "/")
         );
+
+    }
+
+    @Test
+    public void WeatherInformationForecastTest() {
 
     }
 }
