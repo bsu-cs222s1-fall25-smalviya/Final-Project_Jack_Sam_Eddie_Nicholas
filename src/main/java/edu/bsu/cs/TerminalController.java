@@ -54,7 +54,6 @@ public class TerminalController {
 
         System.out.println("Would you like units to be in Imperial or Metric? (I/M)");
         String unitPreference = scanner.nextLine();
-        scanner.close();
 
         if (unitPreference.equalsIgnoreCase("I")) {
             return "imperial";
@@ -63,6 +62,21 @@ public class TerminalController {
         } else {
             System.out.println("Invalid response. Defaulted to Imperial");
             return "imperial";
+        }
+    }
+
+    protected String getForecastType(){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Do you want to see weather for the next few days or for the next few hours? (D/H)");
+        String forecastType = scanner.nextLine();
+        if (forecastType.equalsIgnoreCase("D")){
+            return "daily";
+        } else if (forecastType.equalsIgnoreCase("H")){
+            return "hourly";
+        } else {
+            System.out.println("Invalid response. Defaulting to daily. ");
+            return "daily";
         }
     }
 }
