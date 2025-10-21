@@ -42,11 +42,11 @@ public class TerminalController {
         String response = scanner.nextLine();
         for (Pair i: locations){
             if (response.equalsIgnoreCase(i.getName())){
-                return response.toLowerCase();
+                return i.getLatLong();
             }
         }
         System.out.println("Invalid response. Defaulted to Muncie. ");
-        return "muncie";
+        return "40.1933,-85.3863";
     }
 
     protected String getUnitPreference() {
