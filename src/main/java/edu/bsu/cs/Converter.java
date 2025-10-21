@@ -9,9 +9,10 @@ public class Converter {
         this.locationPairs = locationPairs;
 }
 
-    public int fahrenheitToCelsius(int fTemp){
-        float cTemp = (float) (fTemp-32)*5/9;
-        return Math.round(cTemp);
+    //use for temperature and dewpoint, both are temperatures
+    public int fahrenheitToCelsius(int fUnit){
+        float cUnit = (float) (fUnit-32)*5/9;
+        return Math.round(cUnit);
     }
 
     public String locationToLatLong(String name){
@@ -22,5 +23,10 @@ public class Converter {
             }
         }
         return null;
+    }
+
+    public int milesToKilometers(int mUnit){
+        float kUnit = (float) (mUnit *1.609344);
+        return Math.round(kUnit);
     }
 }

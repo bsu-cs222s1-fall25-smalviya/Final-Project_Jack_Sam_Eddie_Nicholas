@@ -17,7 +17,6 @@ public class TestConverter {
         this.locationPairs.add(indianapolisPair);
     }
 
-
     @Test
     public void testFahrenheitToCelsius(){
         int fTemp1 = 0;
@@ -42,5 +41,20 @@ public class TestConverter {
         Assertions.assertEquals("39.7655,-86.1595", indianapolisLatLong);
         Assertions.assertEquals("40.1933,-85.3863", muncieLatLong);
         Assertions.assertNull(istanbulLatLong);
+    }
+
+    @Test
+    public void testMilesToKilometers(){
+        int mph1 = 0;
+        int mph2 = 10;
+        int mph3 = 17;
+
+        int kph1 = converter.milesToKilometers(mph1);
+        int kph2 = converter.milesToKilometers(mph2);
+        int kph3 = converter.milesToKilometers(mph3);
+
+        Assertions.assertEquals(0, kph1);
+        Assertions.assertEquals(16, kph2);
+        Assertions.assertEquals(27, kph3);
     }
 }
