@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class APIDataFormatterTest {
+public class FormatDataTest {
 
     @Test
     public void testFormatWeatherData() {
-        APIDataFormatter dataFormatter = new APIDataFormatter();
+        FormatData dataFormatter = new FormatData();
         ArrayList<String> weatherData = new ArrayList<>(Arrays.asList("71", "0%", "5", "34%", "7 mph NNE"));
         String expectedOutput = """
         Current Weather:
@@ -28,7 +28,7 @@ public class APIDataFormatterTest {
 
     @Test
     public void testNullWeatherData() {
-        APIDataFormatter dataFormatter = new APIDataFormatter();
+        FormatData dataFormatter = new FormatData();
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
                 () -> dataFormatter.formatWeatherData(null)
@@ -38,7 +38,7 @@ public class APIDataFormatterTest {
 
     @Test
     public void testTooFewDataPoints() {
-        APIDataFormatter dataFormatter = new APIDataFormatter();
+        FormatData dataFormatter = new FormatData();
         ArrayList<String> weatherData = new ArrayList<>(Arrays.asList("71", "0%", "5", "34%"));
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> dataFormatter.formatWeatherData(weatherData));
@@ -49,7 +49,7 @@ public class APIDataFormatterTest {
 
     @Test
     public void testTooManyDataPoints() {
-        APIDataFormatter dataFormatter = new APIDataFormatter();
+        FormatData dataFormatter = new FormatData();
         ArrayList<String> weatherData = new ArrayList<>(Arrays.asList("71", "0%", "5", "34%", "7 mph NNE", "extra"));
         Exception exception = Assertions.assertThrows(IllegalArgumentException.class,
                 () -> dataFormatter.formatWeatherData(weatherData));

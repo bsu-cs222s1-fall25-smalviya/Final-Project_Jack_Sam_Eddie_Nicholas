@@ -3,7 +3,7 @@ package edu.bsu.cs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class APIDataFormatter {
+public class FormatData {
 
     private static final int REQUIRED_DATA_POINTS = 5; // Minimize the number of entities, if we add more data types, we only need to change it here
 
