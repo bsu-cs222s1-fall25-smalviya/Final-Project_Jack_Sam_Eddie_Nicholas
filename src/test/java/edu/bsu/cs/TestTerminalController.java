@@ -18,6 +18,7 @@ public class TestTerminalController {
 
         terminalController.printWelcomeMessage();
         terminalController.printLocations(locations);
+        terminalController.printInvalidResponse();
     }
 
     @Test

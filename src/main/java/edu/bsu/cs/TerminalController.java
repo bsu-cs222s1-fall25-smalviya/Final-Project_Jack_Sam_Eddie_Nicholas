@@ -11,6 +11,7 @@ public class TerminalController {
     protected String getUserChoice(){
         Scanner scanner = new Scanner(System.in);
 
+        //TODO: clarify hourly vs daily
         System.out.println("""
                 0: Exit the program.
                 1: Set preferences.

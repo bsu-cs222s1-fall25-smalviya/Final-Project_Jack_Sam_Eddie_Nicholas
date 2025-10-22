@@ -19,7 +19,7 @@ public class APIDataParserTest {
                 "Humidity: 34%",
                 "Wind Speed & Direction: 7 mph NNE"));
 
-        InputStream weatherData = getClass().getResourceAsStream("/hourlyWeather.json");
+        InputStream weatherData = getClass().getResourceAsStream("/edu/bsu/cs/hourlyWeather.json");
         Assertions.assertNotNull(weatherData, "Data stream was not found");
 
         APIDataParser apiDataParser = new APIDataParser();
@@ -32,7 +32,7 @@ public class APIDataParserTest {
 
     @Test
     public void parseWeatherAPILinkTest() throws IOException {
-        InputStream weatherData = getClass().getResourceAsStream("/weatherContext.json");
+        InputStream weatherData = getClass().getResourceAsStream("/edu/bsu/cs/weatherContext.json");
         APIDataParser apiDataParser = new APIDataParser();
         String actualUrl = apiDataParser.parseWeatherAPILink(weatherData, "forecastHourly");
         String expectedUrl = "https://api.weather.gov/gridpoints/IND/83,90/forecast/hourly";
@@ -45,7 +45,7 @@ public class APIDataParserTest {
 
     @Test
     public void WeatherInformationForecastTest() throws IOException {
-        InputStream weatherData = getClass().getResourceAsStream("/dailyWeatherForecast.json");
+        InputStream weatherData = getClass().getResourceAsStream("/edu/bsu/cs/dailyWeatherForecast.json");
         Assertions.assertNotNull(weatherData);
         APIDataParser apiDataParser = new APIDataParser();
         ArrayList<String> trueArray = new ArrayList<>(Arrays.asList(
