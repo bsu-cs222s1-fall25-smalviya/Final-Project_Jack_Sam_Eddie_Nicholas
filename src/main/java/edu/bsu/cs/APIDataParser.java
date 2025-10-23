@@ -27,7 +27,7 @@ public class APIDataParser {
 
     protected void forecastData(){
         for (int i = 1; i <= 8; i++){
-            dailyForecast.put(String.valueOf(i), ParseWeatherAPIData( i));
+            dailyForecast.put(String.valueOf(i), ParseWeatherAPIData(i - 1));
         }
     }
 
@@ -35,15 +35,17 @@ public class APIDataParser {
 
     protected ArrayList<String> ParseWeatherAPIData(int periodQuery){
         String base = "$.properties.periods[" + periodQuery + "]";
-        String dewPoint, humidity;
+        String humidity, dewPointValue;
+        Number dewPoint;
 
         String temperature   = ("Temperature: " + ctx.read(base + ".temperature"));
         String precipitation = ("Precipitation: " + ctx.read(base + ".probabilityOfPrecipitation.value") + "%");
         if (ctx.read(base + ".dewpoint.value") != null) {
-            dewPoint = ("Dew Point: " + ctx.read(base + ".dewpoint.value"));
+            dewPoint = ctx.read(base + ".dewpoint.value", Number.class);
+            dewPointValue = "Dew Point: " + String.format("%.2f", dewPoint.doubleValue());
             humidity = ("Humidity: " + ctx.read(base + ".relativeHumidity.value") + "%");
         } else {
-            dewPoint = null;
+            dewPointValue = null;
             humidity = null;
         }
         String windSpeed     = ("Wind Speed & Direction: " + ctx.read(base + ".windSpeed"));
@@ -51,7 +53,7 @@ public class APIDataParser {
         return Stream.of(
                         temperature,
                         precipitation,
-                        dewPoint,
+                        dewPointValue,
                         humidity,
                         windSpeed + " " + windDirection
                 )
