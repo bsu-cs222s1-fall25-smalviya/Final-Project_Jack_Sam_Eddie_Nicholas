@@ -46,13 +46,13 @@ public class TerminalMain {
         tm.resetPreferences();
     }
 
-    private void setPreferences() throws IOException {
+    protected void setPreferences() throws IOException {
         String location = terminalController.getLocationPreference(this.locations);
         String units = terminalController.getUnitPreference();
         fileController.savePreferences(new String[] {"true",location,units});
     }
 
-    private void getHourlyForecast() throws IOException {
+    protected void getHourlyForecast() throws IOException {
         InputStream weatherData;
         if (this.preferences[0].equals("true")) {
             String link = api.createURLString(this.preferences[1]);
@@ -76,7 +76,7 @@ public class TerminalMain {
         }
     }
 
-    private void getDailyForecast() throws IOException {
+    protected void getDailyForecast() throws IOException {
         InputStream weatherData;
         if (this.preferences[0].equals("true")) {
             String link = api.createURLString(this.preferences[1]);
@@ -97,7 +97,7 @@ public class TerminalMain {
         System.out.println(actualArray);
     }
 
-    private void resetPreferences() throws IOException {
+    protected void resetPreferences() throws IOException {
         fileController.savePreferences(new String[] {"false","muncie, in","imperial"});
     }
 }
