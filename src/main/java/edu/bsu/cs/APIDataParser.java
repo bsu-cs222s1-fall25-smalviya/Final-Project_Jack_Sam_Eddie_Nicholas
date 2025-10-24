@@ -11,8 +11,8 @@ import com.jayway.jsonpath.*;
 
 public class APIDataParser {
 
-    protected HashMap<String, ArrayList<String>> hourlyForecast = new HashMap<>();
-    protected HashMap<String, ArrayList<String>> dailyForecast = new HashMap<>();
+    protected HashMap<Integer, ArrayList<String>> hourlyForecast = new HashMap<>();
+    protected HashMap<Integer, ArrayList<String>> dailyForecast = new HashMap<>();
 
     private ReadContext ctx;
     private final Configuration conf = Configuration.builder()
@@ -21,13 +21,13 @@ public class APIDataParser {
 
     protected void HourlyForecastData(){
         for (int i = 1; i <= 7; i++){
-            hourlyForecast.put(String.valueOf(i), ParseWeatherAPIData( i - 1));
+            hourlyForecast.put(i, ParseWeatherAPIData( i - 1));
         }
     }
 
     protected void forecastData(){
         for (int i = 1; i <= 8; i++){
-            dailyForecast.put(String.valueOf(i), ParseWeatherAPIData(i - 1));
+            dailyForecast.put(i, ParseWeatherAPIData(i - 1));
         }
     }
 
@@ -35,25 +35,24 @@ public class APIDataParser {
 
     protected ArrayList<String> ParseWeatherAPIData(int periodQuery){
         String base = "$.properties.periods[" + periodQuery + "]";
-        String humidity, dewPointValue;
-        Number dewPoint;
+        String humidity, dewPoint;
 
-        String temperature   = ("Temperature: " + ctx.read(base + ".temperature"));
-        String precipitation = ("Precipitation: " + ctx.read(base + ".probabilityOfPrecipitation.value") + "%");
+        String temperature   = (ctx.read(base + ".temperature")).toString();
+        String precipitation = (ctx.read(base + ".probabilityOfPrecipitation.value")).toString();
         if (ctx.read(base + ".dewpoint.value") != null) {
-            dewPoint = ctx.read(base + ".dewpoint.value", Number.class);
-            dewPointValue = "Dew Point: " + String.format("%.2f", dewPoint.doubleValue());
-            humidity = ("Humidity: " + ctx.read(base + ".relativeHumidity.value") + "%");
+            dewPoint = ctx.read(base + ".dewpoint.value").toString();
+            //dewPointValue = String.format("%.2f", dewPoint.doubleValue());
+            humidity = (ctx.read(base + ".relativeHumidity.value")).toString();
         } else {
-            dewPointValue = null;
+            dewPoint = null;
             humidity = null;
         }
-        String windSpeed     = ("Wind Speed & Direction: " + ctx.read(base + ".windSpeed"));
+        String windSpeed     = (ctx.read(base + ".windSpeed"));
         String windDirection = (ctx.read(base + ".windDirection")).toString();
         return Stream.of(
                         temperature,
                         precipitation,
-                        dewPointValue,
+                        dewPoint,
                         humidity,
                         windSpeed + " " + windDirection
                 )
@@ -74,11 +73,11 @@ public class APIDataParser {
         this.ctx = JsonPath.using(conf).parse(jsonFile);
     }
 
-    protected HashMap<String, ArrayList<String>> getHourlyForecast() {
+    protected HashMap<Integer, ArrayList<String>> getHourlyForecast() {
         return hourlyForecast;
     }
 
-    protected HashMap<String, ArrayList<String>> getDailyForecast() {
+    protected HashMap<Integer, ArrayList<String>> getDailyForecast() {
         return dailyForecast;
     }
 }

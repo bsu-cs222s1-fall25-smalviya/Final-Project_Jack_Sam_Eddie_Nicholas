@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TerminalMain {
+/*public class TerminalMain {
     TerminalController terminalController = new TerminalController();
     FileController fileController = new FileController();
     WeatherServiceAPI api = new WeatherServiceAPI();
@@ -101,3 +101,5 @@ public class TerminalMain {
         fileController.savePreferences(new String[] {"false","muncie, in","imperial"});
     }
 }
+
+ */
