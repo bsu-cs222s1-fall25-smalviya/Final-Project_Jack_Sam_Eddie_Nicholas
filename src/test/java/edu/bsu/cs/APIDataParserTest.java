@@ -24,7 +24,7 @@ public class APIDataParserTest {
 
         APIDataParser apiDataParser = new APIDataParser();
         apiDataParser.setWeatherData(weatherData);
-        apiDataParser.HourlyForecastData();
+        apiDataParser.hourlyForecastData();
         HashMap<String, ArrayList<String>> hourlyForecast = apiDataParser.getHourlyForecast();
         ArrayList<String> actualArray = hourlyForecast.get("1");
         Assertions.assertEquals(trueArray, actualArray);

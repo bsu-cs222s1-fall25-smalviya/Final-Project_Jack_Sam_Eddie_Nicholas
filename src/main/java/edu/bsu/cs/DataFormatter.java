@@ -37,7 +37,7 @@ public class DataFormatter {
         int displayTemp;
         int displayDewPoint;
 
-        if (desiredUnit.equalsIgnoreCase("C")) {
+        if (desiredUnit.equalsIgnoreCase("Celsius")) {
             displayTemp = converter.fahrenheitToCelsius(tempValue);
             tempUnitLabel = "°C";
             displayDewPoint = (int) Math.round(dewPointValue);

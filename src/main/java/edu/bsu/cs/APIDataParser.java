@@ -19,7 +19,7 @@ public class APIDataParser {
             .options(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS)
             .build();
 
-    protected void HourlyForecastData(){
+    protected void hourlyForecastData(){
         for (int i = 1; i <= 7; i++){
             hourlyForecast.put(String.valueOf(i), ParseWeatherAPIData( i - 1));
         }
