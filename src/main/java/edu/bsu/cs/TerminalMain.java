@@ -11,7 +11,7 @@ public class TerminalMain {
     FileController fileController = new FileController();
     WeatherServiceAPI api = new WeatherServiceAPI();
     APIDataParser dataParser = new APIDataParser();
-    FormatData dataFormatter = new FormatData();
+    DataFormatter dataFormatter = new DataFormatter();
     ArrayList<Pair> locations;
     String[] preferences;
 
@@ -53,13 +53,41 @@ public class TerminalMain {
     }
 
     protected void getHourlyForecast() throws IOException {
+        String link;
         InputStream weatherData;
+        String units;
+        if (this.preferences[0].equals("true")) {
+            link = api.createURLString(this.preferences[1]);
+            units = this.preferences[2];
+        } else {
+            String location = terminalController.getLocationPreference(this.locations);
+            units = terminalController.getUnitPreference();
+            link = api.createURLString(location);
+        }
+
+        weatherData = api.getInputStreamFromURL(link);
+        String hourlyForecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
+        InputStream hourlyForecastData = this.api.getInputStreamFromURL(hourlyForecastURLString);
+        this.dataParser.setWeatherData(hourlyForecastData);
+        this.dataParser.hourlyForecastData();
+        HashMap<String, ArrayList<String>> hourlyForecast = this.dataParser.getHourlyForecast();
+        int i;
+        for (i=1;i<7;i++){
+            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
+            System.out.println(this.dataFormatter.formatWeatherData(forecast, units));
+        }
+    }
+
+    protected void getDailyForecast() throws IOException {
+        InputStream weatherData;
+        String units;
         if (this.preferences[0].equals("true")) {
             String link = api.createURLString(this.preferences[1]);
             weatherData = api.getInputStreamFromURL(link);
+            units = this.preferences[2];
         } else {
             String location = terminalController.getLocationPreference(this.locations);
-            String units = terminalController.getUnitPreference();
+            units = terminalController.getUnitPreference();
             String link = api.createURLString(location);
             weatherData = api.getInputStreamFromURL(link);
         }
@@ -68,33 +96,12 @@ public class TerminalMain {
         InputStream hourlyForecastData = this.api.getInputStreamFromURL(hourlyForcastURLString);
         this.dataParser.setWeatherData(hourlyForecastData);
         this.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> hourlyForecast = this.dataParser.getDailyForecast();
+        HashMap<String, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
         int i;
         for (i=1;i<7;i++){
-            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
-            System.out.println(this.dataFormatter.formatWeatherData(forecast));
+            ArrayList<String> forecast = weeklyForecast.get(Integer.toString(i));
+            System.out.println(this.dataFormatter.formatWeatherData(forecast, units));
         }
-    }
-
-    protected void getDailyForecast() throws IOException {
-        InputStream weatherData;
-        if (this.preferences[0].equals("true")) {
-            String link = api.createURLString(this.preferences[1]);
-            weatherData = api.getInputStreamFromURL(link);
-        } else {
-            String location = terminalController.getLocationPreference(this.locations);
-            String units = terminalController.getUnitPreference();
-            String link = api.createURLString(location);
-            weatherData = api.getInputStreamFromURL(link);
-        }
-
-        String forecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
-        InputStream forecastData = this.api.getInputStreamFromURL(forecastURLString);
-        this.dataParser.setWeatherData(forecastData);
-        this.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> dailyForecast = this.dataParser.getDailyForecast();
-        ArrayList<String> actualArray = dailyForecast.get("1");
-        System.out.println(actualArray);
     }
 
     protected void resetPreferences() throws IOException {
