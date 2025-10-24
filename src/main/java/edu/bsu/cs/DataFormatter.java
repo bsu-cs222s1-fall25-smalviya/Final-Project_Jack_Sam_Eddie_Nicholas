@@ -1,48 +1,112 @@
 package edu.bsu.cs;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DataFormatter {
 
-    private static final int REQUIRED_DATA_POINTS = 5; // Minimize the number of entities, if we add more data types, we only need to change it here
+    private final Converter converter;
 
-
-    // clean easy to read main method
-    public String formatWeatherData(ArrayList<String> weatherData) {
-        validateWeatherData(weatherData);
-        return buildFormattedString(weatherData);
+    public DataFormatter() {
+        this.converter = new Converter(new ArrayList<>());
     }
 
-    // separate from the formatting logic, making the code cleaner and easier to test
-    private void validateWeatherData(List<String> weatherData) {
-        if (weatherData == null) {
-            throw new IllegalArgumentException("Weather data cannot be null.");
-        }
-        if (weatherData.size() != REQUIRED_DATA_POINTS) {
-            throw new IllegalArgumentException("Weather data must contain exactly " + REQUIRED_DATA_POINTS + " data points.");
-        }
+    public String formatWeatherData(ArrayList<String> weatherData, String desiredUnit) {
+        return buildCurrentWeatherString(weatherData, desiredUnit);
     }
 
-    //
-    private String buildFormattedString(List<String> weatherData) {
+    public String formatForecastData(LinkedHashMap<Integer, LinkedHashMap<String, String>> forecastData, String forecastType, String desiredUnit) {
+        return buildForecastString(forecastData, forecastType, desiredUnit);
+    }
+
+    private String buildCurrentWeatherString(List<String> weatherData, String desiredUnit) {
         StringBuilder formattedData = new StringBuilder();
         formattedData.append("Current Weather:\n");
-        appendDataPoint(formattedData, "Temperature", weatherData.get(0), "°F");
-        appendDataPoint(formattedData, "Precipitation", weatherData.get(1), "");
-        appendDataPoint(formattedData, "Dew Point", weatherData.get(2), "°C");
-        appendDataPoint(formattedData, "Humidity", weatherData.get(3), "");
-        appendDataPoint(formattedData, "Wind", weatherData.get(4), "");
+
+        double tempValue = Double.parseDouble(weatherData.get(0));
+        String precipValue = weatherData.get(1);
+        double dewPointValue = Double.parseDouble(weatherData.get(2));
+        String humidityValue = weatherData.get(3);
+        String windValue = weatherData.get(4);
+
+        String tempUnitLabel;
+        String dewPointUnitLabel;
+
+        int displayTemp;
+        int displayDewPoint;
+
+        if (desiredUnit.equalsIgnoreCase("C")) {
+            displayTemp = converter.fahrenheitToCelsius(tempValue);
+            tempUnitLabel = "°C";
+            displayDewPoint = (int) Math.round(dewPointValue);
+            dewPointUnitLabel = "°C";
+        } else {
+            displayTemp = (int) Math.round(tempValue);
+            tempUnitLabel = "°F";
+            displayDewPoint = converter.celsiusToFahrenheit(dewPointValue);
+            dewPointUnitLabel = "°F";
+        }
+
+        appendDataPoint(formattedData, "Temperature", String.valueOf(displayTemp), tempUnitLabel, "  ");
+        appendDataPoint(formattedData, "Precipitation", precipValue, "%", "  ");
+        appendDataPoint(formattedData, "Dew Point", String.valueOf(displayDewPoint), dewPointUnitLabel, "  ");
+        appendDataPoint(formattedData, "Humidity", humidityValue, "%", "  ");
+        appendDataPoint(formattedData, "Wind", windValue, "", "  ");
         return formattedData.toString();
     }
-    // This helper method eliminates the repeated code for appending each line of weather data
-    // abstracting the pattern of "label: value unit" into a single, reusable function
-    private void appendDataPoint(StringBuilder builder, String label, String value, String unit) {
-        builder.append("  • ")
+
+    private String buildForecastString(LinkedHashMap<Integer, LinkedHashMap<String, String>> forecastData, String forecastType, String desiredUnit) {
+        StringBuilder formattedData = new StringBuilder();
+        String timeLabel = forecastType.contains("Hour") ? "Hour" : "Day";
+        formattedData.append(forecastType).append(" Forecast:\n");
+
+        for (Map.Entry<Integer, LinkedHashMap<String, String>> entry : forecastData.entrySet()) {
+            formattedData.append("  ").append(timeLabel).append(" ").append(entry.getKey()).append(":\n");
+
+            Map<String, String> data = entry.getValue();
+
+            double tempValue = Double.parseDouble(data.get("Temperature"));
+            String precipValue = data.get("Precipitation");
+            double dewPointValue = Double.parseDouble(data.get("Dew Point"));
+            String humidityValue = data.get("Humidity");
+            String windValue = data.get("Wind Speed & Direction");
+
+            String tempUnitLabel;
+            String dewPointUnitLabel;
+
+            int displayTemp;
+            int displayDewPoint;
+
+            if (desiredUnit.equalsIgnoreCase("C")) {
+                displayTemp = converter.fahrenheitToCelsius(tempValue);
+                tempUnitLabel = "°C";
+                displayDewPoint = (int) Math.round(dewPointValue);
+                dewPointUnitLabel = "°C";
+            } else {
+                displayTemp = (int) Math.round(tempValue);
+                tempUnitLabel = "°F";
+                displayDewPoint = converter.celsiusToFahrenheit(dewPointValue);
+                dewPointUnitLabel = "°F";
+            }
+
+            appendDataPoint(formattedData, "Temperature", String.valueOf(displayTemp), tempUnitLabel, "    ");
+            appendDataPoint(formattedData, "Precipitation", precipValue, "%", "    ");
+            appendDataPoint(formattedData, "Dew Point", String.valueOf(displayDewPoint), dewPointUnitLabel, "    ");
+            appendDataPoint(formattedData, "Humidity", humidityValue, "%", "    ");
+            appendDataPoint(formattedData, "Wind", windValue, "", "    ");
+        }
+        return formattedData.toString();
+    }
+
+    private void appendDataPoint(StringBuilder builder, String label, String value, String unit, String indent) {
+        builder.append(indent)
+                .append("• ")
                 .append(label)
                 .append(": ")
                 .append(value)
-                .append(unit)
+                .append(unit.equals("%") && value.endsWith("%") ? "" : unit)
                 .append("\n");
     }
 }
