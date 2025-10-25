@@ -70,12 +70,8 @@ public class TerminalMain {
         InputStream hourlyForecastData = this.api.getInputStreamFromURL(hourlyForecastURLString);
         this.dataParser.setWeatherData(hourlyForecastData);
         this.dataParser.hourlyForecastData();
-        HashMap<String, ArrayList<String>> hourlyForecast = this.dataParser.getHourlyForecast();
-        int i;
-        for (i=1;i<7;i++){
-            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
-            System.out.println(this.dataFormatter.formatWeatherData(forecast, units));
-        }
+        HashMap<Integer, ArrayList<String>> hourlyForecast = this.dataParser.getHourlyForecast();
+        System.out.println(this.dataFormatter.formatForecastData(hourlyForecast, units));
     }
 
     protected void getDailyForecast() throws IOException {
@@ -96,10 +92,10 @@ public class TerminalMain {
         InputStream hourlyForecastData = this.api.getInputStreamFromURL(hourlyForcastURLString);
         this.dataParser.setWeatherData(hourlyForecastData);
         this.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
+        HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
         int i;
         for (i=1;i<7;i++){
-            ArrayList<String> forecast = weeklyForecast.get(Integer.toString(i));
+            ArrayList<String> forecast = weeklyForecast.get(i);
             System.out.println(this.dataFormatter.formatWeatherData(forecast, units));
         }
     }
