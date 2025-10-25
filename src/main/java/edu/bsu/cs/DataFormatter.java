@@ -25,16 +25,22 @@ public class DataFormatter {
             formattedData.append("Next Day:\n");
         }
 
-
-
-        double tempValue = Double.parseDouble(weatherData.get(0));
-        String precipValue = weatherData.get(1);
-        double dewPointValue = Double.parseDouble(weatherData.get(2));
+        double tempValue = 0;
+        String precipValue;
         String humidityValue = "";
-        String windValue = "";
+        double dewPointValue = 0;
+        String windValue;
+
         if (weatherData.size() > 3) {
+            tempValue = Double.parseDouble(weatherData.get(0));
+            precipValue = weatherData.get(1);
+            dewPointValue = Double.parseDouble(weatherData.get(2));
             humidityValue = weatherData.get(3);
             windValue = weatherData.get(4);
+        } else {
+            tempValue = Double.parseDouble(weatherData.get(0));
+            precipValue = weatherData.get(1);
+            windValue = weatherData.get(2);
         }
 
         String tempUnitLabel;
@@ -55,12 +61,16 @@ public class DataFormatter {
             dewPointUnitLabel = "°F";
         }
 
-        appendDataPoint(formattedData, "Temperature", String.valueOf(displayTemp), tempUnitLabel, "  ");
-        appendDataPoint(formattedData, "Precipitation", precipValue, "%", "  ");
-        appendDataPoint(formattedData, "Dew Point", String.valueOf(displayDewPoint), dewPointUnitLabel, "  ");
         if (weatherData.size() > 3) {
-            appendDataPoint(formattedData, "Humidity", humidityValue, "%", "  ");
+            appendDataPoint(formattedData, "Temperature", String.valueOf(displayTemp), tempUnitLabel, "  ");
+            appendDataPoint(formattedData, "Precipitation", precipValue, "%", "  ");
             appendDataPoint(formattedData, "Wind", windValue, "", "  ");
+            appendDataPoint(formattedData, "Humidity", humidityValue, "%", "  ");
+            appendDataPoint(formattedData, "Dew Point", String.valueOf(displayDewPoint), dewPointUnitLabel, "  ");
+        } else {
+            appendDataPoint(formattedData, "Temperature", String.valueOf(displayTemp), tempUnitLabel, "  ");
+            appendDataPoint(formattedData, "Precipitation", precipValue, "%", "  ");
+            appendDataPoint(formattedData, "Dew Point", String.valueOf(displayDewPoint), dewPointUnitLabel, "  ");
         }
 
         return formattedData.toString();

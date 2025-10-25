@@ -1,5 +1,7 @@
 package edu.bsu.cs;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -11,13 +13,23 @@ public class TerminalController {
     protected String getUserChoice(){
         Scanner scanner = new Scanner(System.in);
 
-        //TODO: clarify hourly vs daily
         System.out.println("""
                 0: Exit the program.
-                1: Set preferences.
-                2: Get hourly weather conditions
-                3: Get daily weather conditions""");
+                1: Reset preferences.
+                2: Set preferences.
+                3: Print preferences.
+                4: Get hourly weather conditions
+                5: Get daily weather conditions""");
         return scanner.nextLine();
+    }
+
+    protected void printPreferences() throws FileNotFoundException {
+        FileController fileController = new FileController();
+        String[] preferences = fileController.loadPreferences();
+        System.out.println("Current preferences:");
+        for (String i: preferences){
+            System.out.println(i);
+        }
     }
 
     protected void printInvalidResponse(){
@@ -49,7 +61,7 @@ public class TerminalController {
     protected String getLocationPreference(ArrayList<Pair> locations){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("What would you like your default location to be? ");
+        System.out.println("What would you like your location to be? ");
         System.out.println("Choose from these options: ");
         this.printLocations(locations);
 
