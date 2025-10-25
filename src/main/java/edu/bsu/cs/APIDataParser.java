@@ -26,7 +26,7 @@ public class APIDataParser {
     }
 
     protected void forecastData(){
-        for (int i = 1; i <= 8; i++){
+        for (int i = 1; i <= 14; i += 2){
             dailyForecast.put(i, ParseWeatherAPIData(i - 1));
         }
     }
