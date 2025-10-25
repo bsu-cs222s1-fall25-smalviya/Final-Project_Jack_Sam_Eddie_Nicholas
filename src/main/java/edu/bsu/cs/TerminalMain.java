@@ -11,21 +11,16 @@ public class TerminalMain {
     FileController fileController = new FileController();
     WeatherServiceAPI api = new WeatherServiceAPI();
     APIDataParser dataParser = new APIDataParser();
-    FormatData dataFormatter = new FormatData();
+    DataFormatter dataFormatter = new DataFormatter();
     ArrayList<Pair> locations;
-    String[] preferences;
 
     public TerminalMain() throws FileNotFoundException {
         this.locations = this.fileController.loadCities();
-        this.preferences = this.fileController.loadPreferences();
     }
 
     static void main() throws IOException {
         TerminalMain tm = new TerminalMain();
         boolean keepGoing = true;
-
-        //TODO: remove this line
-        tm.resetPreferences();
 
         tm.terminalController.printWelcomeMessage();
         while (keepGoing) {
@@ -33,17 +28,19 @@ public class TerminalMain {
             if (choice.equals("0")) {
                 keepGoing = false;
             } else if (choice.equals("1")) {
-                tm.setPreferences();
+                tm.resetPreferences();
             } else if (choice.equals("2")) {
+                tm.setPreferences();
+            }  else if (choice.equals("3")){
+                tm.terminalController.printPreferences();
+            } else if (choice.equals("4")) {
                 tm.getHourlyForecast();
-            } else if (choice.equals("3")) {
+            } else if (choice.equals("5")) {
                 tm.getDailyForecast();
             } else {
                 tm.terminalController.printInvalidResponse();
             }
         }
-        //TODO: remove this line
-        tm.resetPreferences();
     }
 
     protected void setPreferences() throws IOException {
@@ -53,51 +50,60 @@ public class TerminalMain {
     }
 
     protected void getHourlyForecast() throws IOException {
+        String link;
         InputStream weatherData;
-        if (this.preferences[0].equals("true")) {
-            String link = api.createURLString(this.preferences[1]);
-            weatherData = api.getInputStreamFromURL(link);
+        String units;
+        String[] preferences = this.fileController.loadPreferences();
+        if (preferences[0].equals("true")) {
+            link = api.createURLString(preferences[1]);
+            units = preferences[2];
         } else {
             String location = terminalController.getLocationPreference(this.locations);
-            String units = terminalController.getUnitPreference();
-            String link = api.createURLString(location);
-            weatherData = api.getInputStreamFromURL(link);
+            units = terminalController.getUnitPreference();
+            link = api.createURLString(location);
         }
 
-        String hourlyForcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
-        InputStream hourlyForecastData = this.api.getInputStreamFromURL(hourlyForcastURLString);
+        weatherData = api.getInputStreamFromURL(link);
+        String hourlyForecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
+        InputStream hourlyForecastData = this.api.getInputStreamFromURL(hourlyForecastURLString);
         this.dataParser.setWeatherData(hourlyForecastData);
-        this.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> hourlyForecast = this.dataParser.getDailyForecast();
+        this.dataParser.hourlyForecastData();
+        HashMap<Integer, ArrayList<String>> hourlyForecast = this.dataParser.getHourlyForecast();
         int i;
-        for (i=1;i<7;i++){
-            ArrayList<String> forecast = hourlyForecast.get(Integer.toString(i));
-            System.out.println(this.dataFormatter.formatWeatherData(forecast));
+        for (i=1;i<=7;i++){
+            ArrayList<String> forecast = hourlyForecast.get(i);
+            System.out.println(this.dataFormatter.formatWeatherData(forecast, units, "Hourly"));
         }
     }
 
     protected void getDailyForecast() throws IOException {
         InputStream weatherData;
-        if (this.preferences[0].equals("true")) {
-            String link = api.createURLString(this.preferences[1]);
+        String units;
+        String[] preferences = this.fileController.loadPreferences();
+        if (preferences[0].equals("true")) {
+            String link = api.createURLString(preferences[1]);
             weatherData = api.getInputStreamFromURL(link);
+            units = preferences[2];
         } else {
             String location = terminalController.getLocationPreference(this.locations);
-            String units = terminalController.getUnitPreference();
+            units = terminalController.getUnitPreference();
             String link = api.createURLString(location);
             weatherData = api.getInputStreamFromURL(link);
         }
 
-        String forecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
-        InputStream forecastData = this.api.getInputStreamFromURL(forecastURLString);
+        String forcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
+        InputStream forecastData = this.api.getInputStreamFromURL(forcastURLString);
         this.dataParser.setWeatherData(forecastData);
         this.dataParser.forecastData();
-        HashMap<String, ArrayList<String>> dailyForecast = this.dataParser.getDailyForecast();
-        ArrayList<String> actualArray = dailyForecast.get("1");
-        System.out.println(actualArray);
+        HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
+        int i;
+        for (i=1;i<7;i++){
+            ArrayList<String> forecast = weeklyForecast.get(i);
+            System.out.println(this.dataFormatter.formatWeatherData(forecast,units,"Daily"));
+        }
     }
 
     protected void resetPreferences() throws IOException {
-        fileController.savePreferences(new String[] {"false","muncie, in","imperial"});
+        fileController.savePreferences(new String[] {"false","muncie, in","I"});
     }
 }
