@@ -72,7 +72,7 @@ public class TerminalController {
         if (unitPreference.equalsIgnoreCase("I")) {
             return "I";
         } else if (unitPreference.equalsIgnoreCase("M")) {
-            return "C";
+            return "M";
         } else {
             System.out.println("Invalid response. Defaulted to Imperial");
             return "I";
