@@ -9,8 +9,6 @@ public class WeatherServiceAPI {
     protected URLConnection getConnectionFromURL(String urlString) throws IOException {
         URI uri = URI.create(urlString);
         URLConnection connection = uri.toURL().openConnection();
-        //TODO: connection.connect(); potentially redundant
-        connection.connect();
         return connection;
-    }
-}
+    } //end of URLConnection
+} //end of WeatherServiceAPI class
