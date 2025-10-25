@@ -70,12 +70,12 @@ public class TerminalController {
         String unitPreference = scanner.nextLine();
 
         if (unitPreference.equalsIgnoreCase("I")) {
-            return "imperial";
+            return "I";
         } else if (unitPreference.equalsIgnoreCase("M")) {
-            return "metric";
+            return "C";
         } else {
             System.out.println("Invalid response. Defaulted to Imperial");
-            return "imperial";
+            return "I";
         }
     }
 

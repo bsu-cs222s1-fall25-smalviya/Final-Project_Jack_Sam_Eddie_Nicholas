@@ -71,7 +71,7 @@ public class TerminalMain {
         this.dataParser.setWeatherData(hourlyForecastData);
         this.dataParser.hourlyForecastData();
         HashMap<Integer, ArrayList<String>> hourlyForecast = this.dataParser.getHourlyForecast();
-        System.out.println(this.dataFormatter.formatForecastData(hourlyForecast, units));
+        System.out.println(this.dataFormatter.formatForecastData(hourlyForecast, "7-Hour", units));
     }
 
     protected void getDailyForecast() throws IOException {
@@ -93,11 +93,7 @@ public class TerminalMain {
         this.dataParser.setWeatherData(hourlyForecastData);
         this.dataParser.forecastData();
         HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
-        int i;
-        for (i=1;i<7;i++){
-            ArrayList<String> forecast = weeklyForecast.get(i);
-            System.out.println(this.dataFormatter.formatWeatherData(forecast, units));
-        }
+        System.out.println(this.dataFormatter.formatForecastData(weeklyForecast, "7-Day", units));
     }
 
     protected void resetPreferences() throws IOException {
