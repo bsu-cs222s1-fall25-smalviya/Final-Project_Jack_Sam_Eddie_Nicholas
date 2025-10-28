@@ -3,47 +3,81 @@ package edu.bsu.cs;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import com.jayway.jsonpath.*;
 
-import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
-import com.jayway.jsonpath.ReadContext;
-import net.minidev.json.JSONArray;
 
 public class APIDataParser {
 
-    protected ArrayList<String> WeatherApiParser(InputStream weatherData) throws IOException {
-        String json = new String(weatherData.readAllBytes(), StandardCharsets.UTF_8);
-        String base = "$.properties.periods[0]";
+    protected HashMap<Integer, ArrayList<String>> hourlyForecast = new HashMap<>();
+    protected HashMap<Integer, ArrayList<String>> dailyForecast = new HashMap<>();
 
-        Configuration conf = Configuration.builder().options(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS).build();
-        ReadContext ctx = JsonPath.using(conf).parse(json);
+    private ReadContext ctx;
+    private final Configuration conf = Configuration.builder()
+            .options(Option.DEFAULT_PATH_LEAF_TO_NULL, Option.SUPPRESS_EXCEPTIONS)
+            .build();
+
+    protected void hourlyForecastData(){
+        for (int i = 1; i <= 7; i++){
+            hourlyForecast.put(i, ParseWeatherAPIData( i - 1));
+        }
+    }
+
+    protected void forecastData(){
+        for (int i = 1; i <= 14; i += 2){
+            dailyForecast.put(i, ParseWeatherAPIData(i - 1));
+        }
+    }
+
+
+
+    protected ArrayList<String> ParseWeatherAPIData(int periodQuery){
+        String base = "$.properties.periods[" + periodQuery + "]";
+        String humidity, dewPoint;
 
         String temperature   = (ctx.read(base + ".temperature")).toString();
-        String precipitation = (ctx.read(base + ".probabilityOfPrecipitation.value") + "%");
-        String dewpoint      = (ctx.read(base + ".dewpoint.value")).toString();
-        String humidity      = (ctx.read(base + ".relativeHumidity.value") + "%");
-        String windSpeed     = (ctx.read(base + ".windSpeed")).toString();
+        String precipitation = (ctx.read(base + ".probabilityOfPrecipitation.value")).toString();
+        if (ctx.read(base + ".dewpoint.value") != null) {
+            dewPoint = ctx.read(base + ".dewpoint.value").toString();
+            //dewPointValue = String.format("%.2f", dewPoint.doubleValue());
+            humidity = (ctx.read(base + ".relativeHumidity.value")).toString();
+        } else {
+            dewPoint = null;
+            humidity = null;
+        }
+        String windSpeed     = (ctx.read(base + ".windSpeed"));
         String windDirection = (ctx.read(base + ".windDirection")).toString();
-
-        return new ArrayList<>(List.of(
-                temperature,
-                precipitation,
-                dewpoint,
-                humidity,
-                windSpeed + " " + windDirection
-        ));
+        return Stream.of(
+                        temperature,
+                        precipitation,
+                        dewPoint,
+                        humidity,
+                        windSpeed + " " + windDirection
+                )
+                .filter(Objects::nonNull)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
 
     //Searches for proper JsonPath based on the query you request
     //forecast; forecastHourly
-    protected String weatherAPILinkParser(InputStream weatherData, String weatherQuery) throws IOException {
-        String searchQuery = "$..properties." + weatherQuery;
-        JSONArray queryResult;
-        queryResult = JsonPath.read(weatherData, searchQuery);
-        return queryResult.getFirst().toString();
+    protected String parseWeatherAPILink(InputStream weatherData, String weatherQuery) throws IOException {
+        String searchQuery = "$.properties." + weatherQuery;
+        return JsonPath.read(weatherData, searchQuery);
+    }
+
+    public void setWeatherData(InputStream weatherDataStream) throws IOException{
+        String jsonFile = new String(weatherDataStream.readAllBytes(), StandardCharsets.UTF_8);
+        this.ctx = JsonPath.using(conf).parse(jsonFile);
+    }
+
+    protected HashMap<Integer, ArrayList<String>> getHourlyForecast() {
+        return hourlyForecast;
+    }
+
+    protected HashMap<Integer, ArrayList<String>> getDailyForecast() {
+        return dailyForecast;
     }
 }

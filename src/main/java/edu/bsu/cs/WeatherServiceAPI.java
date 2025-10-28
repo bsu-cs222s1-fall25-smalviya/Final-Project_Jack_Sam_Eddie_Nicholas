@@ -1,4 +1,7 @@
+package edu.bsu.cs;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.*;
 
 public class WeatherServiceAPI {
@@ -6,9 +9,9 @@ public class WeatherServiceAPI {
         return "https://api.weather.gov/points/" + latLong;
     }
 
-    protected URLConnection getConnectionFromURL(String urlString) throws IOException {
+    protected InputStream getInputStreamFromURL(String urlString) throws IOException {
         URI uri = URI.create(urlString);
         URLConnection connection = uri.toURL().openConnection();
-        return connection;
-    } //end of URLConnection
-} //end of WeatherServiceAPI class
+        return connection.getInputStream();
+    }
+}
