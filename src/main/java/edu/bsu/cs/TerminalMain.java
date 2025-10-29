@@ -104,6 +104,6 @@ public class TerminalMain {
     }
 
     protected void resetPreferences() throws IOException {
-        fileController.savePreferences(new String[] {"false","40.1933,-85.3863","I"});
+        fileController.savePreferences(new String[] {"false","40.1933,-85.3863","imperial"});
     }
 }
