@@ -40,4 +40,8 @@ public class FileController {
         }
         return cities;
     }
+
+    protected void resetPreferences() throws IOException {
+        this.savePreferences(new String[] {"false","40.1933,-85.3863","imperial"});
+    }
 }
