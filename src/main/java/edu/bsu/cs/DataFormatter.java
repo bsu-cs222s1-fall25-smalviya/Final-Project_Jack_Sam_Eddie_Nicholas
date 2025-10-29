@@ -51,14 +51,14 @@ public class DataFormatter {
 
         if (desiredUnit.equalsIgnoreCase("M")) {
             displayTemp = converter.fahrenheitToCelsius(tempValue);
-            tempUnitLabel = "°C";
+            tempUnitLabel = " degrees C";
             displayDewPoint = (int) Math.round(dewPointValue);
-            dewPointUnitLabel = "°C";
+            dewPointUnitLabel = " degrees C";
         } else {
             displayTemp = (int) Math.round(tempValue);
-            tempUnitLabel = "°F";
+            tempUnitLabel = " degrees F";
             displayDewPoint = converter.celsiusToFahrenheit(dewPointValue);
-            dewPointUnitLabel = "°F";
+            dewPointUnitLabel = " degrees F";
         }
 
         if (weatherData.size() > 3) {
@@ -76,11 +76,9 @@ public class DataFormatter {
         return formattedData.toString();
     }
 
-
-
     private void appendDataPoint(StringBuilder builder, String label, String value, String unit, String indent) {
         builder.append(indent)
-                .append("• ")
+                .append(" -  ")
                 .append(label)
                 .append(": ")
                 .append(value)
