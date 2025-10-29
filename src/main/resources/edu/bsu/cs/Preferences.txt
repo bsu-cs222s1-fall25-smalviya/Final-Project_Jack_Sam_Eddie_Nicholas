@@ -1,1 +1,1 @@
-false;muncie;imperial;
+false;40.1933,-85.3863;I;
