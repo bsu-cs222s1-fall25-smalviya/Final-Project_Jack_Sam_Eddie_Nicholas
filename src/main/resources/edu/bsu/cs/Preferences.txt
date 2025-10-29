@@ -1,1 +1,1 @@
-false;muncie, in;I;
+true;40.1933,-85.3863;I;

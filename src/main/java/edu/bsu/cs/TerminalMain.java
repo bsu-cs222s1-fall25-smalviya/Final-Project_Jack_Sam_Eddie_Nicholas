@@ -97,13 +97,13 @@ public class TerminalMain {
         this.dataParser.forecastData();
         HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
         int i;
-        for (i=1;i<7;i++){
+        for (i=1;i<=13;i=i+2){
             ArrayList<String> forecast = weeklyForecast.get(i);
             System.out.println(this.dataFormatter.formatWeatherData(forecast,units,"Daily"));
         }
     }
 
     protected void resetPreferences() throws IOException {
-        fileController.savePreferences(new String[] {"false","muncie, in","I"});
+        fileController.savePreferences(new String[] {"false","40.1933,-85.3863","I"});
     }
 }
