@@ -41,7 +41,6 @@ public class APIDataParser {
         String precipitation = (ctx.read(base + ".probabilityOfPrecipitation.value")).toString();
         if (ctx.read(base + ".dewpoint.value") != null) {
             dewPoint = ctx.read(base + ".dewpoint.value").toString();
-            //dewPointValue = String.format("%.2f", dewPoint.doubleValue());
             humidity = (ctx.read(base + ".relativeHumidity.value")).toString();
         } else {
             dewPoint = null;
