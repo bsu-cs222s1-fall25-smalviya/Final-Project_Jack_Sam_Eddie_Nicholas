@@ -17,6 +17,9 @@ dependencies {
     implementation("com.jayway.jsonpath:json-path:2.9.0")
     // https://mvnrepository.com/artifact/org.apache.poi/poi
     implementation("org.apache.poi:poi:5.4.1")
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+    implementation("org.apache.poi:poi-ooxml:5.4.1")
+    implementation("org.apache.commons:commons-lang3:3.18.0")
 }
 
 tasks.test {

@@ -7,6 +7,7 @@ import java.io.IOException;
 
 public class CitiesDatabaseParserTest {
 
+    //Tests to see if the program could correctly return correct coordinates
     @Test
     public void getCoordinatesTest() throws IOException {
         String expectedLatLong = "39.8318,-84.8905";
