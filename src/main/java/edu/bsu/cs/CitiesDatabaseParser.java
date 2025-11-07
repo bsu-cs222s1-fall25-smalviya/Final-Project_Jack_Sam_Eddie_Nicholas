@@ -49,6 +49,9 @@ public class CitiesDatabaseParser {
     }
 
     public String getCoordinates(String zipCode) {
+        if (!zipCodeToCoordinates.containsKey(zipCode)) {
+            return "N/A Please try Again";
+        }
         List<String> coordinates = zipCodeToCoordinates.get(zipCode);
         return coordinates.getFirst();
     }
