@@ -1,5 +1,6 @@
 package edu.bsu.cs;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +29,7 @@ public class TerminalMain {
             if (choice.equals("0")) {
                 keepGoing = false;
             } else if (choice.equals("1")) {
-                tm.resetPreferences();
+                tm.fileController.resetPreferences();
             } else if (choice.equals("2")) {
                 tm.setPreferences();
             }  else if (choice.equals("3")){
@@ -120,9 +121,5 @@ public class TerminalMain {
         this.dataParser.alertsData();
         ArrayList<String> alerts = this.dataParser.getAlerts();
         System.out.println(this.dataFormatter.formatAlerts(alerts));
-    }
-
-    protected void resetPreferences() throws IOException {
-        fileController.savePreferences(new String[] {"false","40.1933,-85.3863","imperial"});
     }
 }
