@@ -50,7 +50,7 @@ public class CitiesDatabaseParser {
 
     public String getCoordinates(String zipCode) {
         if (!zipCodeToCoordinates.containsKey(zipCode)) {
-            return "N/A Please try Again";
+            return "Error";
         }
         List<String> coordinates = zipCodeToCoordinates.get(zipCode);
         return coordinates.getFirst();

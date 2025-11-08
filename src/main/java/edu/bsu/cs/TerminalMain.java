@@ -1,7 +1,6 @@
 package edu.bsu.cs;
 
 import javax.swing.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,10 +12,8 @@ public class TerminalMain {
     WeatherServiceAPI api = new WeatherServiceAPI();
     APIDataParser dataParser = new APIDataParser();
     DataFormatter dataFormatter = new DataFormatter();
-    ArrayList<Pair> locations;
 
-    public TerminalMain() throws FileNotFoundException {
-        this.locations = this.fileController.loadCities();
+    public TerminalMain() throws IOException {
     }
 
     static void main() throws IOException {
@@ -26,28 +23,21 @@ public class TerminalMain {
         tm.terminalController.printWelcomeMessage();
         while (keepGoing) {
             String choice = tm.terminalController.getUserChoice();
-            if (choice.equals("0")) {
-                keepGoing = false;
-            } else if (choice.equals("1")) {
-                tm.fileController.resetPreferences();
-            } else if (choice.equals("2")) {
-                tm.setPreferences();
-            }  else if (choice.equals("3")){
-                tm.terminalController.printPreferences();
-            } else if (choice.equals("4")) {
-                tm.getHourlyForecast();
-            } else if (choice.equals("5")) {
-                tm.getDailyForecast();
-            } else if (choice.equals("6")) {
-                tm.getWeatherAlerts();
-            } else {
-                tm.terminalController.printInvalidResponse();
+            switch (choice) {
+                case "0" -> keepGoing = false;
+                case "1" -> tm.fileController.resetPreferences();
+                case "2" -> tm.setPreferences();
+                case "3" -> tm.terminalController.printPreferences();
+                case "4" -> tm.getHourlyForecast();
+                case "5" -> tm.getDailyForecast();
+                case "6" -> tm.getWeatherAlerts();
+                default -> tm.terminalController.printInvalidResponse();
             }
         }
     }
 
     protected void setPreferences() throws IOException {
-        String location = terminalController.getLocationPreference(this.locations);
+        String location = terminalController.getLocationPreference();
         String units = terminalController.getUnitPreference();
         fileController.savePreferences(new String[] {"true",location,units});
     }
@@ -61,7 +51,7 @@ public class TerminalMain {
             link = api.createURLString(preferences[1]);
             units = preferences[2];
         } else {
-            String location = terminalController.getLocationPreference(this.locations);
+            String location = terminalController.getLocationPreference();
             units = terminalController.getUnitPreference();
             link = api.createURLString(location);
         }
@@ -88,7 +78,7 @@ public class TerminalMain {
             weatherData = api.getInputStreamFromURL(link);
             units = preferences[2];
         } else {
-            String location = terminalController.getLocationPreference(this.locations);
+            String location = terminalController.getLocationPreference();
             units = terminalController.getUnitPreference();
             String link = api.createURLString(location);
             weatherData = api.getInputStreamFromURL(link);
@@ -112,7 +102,7 @@ public class TerminalMain {
         if (preferences[0].equals("true")) {
             location = preferences[1];
         } else {
-            location = terminalController.getLocationPreference(this.locations);
+            location = terminalController.getLocationPreference();
         }
 
         String alertsURL = api.createAlertsURLString(location);
