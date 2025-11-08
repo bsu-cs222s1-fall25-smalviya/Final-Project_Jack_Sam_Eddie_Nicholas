@@ -21,6 +21,10 @@ public class TerminalMain {
         boolean keepGoing = true;
 
         tm.terminalController.printWelcomeMessage();
+        String[] preferences = tm.fileController.loadPreferences();
+        if (preferences[0].equals("true")) {
+            tm.getWeatherAlerts();
+        }
         while (keepGoing) {
             String choice = tm.terminalController.getUserChoice();
             switch (choice) {
