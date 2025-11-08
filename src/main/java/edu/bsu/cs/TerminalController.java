@@ -19,7 +19,8 @@ public class TerminalController {
                 2: Set preferences.
                 3: Print preferences.
                 4: Get hourly weather conditions
-                5: Get daily weather conditions""");
+                5: Get daily weather conditions
+                6: Get severe weather alerts""");
         return scanner.nextLine();
     }
 

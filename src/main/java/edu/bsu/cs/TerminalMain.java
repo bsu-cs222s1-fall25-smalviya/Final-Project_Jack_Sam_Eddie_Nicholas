@@ -38,6 +38,8 @@ public class TerminalMain {
                 tm.getHourlyForecast();
             } else if (choice.equals("5")) {
                 tm.getDailyForecast();
+            } else if (choice.equals("6")) {
+                tm.getWeatherAlerts();
             } else {
                 tm.terminalController.printInvalidResponse();
             }
@@ -102,5 +104,22 @@ public class TerminalMain {
             ArrayList<String> forecast = weeklyForecast.get(i);
             System.out.println(this.dataFormatter.formatWeatherData(forecast,units,"Daily"));
         }
+    }
+
+    protected void getWeatherAlerts() throws IOException {
+        String location;
+        String[] preferences = this.fileController.loadPreferences();
+        if (preferences[0].equals("true")) {
+            location = preferences[1];
+        } else {
+            location = terminalController.getLocationPreference(this.locations);
+        }
+
+        String alertsURL = api.createAlertsURLString(location);
+        InputStream alertsData = api.getInputStreamFromURL(alertsURL);
+        this.dataParser.setWeatherData(alertsData);
+        this.dataParser.alertsData();
+        ArrayList<String> alerts = this.dataParser.getAlerts();
+        System.out.println(this.dataFormatter.formatAlerts(alerts));
     }
 }

@@ -25,6 +25,35 @@ public class WeatherServiceAPITest {
         String actualURL = service.createURLString("40.1933,-85.3863");
         Assertions.assertEquals(expectedURL, actualURL);
     }
+
+
+    @Test
+    public void testWeatherAlertsAPI() throws IOException, ParseException {
+        WeatherServiceAPI service = new WeatherServiceAPI();
+        String latLong = "39.7456,-97.0892";
+        String urlString = service.createAlertsURLString(latLong);
+
+        InputStream connection = service.getInputStreamFromURL(urlString);
+
+        if (connection == null) {
+            Assertions.fail("Connection is null – failed to connect to the alerts API.");
+            return;
+        }
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
+        }
+        reader.close();
+
+        JSONParser parser = new JSONParser(JSONParser.MODE_PERMISSIVE);
+        JSONObject json = (JSONObject) parser.parse(response.toString());
+
+        //the API should return JSON object containing features
+        Assertions.assertTrue(json.containsKey("features"));
+    }
 }
 
 

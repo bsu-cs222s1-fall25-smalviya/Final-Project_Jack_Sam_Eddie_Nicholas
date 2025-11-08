@@ -5,6 +5,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Formats weather data and alerts for console display.
+ * Handles unit conversion and consistent formatting across all output types.
+ */
+
 public class DataFormatter {
 
     private final Converter converter;
@@ -12,6 +18,31 @@ public class DataFormatter {
     public DataFormatter() {
         this.converter = new Converter(new ArrayList<>());
     }
+
+
+
+
+    public String formatAlerts(ArrayList<String> alerts) {
+        if (alerts.isEmpty()) {
+            return "No active weather alerts.";
+        }
+
+        StringBuilder formattedAlerts = new StringBuilder();
+        formattedAlerts.append("Active Weather Alerts:\n");
+
+        for (int i = 0; i < alerts.size(); i += 2) {
+            if (i + 1 < alerts.size()) {
+                formattedAlerts.append("  -  ")
+                        .append(alerts.get(i))
+                        .append(": ")
+                        .append(alerts.get(i + 1))
+                        .append("\n");
+            }
+        }
+
+        return formattedAlerts.toString();
+    }
+
 
     public String formatWeatherData(ArrayList<String> weatherData, String desiredUnit, String forecastType) {
         return buildCurrentWeatherString(weatherData, desiredUnit, forecastType);

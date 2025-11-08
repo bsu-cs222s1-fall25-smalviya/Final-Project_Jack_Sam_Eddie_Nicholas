@@ -58,4 +58,20 @@ public class APIDataParserTest {
         ArrayList<String> actualArray = dailyForecast.get(1);
         Assertions.assertEquals(trueArray, actualArray);
     }
+
+    @Test
+    public void WeatherAlertsDataTest() throws IOException {
+        InputStream alertsData = getClass().getResourceAsStream("/edu/bsu/cs/weatherAlerts.json");
+        Assertions.assertNotNull(alertsData, "Alerts data stream was not found");
+
+        APIDataParser apiDataParser = new APIDataParser();
+        apiDataParser.setWeatherData(alertsData);
+        apiDataParser.alertsData();
+        ArrayList<String> alerts = apiDataParser.getAlerts();
+
+        Assertions.assertNotNull(alerts);
+        Assertions.assertTrue(alerts.size() >= 2);
+        Assertions.assertEquals("Severe Thunderstorm Warning", alerts.get(0));
+        Assertions.assertTrue(alerts.get(1).contains("National Weather Service"));
+    }
 }
