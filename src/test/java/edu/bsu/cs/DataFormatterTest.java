@@ -53,4 +53,37 @@ public class DataFormatterTest {
         String actualOutput = dataFormatter.formatWeatherData(weatherData, "M", "daily");
         assertEquals(expectedOutput.trim(), actualOutput.trim());
     }
+
+
+    @Test
+    public void testFormatAlerts_WithAlerts() {
+        DataFormatter dataFormatter = new DataFormatter();
+
+        ArrayList<String> alerts = new ArrayList<>(Arrays.asList(
+                "Severe Thunderstorm Warning",
+                "National Weather Service has issued a Severe Thunderstorm Warning",
+                "Flood Watch",
+                "A Flood Watch has been issued for the area"
+        ));
+
+        String expectedOutput = """
+        Active Weather Alerts:
+          -  Severe Thunderstorm Warning: National Weather Service has issued a Severe Thunderstorm Warning
+          -  Flood Watch: A Flood Watch has been issued for the area
+        """;
+
+        String actualOutput = dataFormatter.formatAlerts(alerts);
+        assertEquals(expectedOutput.trim(), actualOutput.trim());
+    }
+
+    @Test
+    public void testFormatAlerts_NoAlerts() {
+        DataFormatter dataFormatter = new DataFormatter();
+
+        ArrayList<String> alerts = new ArrayList<>();
+        String expectedOutput = "No active weather alerts.";
+        String actualOutput = dataFormatter.formatAlerts(alerts);
+
+        assertEquals(expectedOutput, actualOutput);
+    }
 }

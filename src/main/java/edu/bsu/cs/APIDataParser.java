@@ -8,11 +8,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import com.jayway.jsonpath.*;
 
+/**
+ * Parses JSON weather data from the Weather.gov API.
+ * Extracts hourly forecasts, daily forecasts, and severe weather alerts.
+ */
 
 public class APIDataParser {
 
     protected HashMap<Integer, ArrayList<String>> hourlyForecast = new HashMap<>();
     protected HashMap<Integer, ArrayList<String>> dailyForecast = new HashMap<>();
+    protected ArrayList<String> alerts = new ArrayList<>();
 
     private ReadContext ctx;
     private final Configuration conf = Configuration.builder()
@@ -28,6 +33,26 @@ public class APIDataParser {
     protected void forecastData(){
         for (int i = 1; i <= 14; i += 2){
             dailyForecast.put(i, ParseWeatherAPIData(i - 1));
+        }
+    }
+
+    protected void alertsData(){
+        alerts.clear();
+        try {
+            List<Map<String, Object>> features = ctx.read("$.features[*]");
+            for (Map<String, Object> feature : features) {
+                Map<String, Object> properties = (Map<String, Object>) feature.get("properties");
+                if (properties != null) {
+                    String event = (String) properties.get("event");
+                    String headline = (String) properties.get("headline");
+                    if (event != null && headline != null) {
+                        alerts.add(event);
+                        alerts.add(headline);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // No alerts or parsing error
         }
     }
 
@@ -79,5 +104,9 @@ public class APIDataParser {
 
     protected HashMap<Integer, ArrayList<String>> getDailyForecast() {
         return dailyForecast;
+    }
+
+    protected ArrayList<String> getAlerts() {
+        return alerts;
     }
 }

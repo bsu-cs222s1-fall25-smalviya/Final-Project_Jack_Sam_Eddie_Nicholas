@@ -1,0 +1,46 @@
+{
+  "@context": [
+    "https://geojson.org/geojson-ld/geojson-context.jsonld"
+  ],
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.1234567890",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "id": "urn:oid:2.49.0.1.840.0.1234567890",
+        "areaDesc": "Delaware; Grant; Hamilton; Hancock; Hendricks",
+        "event": "Severe Thunderstorm Warning",
+        "headline": "Severe Thunderstorm Warning issued November 7 at 3:00PM EST until November 7 at 4:00PM EST by National Weather Service",
+        "description": "At 300 PM EST, a severe thunderstorm was located near Indianapolis, moving northeast at 40 mph.",
+        "instruction": "For your protection move to an interior room on the lowest floor of a building.",
+        "severity": "Severe",
+        "certainty": "Observed",
+        "urgency": "Immediate",
+        "onset": "2025-11-07T15:00:00-05:00",
+        "expires": "2025-11-07T16:00:00-05:00"
+      }
+    },
+    {
+      "id": "https://api.weather.gov/alerts/urn:oid:2.49.0.1.840.0.9876543210",
+      "type": "Feature",
+      "geometry": null,
+      "properties": {
+        "id": "urn:oid:2.49.0.1.840.0.9876543210",
+        "areaDesc": "Marion; Johnson; Shelby",
+        "event": "Flood Watch",
+        "headline": "Flood Watch issued November 7 at 2:00PM EST until November 8 at 8:00AM EST by National Weather Service",
+        "description": "Excessive rainfall possible. A Flood Watch means there is a potential for flooding based on current forecasts.",
+        "instruction": "You should monitor later forecasts and be alert for possible Flood Warnings.",
+        "severity": "Moderate",
+        "certainty": "Possible",
+        "urgency": "Future",
+        "onset": "2025-11-07T14:00:00-05:00",
+        "expires": "2025-11-08T08:00:00-05:00"
+      }
+    }
+  ],
+  "title": "Current watches, warnings, and advisories for Indiana",
+  "updated": "2025-11-07T15:30:00-05:00"
+}
