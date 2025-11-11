@@ -19,7 +19,8 @@ public class TerminalController {
                 2: Set preferences.
                 3: Print preferences.
                 4: Get hourly weather conditions
-                5: Get daily weather conditions""");
+                5: Get daily weather conditions
+                6: Get severe weather alerts""");
         return scanner.nextLine();
     }
 
@@ -81,14 +82,15 @@ public class TerminalController {
         System.out.println("Would you like units to be in Imperial or Metric? (I/M)");
         String unitPreference = scanner.nextLine();
 
-        if (unitPreference.equalsIgnoreCase("I")) {
-            return "I";
-        } else if (unitPreference.equalsIgnoreCase("M")) {
-            return "M";
+        if (unitPreference.equalsIgnoreCase("imperial") || unitPreference.equalsIgnoreCase("I")) {
+            return "imperial";
+        } else if (unitPreference.equalsIgnoreCase("metric") || unitPreference.equalsIgnoreCase("M")) {
+            return "metric";
         } else {
             System.out.println("Invalid response. Defaulted to Imperial");
-            return "I";
+            return "imperial";
         }
+
     }
 
     protected String getForecastType(){

@@ -1,5 +1,6 @@
 package edu.bsu.cs;
 
+import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +29,7 @@ public class TerminalMain {
             if (choice.equals("0")) {
                 keepGoing = false;
             } else if (choice.equals("1")) {
-                tm.resetPreferences();
+                tm.fileController.resetPreferences();
             } else if (choice.equals("2")) {
                 tm.setPreferences();
             }  else if (choice.equals("3")){
@@ -37,6 +38,8 @@ public class TerminalMain {
                 tm.getHourlyForecast();
             } else if (choice.equals("5")) {
                 tm.getDailyForecast();
+            } else if (choice.equals("6")) {
+                tm.getWeatherAlerts();
             } else {
                 tm.terminalController.printInvalidResponse();
             }
@@ -103,7 +106,20 @@ public class TerminalMain {
         }
     }
 
-    protected void resetPreferences() throws IOException {
-        fileController.savePreferences(new String[] {"false","40.1933,-85.3863","I"});
+    protected void getWeatherAlerts() throws IOException {
+        String location;
+        String[] preferences = this.fileController.loadPreferences();
+        if (preferences[0].equals("true")) {
+            location = preferences[1];
+        } else {
+            location = terminalController.getLocationPreference(this.locations);
+        }
+
+        String alertsURL = api.createAlertsURLString(location);
+        InputStream alertsData = api.getInputStreamFromURL(alertsURL);
+        this.dataParser.setWeatherData(alertsData);
+        this.dataParser.alertsData();
+        ArrayList<String> alerts = this.dataParser.getAlerts();
+        System.out.println(this.dataFormatter.formatAlerts(alerts));
     }
 }

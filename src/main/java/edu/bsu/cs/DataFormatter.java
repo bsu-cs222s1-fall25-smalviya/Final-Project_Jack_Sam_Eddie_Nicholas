@@ -5,6 +5,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Formats weather data and alerts for console display.
+ * Handles unit conversion and consistent formatting across all output types.
+ */
+
 public class DataFormatter {
 
     private final Converter converter;
@@ -12,6 +18,31 @@ public class DataFormatter {
     public DataFormatter() {
         this.converter = new Converter(new ArrayList<>());
     }
+
+
+
+
+    public String formatAlerts(ArrayList<String> alerts) {
+        if (alerts.isEmpty()) {
+            return "No active weather alerts.";
+        }
+
+        StringBuilder formattedAlerts = new StringBuilder();
+        formattedAlerts.append("Active Weather Alerts:\n");
+
+        for (int i = 0; i < alerts.size(); i += 2) {
+            if (i + 1 < alerts.size()) {
+                formattedAlerts.append("  -  ")
+                        .append(alerts.get(i))
+                        .append(": ")
+                        .append(alerts.get(i + 1))
+                        .append("\n");
+            }
+        }
+
+        return formattedAlerts.toString();
+    }
+
 
     public String formatWeatherData(ArrayList<String> weatherData, String desiredUnit, String forecastType) {
         return buildCurrentWeatherString(weatherData, desiredUnit, forecastType);
@@ -51,14 +82,14 @@ public class DataFormatter {
 
         if (desiredUnit.equalsIgnoreCase("M")) {
             displayTemp = converter.fahrenheitToCelsius(tempValue);
-            tempUnitLabel = "°C";
+            tempUnitLabel = " degrees C";
             displayDewPoint = (int) Math.round(dewPointValue);
-            dewPointUnitLabel = "°C";
+            dewPointUnitLabel = " degrees C";
         } else {
             displayTemp = (int) Math.round(tempValue);
-            tempUnitLabel = "°F";
+            tempUnitLabel = " degrees F";
             displayDewPoint = converter.celsiusToFahrenheit(dewPointValue);
-            dewPointUnitLabel = "°F";
+            dewPointUnitLabel = " degrees F";
         }
 
         if (weatherData.size() > 3) {
@@ -76,11 +107,9 @@ public class DataFormatter {
         return formattedData.toString();
     }
 
-
-
     private void appendDataPoint(StringBuilder builder, String label, String value, String unit, String indent) {
         builder.append(indent)
-                .append("• ")
+                .append(" -  ")
                 .append(label)
                 .append(": ")
                 .append(value)

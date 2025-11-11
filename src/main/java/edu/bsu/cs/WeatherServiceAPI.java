@@ -14,4 +14,9 @@ public class WeatherServiceAPI {
         URLConnection connection = uri.toURL().openConnection();
         return connection.getInputStream();
     }
+
+    protected String createAlertsURLString(String latLong) {
+        return "https://api.weather.gov/alerts/active?point=" + latLong;
+    }
+
 }

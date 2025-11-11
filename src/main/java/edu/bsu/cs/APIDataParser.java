@@ -8,11 +8,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import com.jayway.jsonpath.*;
 
+/**
+ * Parses JSON weather data from the Weather.gov API.
+ * Extracts hourly forecasts, daily forecasts, and severe weather alerts.
+ */
 
 public class APIDataParser {
 
     protected HashMap<Integer, ArrayList<String>> hourlyForecast = new HashMap<>();
     protected HashMap<Integer, ArrayList<String>> dailyForecast = new HashMap<>();
+    protected ArrayList<String> alerts = new ArrayList<>();
 
     private ReadContext ctx;
     private final Configuration conf = Configuration.builder()
@@ -31,6 +36,26 @@ public class APIDataParser {
         }
     }
 
+    protected void alertsData(){
+        alerts.clear();
+        try {
+            List<Map<String, Object>> features = ctx.read("$.features[*]");
+            for (Map<String, Object> feature : features) {
+                Map<String, Object> properties = (Map<String, Object>) feature.get("properties");
+                if (properties != null) {
+                    String event = (String) properties.get("event");
+                    String headline = (String) properties.get("headline");
+                    if (event != null && headline != null) {
+                        alerts.add(event);
+                        alerts.add(headline);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // No alerts or parsing error
+        }
+    }
+
 
 
     protected ArrayList<String> ParseWeatherAPIData(int periodQuery){
@@ -41,7 +66,6 @@ public class APIDataParser {
         String precipitation = (ctx.read(base + ".probabilityOfPrecipitation.value")).toString();
         if (ctx.read(base + ".dewpoint.value") != null) {
             dewPoint = ctx.read(base + ".dewpoint.value").toString();
-            //dewPointValue = String.format("%.2f", dewPoint.doubleValue());
             humidity = (ctx.read(base + ".relativeHumidity.value")).toString();
         } else {
             dewPoint = null;
@@ -79,5 +103,9 @@ public class APIDataParser {
 
     protected HashMap<Integer, ArrayList<String>> getDailyForecast() {
         return dailyForecast;
+    }
+
+    protected ArrayList<String> getAlerts() {
+        return alerts;
     }
 }
