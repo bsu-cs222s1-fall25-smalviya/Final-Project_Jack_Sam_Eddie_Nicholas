@@ -23,9 +23,10 @@ public class TerminalController {
                 1: Reset preferences.
                 2: Set preferences.
                 3: Print preferences.
-                4: Get hourly weather conditions
-                5: Get daily weather conditions
-                6: Get severe weather alerts""");
+                4: Get hourly weather conditions.
+                5: Get daily weather conditions.
+                6: Get severe weather alerts.
+                7: Get outfit recommendations.""");
         return scanner.nextLine();
     }
 

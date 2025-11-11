@@ -12,6 +12,8 @@ public class TerminalMain {
     WeatherServiceAPI api = new WeatherServiceAPI();
     APIDataParser dataParser = new APIDataParser();
     DataFormatter dataFormatter = new DataFormatter();
+    Converter converter = new Converter();
+    OutfitRecommender outfitRecommender = new OutfitRecommender(converter);
 
     public TerminalMain() throws IOException {
     }
@@ -35,6 +37,7 @@ public class TerminalMain {
                 case "4" -> tm.getHourlyForecast();
                 case "5" -> tm.getDailyForecast();
                 case "6" -> tm.getWeatherAlerts();
+                case "7" -> tm.getOutfitRecommendations();
                 default -> tm.terminalController.printInvalidResponse();
             }
         }
@@ -115,5 +118,38 @@ public class TerminalMain {
         this.dataParser.alertsData();
         ArrayList<String> alerts = this.dataParser.getAlerts();
         System.out.println(this.dataFormatter.formatAlerts(alerts));
+    }
+
+    protected void getOutfitRecommendations() throws IOException {
+        InputStream weatherData;
+        String units;
+        String[] preferences = this.fileController.loadPreferences();
+        if (preferences[0].equals("true")) {
+            String link = api.createURLString(preferences[1]);
+            weatherData = api.getInputStreamFromURL(link);
+            units = preferences[2];
+        } else {
+            String location = terminalController.getLocationPreference();
+            units = terminalController.getUnitPreference();
+            String link = api.createURLString(location);
+            weatherData = api.getInputStreamFromURL(link);
+        }
+
+        String forcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
+        InputStream forecastData = this.api.getInputStreamFromURL(forcastURLString);
+        this.dataParser.setWeatherData(forecastData);
+        this.dataParser.forecastData();
+        HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
+        int i;
+        for (i=1;i<=13;i=i+2){
+            ArrayList<String> forecast = weeklyForecast.get(i);
+            Double temp = Double.valueOf(forecast.get(0));
+            if (i==1){
+                System.out.println("Today:");
+            } else {
+                System.out.println("Next day:");
+            }
+            System.out.println(outfitRecommender.temperatureOutfitRecommender(temp, units));
+        }
     }
 }

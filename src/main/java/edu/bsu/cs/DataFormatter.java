@@ -16,7 +16,7 @@ public class DataFormatter {
     private final Converter converter;
 
     public DataFormatter() {
-        this.converter = new Converter(new ArrayList<>());
+        this.converter = new Converter();
     }
 
 
