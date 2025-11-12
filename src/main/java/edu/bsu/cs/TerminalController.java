@@ -71,7 +71,7 @@ public class TerminalController {
         System.out.println("Enter the zipcode you would like to get weather for ");
         String response = scanner.nextLine();
         String zipcode = citiesDatabase.getCoordinates(response);
-        if (zipcode.equals("Error")){
+        if (zipcode.equals("Error")||response.isEmpty()){
             System.out.println("Invalid input. Defaulted to Muncie");
             return "40.1933,-85.3863";
         }
