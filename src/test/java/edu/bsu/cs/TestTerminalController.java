@@ -5,11 +5,15 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class TestTerminalController {
     TerminalController terminalController = new TerminalController();
     FileController fileController = new FileController();
+
+    public TestTerminalController() throws IOException {
+    }
 
     //TODO: figure out how to assert this
     @Test
@@ -51,18 +55,14 @@ public class TestTerminalController {
 
     @Test
     public void testGetLocationPreference(){
-        ArrayList<Pair> locations = new ArrayList<>();
-        Pair indianapolis = new Pair("Indianapolis", "39.791,-86.148");
-        locations.add(indianapolis);
-
         String simulatedInput = "nothing";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-        String preference = terminalController.getLocationPreference(locations);
+        String preference = terminalController.getLocationPreference();
         Assertions.assertEquals("40.1933,-85.3863", preference);
 
-        simulatedInput = "indianapolis";
+        simulatedInput = "46077";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-        preference = terminalController.getLocationPreference(locations);
+        preference = terminalController.getLocationPreference();
         Assertions.assertEquals("39.791,-86.148", preference);
     }
 

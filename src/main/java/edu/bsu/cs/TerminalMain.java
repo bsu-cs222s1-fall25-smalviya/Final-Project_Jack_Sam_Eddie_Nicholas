@@ -1,7 +1,6 @@
 package edu.bsu.cs;
 
 import javax.swing.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -13,10 +12,10 @@ public class TerminalMain {
     WeatherServiceAPI api = new WeatherServiceAPI();
     APIDataParser dataParser = new APIDataParser();
     DataFormatter dataFormatter = new DataFormatter();
-    ArrayList<Pair> locations;
+    Converter converter = new Converter();
+    OutfitRecommender outfitRecommender = new OutfitRecommender(converter);
 
-    public TerminalMain() throws FileNotFoundException {
-        this.locations = this.fileController.loadCities();
+    public TerminalMain() throws IOException {
     }
 
     static void main() throws IOException {
@@ -24,30 +23,28 @@ public class TerminalMain {
         boolean keepGoing = true;
 
         tm.terminalController.printWelcomeMessage();
+        String[] preferences = tm.fileController.loadPreferences();
+        if (preferences[0].equals("true")) {
+            tm.getWeatherAlerts();
+        }
         while (keepGoing) {
             String choice = tm.terminalController.getUserChoice();
-            if (choice.equals("0")) {
-                keepGoing = false;
-            } else if (choice.equals("1")) {
-                tm.fileController.resetPreferences();
-            } else if (choice.equals("2")) {
-                tm.setPreferences();
-            }  else if (choice.equals("3")){
-                tm.terminalController.printPreferences();
-            } else if (choice.equals("4")) {
-                tm.getHourlyForecast();
-            } else if (choice.equals("5")) {
-                tm.getDailyForecast();
-            } else if (choice.equals("6")) {
-                tm.getWeatherAlerts();
-            } else {
-                tm.terminalController.printInvalidResponse();
+            switch (choice) {
+                case "0" -> keepGoing = false;
+                case "1" -> tm.fileController.resetPreferences();
+                case "2" -> tm.setPreferences();
+                case "3" -> tm.terminalController.printPreferences();
+                case "4" -> tm.getHourlyForecast();
+                case "5" -> tm.getDailyForecast();
+                case "6" -> tm.getWeatherAlerts();
+                case "7" -> tm.getOutfitRecommendations();
+                default -> tm.terminalController.printInvalidResponse();
             }
         }
     }
 
     protected void setPreferences() throws IOException {
-        String location = terminalController.getLocationPreference(this.locations);
+        String location = terminalController.getLocationPreference();
         String units = terminalController.getUnitPreference();
         fileController.savePreferences(new String[] {"true",location,units});
     }
@@ -61,7 +58,7 @@ public class TerminalMain {
             link = api.createURLString(preferences[1]);
             units = preferences[2];
         } else {
-            String location = terminalController.getLocationPreference(this.locations);
+            String location = terminalController.getLocationPreference();
             units = terminalController.getUnitPreference();
             link = api.createURLString(location);
         }
@@ -88,7 +85,7 @@ public class TerminalMain {
             weatherData = api.getInputStreamFromURL(link);
             units = preferences[2];
         } else {
-            String location = terminalController.getLocationPreference(this.locations);
+            String location = terminalController.getLocationPreference();
             units = terminalController.getUnitPreference();
             String link = api.createURLString(location);
             weatherData = api.getInputStreamFromURL(link);
@@ -112,7 +109,7 @@ public class TerminalMain {
         if (preferences[0].equals("true")) {
             location = preferences[1];
         } else {
-            location = terminalController.getLocationPreference(this.locations);
+            location = terminalController.getLocationPreference();
         }
 
         String alertsURL = api.createAlertsURLString(location);
@@ -121,5 +118,37 @@ public class TerminalMain {
         this.dataParser.alertsData();
         ArrayList<String> alerts = this.dataParser.getAlerts();
         System.out.println(this.dataFormatter.formatAlerts(alerts));
+    }
+
+    protected void getOutfitRecommendations() throws IOException {
+        InputStream weatherData;
+        String units;
+        String[] preferences = this.fileController.loadPreferences();
+        if (preferences[0].equals("true")) {
+            String link = api.createURLString(preferences[1]);
+            weatherData = api.getInputStreamFromURL(link);
+            units = preferences[2];
+        } else {
+            String location = terminalController.getLocationPreference();
+            units = terminalController.getUnitPreference();
+            String link = api.createURLString(location);
+            weatherData = api.getInputStreamFromURL(link);
+        }
+
+        String forcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
+        InputStream forecastData = this.api.getInputStreamFromURL(forcastURLString);
+        this.dataParser.setWeatherData(forecastData);
+        this.dataParser.forecastData();
+        HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
+        int i;
+        double weekTemp = 0;
+        for (i=1;i<=13;i=i+2){
+            ArrayList<String> forecast = weeklyForecast.get(i);
+            weekTemp += Double.parseDouble(forecast.getFirst());
+        }
+        double averageTemp = weekTemp/7;
+        System.out.println("Here's your outfit recommendation for the average temperature next week: ");
+        System.out.println(outfitRecommender.temperatureOutfitRecommender(averageTemp, units));
+        System.out.println();
     }
 }

@@ -1,11 +1,16 @@
 package edu.bsu.cs;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TerminalController {
+    CitiesDatabaseParser citiesDatabase = new CitiesDatabaseParser();
+
+    public TerminalController() throws IOException {
+    }
+
     protected void printWelcomeMessage(){
         System.out.println("Welcome to the CS220 Weather App!");
     }
@@ -18,9 +23,10 @@ public class TerminalController {
                 1: Reset preferences.
                 2: Set preferences.
                 3: Print preferences.
-                4: Get hourly weather conditions
-                5: Get daily weather conditions
-                6: Get severe weather alerts""");
+                4: Get hourly weather conditions.
+                5: Get daily weather conditions.
+                6: Get severe weather alerts.
+                7: Get outfit recommendations.""");
         return scanner.nextLine();
     }
 
@@ -59,21 +65,18 @@ public class TerminalController {
         }
     }
 
-    protected String getLocationPreference(ArrayList<Pair> locations){
+    protected String getLocationPreference(){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("What would you like your location to be? ");
-        System.out.println("Choose from these options: ");
-        this.printLocations(locations);
-
+        System.out.println("Enter the zipcode you would like to get weather for ");
         String response = scanner.nextLine();
-        for (Pair i: locations){
-            if (response.equalsIgnoreCase(i.getName())){
-                return i.getLatLong();
-            }
+        String zipcode = citiesDatabase.getCoordinates(response);
+        if (zipcode.equals("Error")){
+            System.out.println("Invalid input. Defaulted to Muncie");
+            return "40.1933,-85.3863";
         }
-        System.out.println("Invalid response. Defaulted to Muncie. ");
-        return "40.1933,-85.3863";
+        return zipcode;
+
     }
 
     protected String getUnitPreference() {
