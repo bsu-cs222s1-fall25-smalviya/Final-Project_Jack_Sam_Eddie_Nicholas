@@ -144,9 +144,9 @@ public class TerminalMain {
         double weekTemp = 0;
         for (i=1;i<=13;i=i+2){
             ArrayList<String> forecast = weeklyForecast.get(i);
-            weekTemp += Double.valueOf(forecast.get(0));
+            weekTemp += Double.parseDouble(forecast.getFirst());
         }
-        Double averageTemp = weekTemp/7;
+        double averageTemp = weekTemp/7;
         System.out.println("Here's your outfit recommendation for the average temperature next week: ");
         System.out.println(outfitRecommender.temperatureOutfitRecommender(averageTemp, units));
         System.out.println();
