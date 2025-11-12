@@ -1,9 +1,7 @@
 package edu.bsu.cs;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -80,7 +78,7 @@ public class DataFormatter {
         int displayTemp;
         int displayDewPoint;
 
-        if (desiredUnit.equalsIgnoreCase("M")) {
+        if (desiredUnit.equalsIgnoreCase("Metric")) {
             displayTemp = converter.fahrenheitToCelsius(tempValue);
             tempUnitLabel = " degrees C";
             displayDewPoint = (int) Math.round(dewPointValue);
