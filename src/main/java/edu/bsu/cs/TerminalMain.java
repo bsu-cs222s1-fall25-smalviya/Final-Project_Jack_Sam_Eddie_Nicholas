@@ -141,15 +141,14 @@ public class TerminalMain {
         this.dataParser.forecastData();
         HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
         int i;
+        double weekTemp = 0;
         for (i=1;i<=13;i=i+2){
             ArrayList<String> forecast = weeklyForecast.get(i);
-            Double temp = Double.valueOf(forecast.get(0));
-            if (i==1){
-                System.out.println("Today:");
-            } else {
-                System.out.println("Next day:");
-            }
-            System.out.println(outfitRecommender.temperatureOutfitRecommender(temp, units));
+            weekTemp += Double.valueOf(forecast.get(0));
         }
+        Double averageTemp = weekTemp/7;
+        System.out.println("Here's your outfit recommendation for the average temperature next week: ");
+        System.out.println(outfitRecommender.temperatureOutfitRecommender(averageTemp, units));
+        System.out.println();
     }
 }

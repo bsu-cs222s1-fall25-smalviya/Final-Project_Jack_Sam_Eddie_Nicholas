@@ -72,7 +72,7 @@ public class TerminalController {
         String response = scanner.nextLine();
         String zipcode = citiesDatabase.getCoordinates(response);
         if (zipcode.equals("Error")){
-            System.out.println("Error: Invalid input. Defaulted to Muncie");
+            System.out.println("Invalid input. Defaulted to Muncie");
             return "40.1933,-85.3863";
         }
         return zipcode;
