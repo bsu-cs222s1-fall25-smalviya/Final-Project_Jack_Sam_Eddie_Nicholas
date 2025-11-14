@@ -1,9 +1,6 @@
 package edu.bsu.cs;
 
-import java.util.ArrayList;
-
 public class Converter {
-    ArrayList<Pair> locationPairs;
 
     public int fahrenheitToCelsius(int fUnit){
         float cUnit = (float) (fUnit - 32) * 5 / 9;

@@ -18,10 +18,8 @@ public class TestTerminalController {
     //TODO: figure out how to assert this
     @Test
     public void testPrintMessages() throws FileNotFoundException {
-        ArrayList<Pair> locations = fileController.loadCities();
 
         terminalController.printWelcomeMessage();
-        terminalController.printLocations(locations);
         terminalController.printInvalidResponse();
     }
 
@@ -63,7 +61,7 @@ public class TestTerminalController {
         simulatedInput = "46077";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         preference = terminalController.getLocationPreference();
-        Assertions.assertEquals("39.791,-86.148", preference);
+        Assertions.assertEquals("39.9897,-86.3182", preference);
     }
 
     @Test

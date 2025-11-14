@@ -55,7 +55,3 @@ public class WeatherServiceAPITest {
         Assertions.assertTrue(json.containsKey("features"));
     }
 }
-
-
-
-

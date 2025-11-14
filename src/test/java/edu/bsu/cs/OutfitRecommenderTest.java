@@ -1,7 +1,6 @@
 package edu.bsu.cs;
 
 import org.junit.jupiter.api.Test;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +8,7 @@ class OutfitRecommenderTest {
 //these test every out come for temp in OutfitRecommender and if they are saying what they should be saying
     @Test
     void testTemperatureBelowMinus50() {
-        var converter = new Converter(new ArrayList<>());
+        var converter = new Converter();
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(-60, "F");
@@ -18,7 +17,7 @@ class OutfitRecommenderTest {
 
     @Test
     void testTemperatureEqualTo25() {
-        var converter = new Converter(new ArrayList<>());
+        var converter = new Converter();
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(25, "F");
@@ -27,7 +26,7 @@ class OutfitRecommenderTest {
 
     @Test
     void testTemperatureEqualTo55() {
-        var converter = new Converter(new ArrayList<>());
+        var converter = new Converter();
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(55, "F");
@@ -36,7 +35,7 @@ class OutfitRecommenderTest {
 
     @Test
     void testTemperatureEqualTo75() {
-        var converter = new Converter(new ArrayList<>());
+        var converter = new Converter();
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(75, "F");
@@ -45,7 +44,7 @@ class OutfitRecommenderTest {
 
     @Test
     void testTemperatureEqualTo100() {
-        var converter = new Converter(new ArrayList<>());
+        var converter = new Converter();
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(100, "F");
@@ -56,7 +55,7 @@ class OutfitRecommenderTest {
     //percipation
     @Test
     void testPrecipitationEqualTo0() {
-        var converter = new Converter(new ArrayList<>());
+        var converter = new Converter();
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.precipitationOutfitRecommender(0.00);
@@ -68,7 +67,7 @@ class OutfitRecommenderTest {
     //windspeed
     @Test
     void testWindspeedEqualTo2() {
-        var converter = new Converter(new ArrayList<>());
+        var converter = new Converter();
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.windspeedOutfitRecommender(2, "MpH");

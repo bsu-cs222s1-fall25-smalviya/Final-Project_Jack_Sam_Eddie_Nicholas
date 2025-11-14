@@ -43,12 +43,6 @@ public class TerminalController {
         System.out.println("Invalid response. ");
     }
 
-    protected void printLocations(ArrayList<Pair> locations){
-        for (Pair i: locations) {
-            System.out.println(i.getName());
-        }
-    }
-
     protected String getPreferencePreferences(){
         Scanner scanner = new Scanner(System.in);
 
