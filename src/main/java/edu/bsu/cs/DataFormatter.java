@@ -78,7 +78,7 @@ public class DataFormatter {
         int displayTemp;
         int displayDewPoint;
 
-        if (desiredUnit.equalsIgnoreCase("Metric")) {
+        if (desiredUnit.equalsIgnoreCase("Metric")||desiredUnit.equalsIgnoreCase("M")) {
             displayTemp = converter.fahrenheitToCelsius(tempValue);
             tempUnitLabel = " degrees C";
             displayDewPoint = (int) Math.round(dewPointValue);
