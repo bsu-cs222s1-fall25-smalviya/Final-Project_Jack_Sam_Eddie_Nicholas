@@ -12,7 +12,7 @@ class OutfitRecommenderTest {
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(-60, "F");
-        assertEquals("Too cold for out doors, risk of frostbite", result);
+        assertEquals(" - Too cold for out doors, risk of frostbite", result);
     }
 
     @Test
@@ -21,7 +21,7 @@ class OutfitRecommenderTest {
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(25, "F");
-        assertEquals("pants, a coat, a hat, footwear that will tolerate mud and snow, mitts or gloves", result);
+        assertEquals(" - Pants, a coat, a hat, footwear that will tolerate mud and snow, mitts or gloves", result);
     }
 
     @Test
@@ -30,7 +30,7 @@ class OutfitRecommenderTest {
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(55, "F");
-        assertEquals("warm weather clothes. Shorts, skirts without leggings, and sandals appear", result);
+        assertEquals(" - Warm weather clothes. Shorts, skirts without leggings, and sandals appear", result);
     }
 
     @Test
@@ -39,7 +39,7 @@ class OutfitRecommenderTest {
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(75, "F");
-        assertEquals("hot weather clothes, shorts, short sleeveless, sun hats", result);
+        assertEquals(" - Hot weather clothes, shorts, short sleeveless, sun hats", result);
     }
 
     @Test
@@ -48,7 +48,7 @@ class OutfitRecommenderTest {
         var recommender = new OutfitRecommender(converter);
 
         String result = recommender.temperatureOutfitRecommender(100, "F");
-        assertEquals("Too hot for our doors, risk of heat stroke", result);
+        assertEquals(" - Too hot for our doors, risk of heat stroke", result);
     }
 
     //current iteration theses are not used but will for iteration 3
