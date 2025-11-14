@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class OutfitRecommenderTest {
-
+//these test every out come for temp in OutfitRecommender and if they are saying what they should be saying
     @Test
     void testTemperatureBelowMinus50() {
         var converter = new Converter(new ArrayList<>());
@@ -52,6 +52,7 @@ class OutfitRecommenderTest {
         assertEquals("Too hot for our doors, risk of heat stroke", result);
     }
 
+    //current iteration theses are not used but will for iteration 3
     //percipation
     @Test
     void testPrecipitationEqualTo0() {

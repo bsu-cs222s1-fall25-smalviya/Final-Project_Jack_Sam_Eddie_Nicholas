@@ -6,6 +6,7 @@ public class OutfitRecommender {
     private final Converter converter;
 
     //calls on the converter to simplify temp useage like C to F
+    //it's math is based on F
     public OutfitRecommender(Converter converter) {
         this.converter = converter;
     }
@@ -38,7 +39,7 @@ public class OutfitRecommender {
         }
         return temperatureRecommendation;
     }
-
+//current iteration theses are not used but will for iteration 3
 protected String precipitationOutfitRecommender(double precipitation) {
     String precipitationrecommendation = "";
     //chance of water falling from the sky, ice, snow, rain
