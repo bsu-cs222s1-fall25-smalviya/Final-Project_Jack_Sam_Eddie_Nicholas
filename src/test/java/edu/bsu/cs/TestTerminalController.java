@@ -6,18 +6,16 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class TestTerminalController {
     TerminalController terminalController = new TerminalController();
-    FileController fileController = new FileController();
 
     public TestTerminalController() throws IOException {
     }
 
     //TODO: figure out how to assert this
     @Test
-    public void testPrintMessages() throws FileNotFoundException {
+    public void testPrintMessages(){
 
         terminalController.printWelcomeMessage();
         terminalController.printInvalidResponse();

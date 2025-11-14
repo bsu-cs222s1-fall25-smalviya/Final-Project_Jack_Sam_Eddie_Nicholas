@@ -1,8 +1,6 @@
 package edu.bsu.cs;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class FileController {
