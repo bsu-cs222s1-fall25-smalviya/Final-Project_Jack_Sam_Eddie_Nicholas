@@ -1,9 +1,14 @@
 package edu.bsu.cs;
 
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
+import net.minidev.json.parser.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class WeatherServiceAPITest {
     WeatherServiceAPI service = new WeatherServiceAPI();
@@ -55,7 +60,3 @@ public class WeatherServiceAPITest {
         Assertions.assertTrue(json.containsKey("features"));
     }
 }
-
-
-
-

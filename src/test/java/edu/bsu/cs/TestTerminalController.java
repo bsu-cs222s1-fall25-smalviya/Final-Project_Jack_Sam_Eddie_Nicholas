@@ -4,24 +4,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class TestTerminalController {
     TerminalController terminalController = new TerminalController();
-    FileController fileController = new FileController();
 
     public TestTerminalController() throws IOException {
     }
 
     //TODO: figure out how to assert this
     @Test
-    public void testPrintMessages() throws FileNotFoundException {
-        ArrayList<Pair> locations = fileController.loadCities();
+    public void testPrintMessages(){
 
         terminalController.printWelcomeMessage();
-        terminalController.printLocations(locations);
         terminalController.printInvalidResponse();
     }
 
@@ -63,7 +58,7 @@ public class TestTerminalController {
         simulatedInput = "46077";
         System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
         preference = terminalController.getLocationPreference();
-        Assertions.assertEquals("39.791,-86.148", preference);
+        Assertions.assertEquals("39.9897,-86.3182", preference);
     }
 
     @Test

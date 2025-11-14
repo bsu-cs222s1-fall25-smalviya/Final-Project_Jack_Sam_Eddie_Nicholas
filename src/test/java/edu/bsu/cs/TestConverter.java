@@ -3,19 +3,8 @@ package edu.bsu.cs;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
 public class TestConverter {
-    ArrayList<Pair> locationPairs = new ArrayList<>();
-    Converter converter = new Converter(locationPairs);
-
-    public TestConverter() {
-        Pair munciePair = new Pair("Muncie", "40.1933,-85.3863");
-        Pair indianapolisPair = new Pair("Indianapolis", "39.7655,-86.1595");
-
-        this.locationPairs.add(munciePair);
-        this.locationPairs.add(indianapolisPair);
-    }
+    Converter converter = new Converter();
 
     @Test
     public void testFahrenheitToCelsiusInt(){
@@ -80,17 +69,6 @@ public class TestConverter {
 
         Assertions.assertEquals(41, fTemp1);
         Assertions.assertEquals(40, fTemp2); // (40/9 * 9/5) + 32 = 8 + 32 = 40
-    }
-
-    @Test
-    public void testLocationToLatLong(){
-        String indianapolisLatLong = converter.locationToLatLong("Indianapolis");
-        String muncieLatLong = converter.locationToLatLong("Muncie");
-        String istanbulLatLong = converter.locationToLatLong("Istanbul");
-
-        Assertions.assertEquals("39.7655,-86.1595", indianapolisLatLong);
-        Assertions.assertEquals("40.1933,-85.3863", muncieLatLong);
-        Assertions.assertNull(istanbulLatLong);
     }
 
     @Test

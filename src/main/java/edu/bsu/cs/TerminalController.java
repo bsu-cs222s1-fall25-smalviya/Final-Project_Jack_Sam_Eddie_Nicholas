@@ -2,7 +2,6 @@ package edu.bsu.cs;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TerminalController {
@@ -41,12 +40,6 @@ public class TerminalController {
 
     protected void printInvalidResponse(){
         System.out.println("Invalid response. ");
-    }
-
-    protected void printLocations(ArrayList<Pair> locations){
-        for (Pair i: locations) {
-            System.out.println(i.getName());
-        }
     }
 
     protected String getPreferencePreferences(){
