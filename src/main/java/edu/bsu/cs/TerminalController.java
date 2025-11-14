@@ -11,7 +11,7 @@ public class TerminalController {
     }
 
     protected void printWelcomeMessage(){
-        System.out.println("Welcome to the CS220 Weather App!");
+        System.out.println("Welcome to the CS222 Weather App!");
     }
 
     protected String getUserChoice(){

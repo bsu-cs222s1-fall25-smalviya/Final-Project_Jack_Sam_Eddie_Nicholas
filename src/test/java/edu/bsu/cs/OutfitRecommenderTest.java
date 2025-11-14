@@ -1,78 +1,56 @@
 package edu.bsu.cs;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class OutfitRecommenderTest {
+    Converter converter = new Converter();
+    OutfitRecommender recommender = new OutfitRecommender(converter);
 
-class OutfitRecommenderTest {
-//these test every out come for temp in OutfitRecommender and if they are saying what they should be saying
+    //these test every outcome for temp in OutfitRecommender and if they are saying what they should be saying
     @Test
-    void testTemperatureBelowMinus50() {
-        var converter = new Converter();
-        var recommender = new OutfitRecommender(converter);
-
+    public void testTemperatureBelowMinus50() {
         String result = recommender.temperatureOutfitRecommender(-60, "F");
-        assertEquals(" - Too cold for out doors, risk of frostbite", result);
+        Assertions.assertEquals(" - Too cold for out doors, risk of frostbite", result);
     }
 
     @Test
-    void testTemperatureEqualTo25() {
-        var converter = new Converter();
-        var recommender = new OutfitRecommender(converter);
-
+    public void testTemperatureEqualTo25() {
         String result = recommender.temperatureOutfitRecommender(25, "F");
-        assertEquals(" - Pants, a coat, a hat, footwear that will tolerate mud and snow, mitts or gloves", result);
+        Assertions.assertEquals(" - Pants, a coat, a hat, footwear that will tolerate mud and snow, mitts or gloves", result);
     }
 
     @Test
-    void testTemperatureEqualTo55() {
-        var converter = new Converter();
-        var recommender = new OutfitRecommender(converter);
-
+    public void testTemperatureEqualTo55() {
         String result = recommender.temperatureOutfitRecommender(55, "F");
-        assertEquals(" - Warm weather clothes. Shorts, skirts without leggings, and sandals appear", result);
+        Assertions.assertEquals(" - Warm weather clothes. Shorts, skirts without leggings, and sandals appear", result);
     }
 
     @Test
-    void testTemperatureEqualTo75() {
-        var converter = new Converter();
-        var recommender = new OutfitRecommender(converter);
-
+    public void testTemperatureEqualTo75() {
         String result = recommender.temperatureOutfitRecommender(75, "F");
-        assertEquals(" - Hot weather clothes, shorts, short sleeveless, sun hats", result);
+        Assertions.assertEquals(" - Hot weather clothes, shorts, short sleeveless, sun hats", result);
     }
 
     @Test
-    void testTemperatureEqualTo100() {
-        var converter = new Converter();
-        var recommender = new OutfitRecommender(converter);
-
+    public void testTemperatureEqualTo100() {
         String result = recommender.temperatureOutfitRecommender(100, "F");
-        assertEquals(" - Too hot for our doors, risk of heat stroke", result);
+        Assertions.assertEquals(" - Too hot for our doors, risk of heat stroke", result);
     }
 
     //current iteration theses are not used but will for iteration 3
-    //percipation
+    //precipitation
     @Test
-    void testPrecipitationEqualTo0() {
-        var converter = new Converter();
-        var recommender = new OutfitRecommender(converter);
-
+    public void testPrecipitationEqualTo0() {
         String result = recommender.precipitationOutfitRecommender(0.00);
         //assertTrue(result.contains("Somehow it got drier, carry water bottle"));
-        assertFalse(result.contains("Somehow it got drier, carry water bottle"));
-
+        Assertions.assertFalse(result.contains("Somehow it got drier, carry water bottle"));
     }
 
     //windspeed
     @Test
-    void testWindspeedEqualTo2() {
-        var converter = new Converter();
-        var recommender = new OutfitRecommender(converter);
-
+    public void testWindspeedEqualTo2() {
         String result = recommender.windspeedOutfitRecommender(2, "MpH");
-        assertFalse(result.contains("wind speed is low enough to not really need wind resistant clothes"));
+        Assertions.assertFalse(result.contains("wind speed is low enough to not really need wind resistant clothes"));
     }
-
-
 }
