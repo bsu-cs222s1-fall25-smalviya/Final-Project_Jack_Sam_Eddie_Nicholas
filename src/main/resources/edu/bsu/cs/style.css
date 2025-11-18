@@ -1,0 +1,160 @@
+/* Weather App Styles - Black & White Template */
+
+/* Color variables - change these to customize everything at once */
+.root {
+    -fx-background-primary: #FFFFFF;
+    -fx-background-secondary: #F5F5F5;
+
+    -fx-text-primary: #000000;
+    -fx-text-secondary: #666666;
+
+    -fx-button-bg: #FFFFFF;
+    -fx-button-border: #000000;
+    -fx-button-text: #000000;
+    -fx-button-hover: #F0F0F0;
+
+    -fx-input-bg: #FFFFFF;
+    -fx-input-border: #CCCCCC;
+    -fx-input-focus: #000000;
+
+    -fx-accent: #000000;
+}
+
+/* Main window background */
+.root {
+    -fx-background-color: -fx-background-primary;
+    -fx-font-family: "System";
+    -fx-font-size: 14px;
+}
+
+VBox {
+    -fx-background-color: -fx-background-primary;
+}
+
+HBox {
+    -fx-background-color: transparent;
+}
+
+/* Button styles */
+.button {
+    -fx-background-color: -fx-button-bg;
+    -fx-text-fill: -fx-button-text;
+    -fx-border-color: -fx-button-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: -fx-button-hover;
+}
+
+.button:pressed {
+    -fx-background-color: #E0E0E0;
+    -fx-scale-y: 0.98;
+    -fx-scale-x: 0.98;
+}
+
+/* Make the start button a bit more prominent */
+#startButton {
+    -fx-font-weight: bold;
+    -fx-border-width: 2px;
+}
+
+/* If you want to style these differently later */
+#settingsButton {
+}
+
+#helpButton {
+}
+
+/* Text input field */
+.text-field {
+    -fx-background-color: -fx-input-bg;
+    -fx-text-fill: -fx-text-primary;
+    -fx-border-color: -fx-input-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 6px 10px;
+}
+
+.text-field:focused {
+    -fx-border-color: -fx-input-focus;
+    -fx-border-width: 2px;
+}
+
+.text-field .text {
+    -fx-fill: -fx-text-primary;
+}
+
+.text-field .prompt-text {
+    -fx-fill: -fx-text-secondary;
+}
+
+/* Dropdown / ComboBox */
+.combo-box {
+    -fx-background-color: -fx-input-bg;
+    -fx-border-color: -fx-input-border;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+}
+
+.combo-box:focused {
+    -fx-border-color: -fx-input-focus;
+    -fx-border-width: 2px;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: -fx-input-bg;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: -fx-input-bg;
+    -fx-border-color: -fx-input-border;
+    -fx-border-width: 1px;
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: -fx-input-bg;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: -fx-button-hover;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: #E0E0E0;
+    -fx-text-fill: -fx-text-primary;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.combo-box .arrow {
+    -fx-background-color: -fx-text-primary;
+}
+
+/* Labels */
+.label {
+    -fx-text-fill: -fx-text-primary;
+    -fx-font-size: 13px;
+}
+
+HBox > .label {
+    -fx-font-weight: 500;
+}
+
+/* Add a title label if needed */
+#titleLabel {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-text-primary;
+}
