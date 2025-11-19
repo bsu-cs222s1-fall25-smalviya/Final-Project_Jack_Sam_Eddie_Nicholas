@@ -39,7 +39,7 @@ public class UIMain extends Application {
     Converter converter = new Converter();
     OutfitRecommender outfitRecommender = new OutfitRecommender(converter);
 
-    public UIMain() throws IOException {
+    public UIMain() {
     }
 
     @Override
@@ -48,13 +48,9 @@ public class UIMain extends Application {
         mainLayout.setPadding(new Insets(20));
         mainLayout.setAlignment(Pos.TOP_CENTER);
 
-        // Create top row
+        // Create rows
         HBox topRow = createTopRow();
-
-        // Create second row
         HBox secondRow = createSecondRow();
-
-        //Create third row
         HBox thirdRow = createThirdRow();
 
         // Add rows
@@ -115,11 +111,11 @@ public class UIMain extends Application {
         );
         reportTypeDropdown.setPromptText("Select report type");
         reportTypeDropdown.setPrefWidth(200);
-        reportTypeDropdown.setValue("Today's Report"); // Set default selection
+        reportTypeDropdown.setValue("Pick an option"); // Set default selection
 
         // Unit type label and dropdown
         Label unitTypeLabel = new Label("Unit: ");
-        //unitTypeDropdown = getUnitTypeDropdown();
+        unitTypeDropdown = getUnitTypeDropdown();
         unitTypeDropdown.getItems().addAll(
                 "Imperial",
                 "Metric"
@@ -138,12 +134,13 @@ public class UIMain extends Application {
         return secondRow;
     }
 
-    private HBox createThirdRow(){
+    private HBox createThirdRow() {
         HBox secondRow = new HBox(10);
         secondRow.setAlignment(Pos.CENTER_LEFT);
 
         // Output area for report
         Label reportLabel = new Label("Output: ");
+        reportField = getReportField();
         reportField.setEditable(false);
         reportField.setPromptText("Report: ");
         reportField.setPrefWidth(350);
@@ -169,7 +166,7 @@ public class UIMain extends Application {
         return zipcodeField;
     }
 
-    public TextArea getReportField() throws IOException {
+    public TextArea getReportField() {
         String reportString = "";
         if (reportTypeDropdown.getValue().equals("Today's Report")){
             //reportString = getHourlyReport();
@@ -255,14 +252,13 @@ public class UIMain extends Application {
         if (preferences[0].equals("true")) {
             link = api.createURLString(preferences[1]);
             units = preferences[2];
-            weatherData = api.getInputStreamFromURL(link);
         } else {
             String location = zipcodeField.getText();
             units = unitTypeDropdown.getValue();
             link = api.createURLString(location);
-            weatherData = api.getInputStreamFromURL(link);
         }
 
+        weatherData = api.getInputStreamFromURL(link);
         String forcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
         InputStream forecastData = this.api.getInputStreamFromURL(forcastURLString);
         this.dataParser.setWeatherData(forecastData);
@@ -282,14 +278,17 @@ public class UIMain extends Application {
         return reportTypeDropdown;
     }
 
-    public Button getStartButton() throws IOException {
-        startButton.setOnAction(actionEvent -> {
-            reportTypeDropdown = getReportTypeDropdown();
-        });
+    public ComboBox<String> getUnitTypeDropdown(){
+        return unitTypeDropdown;
+        }
+
+    public Button getStartButton() {
+        startButton.setOnAction(event -> reportTypeDropdown = getReportTypeDropdown());
+
         return startButton;
     }
 
-    public static void main(String[] args) throws IOException {
+    static void main(String[] args) {
         launch(args);
     }
 }
