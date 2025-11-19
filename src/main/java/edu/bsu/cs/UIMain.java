@@ -79,12 +79,12 @@ public class UIMain extends Application {
         Label zipcodeLabel = new Label("Zipcode:");
         zipcodeField = getZipcodeField();
         zipcodeField.setPromptText("Enter zipcode");
-        zipcodeField.setPrefWidth(150);
+        zipcodeField.setPrefWidth(245);
 
         // Settings button
         settingsButton = getSettingsButton();
         settingsButton.setId("settingsButton");
-        settingsButton.setPrefWidth(100);
+        settingsButton.setPrefWidth(115);
 
         // Help button
         helpButton = getHelpButton();
@@ -110,7 +110,7 @@ public class UIMain extends Application {
                 "Outfit Recommender"
         );
         reportTypeDropdown.setPromptText("Select report type");
-        reportTypeDropdown.setPrefWidth(200);
+        reportTypeDropdown.setPrefWidth(185);
         reportTypeDropdown.setValue("Pick an option"); // Set default selection
 
         // Unit type label and dropdown
@@ -120,8 +120,8 @@ public class UIMain extends Application {
                 "Imperial",
                 "Metric"
         );
-        unitTypeDropdown.setPrefWidth(100);
-        unitTypeDropdown.setValue("Imperial");
+        unitTypeDropdown.setPrefWidth(115);
+        unitTypeDropdown.setValue("Pick a unit");
 
         // Start button
         startButton = getStartButton();
