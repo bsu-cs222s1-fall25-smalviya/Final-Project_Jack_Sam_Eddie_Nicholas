@@ -15,7 +15,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 //imports for our classes
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -24,13 +23,13 @@ import java.util.HashMap;
 public class UIMain extends Application {
 
     // UI Components
-    private Button settingsButton;
-    private Button helpButton;
-    private TextField zipcodeField;
+    private Button settingsButton = new Button("Settings");
+    private Button helpButton = new Button("Help");
+    private TextField zipcodeField = new TextField();
     private TextArea reportField = new TextArea();
-    private ComboBox<String> reportTypeDropdown;
-    private ComboBox<String> unitTypeDropdown;
-    private Button startButton;
+    private ComboBox<String> reportTypeDropdown = new ComboBox<>();
+    private ComboBox<String> unitTypeDropdown = new ComboBox<>();
+    private Button startButton = new Button("Start");
     
     //Our classes
     FileController fileController = new FileController();
@@ -44,7 +43,7 @@ public class UIMain extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws IOException {
         VBox mainLayout = new VBox(15);
         mainLayout.setPadding(new Insets(20));
         mainLayout.setAlignment(Pos.TOP_CENTER);
@@ -82,17 +81,17 @@ public class UIMain extends Application {
 
         // Zipcode label and text field
         Label zipcodeLabel = new Label("Zipcode:");
-        zipcodeField = new TextField();
+        zipcodeField = getZipcodeField();
         zipcodeField.setPromptText("Enter zipcode");
         zipcodeField.setPrefWidth(150);
 
         // Settings button
-        settingsButton = new Button("Settings");
+        settingsButton = getSettingsButton();
         settingsButton.setId("settingsButton");
         settingsButton.setPrefWidth(100);
 
         // Help button
-        helpButton = new Button("Help");
+        helpButton = getHelpButton();
         helpButton.setId("helpButton");
         helpButton.setPrefWidth(100);
 
@@ -102,13 +101,13 @@ public class UIMain extends Application {
         return topRow;
     }
 
-    private HBox createSecondRow() {
+    private HBox createSecondRow() throws IOException {
         HBox secondRow = new HBox(10);
         secondRow.setAlignment(Pos.CENTER_LEFT);
 
         // Report type label and dropdown
         Label reportTypeLabel = new Label("Report Type:");
-        reportTypeDropdown = new ComboBox<>();
+        reportTypeDropdown = getReportTypeDropdown();
         reportTypeDropdown.getItems().addAll(
                 "Today's Report",
                 "Weekly Report",
@@ -120,7 +119,7 @@ public class UIMain extends Application {
 
         // Unit type label and dropdown
         Label unitTypeLabel = new Label("Unit: ");
-        unitTypeDropdown = new ComboBox<>();
+        //unitTypeDropdown = getUnitTypeDropdown();
         unitTypeDropdown.getItems().addAll(
                 "Imperial",
                 "Metric"
@@ -129,7 +128,7 @@ public class UIMain extends Application {
         unitTypeDropdown.setValue("Imperial");
 
         // Start button
-        startButton = new Button("Start");
+        startButton = getStartButton();
         startButton.setId("startButton");
         startButton.setPrefWidth(100);
 
@@ -173,11 +172,14 @@ public class UIMain extends Application {
     public TextArea getReportField() throws IOException {
         String reportString = "";
         if (reportTypeDropdown.getValue().equals("Today's Report")){
-            reportString = getHourlyReport();
+            //reportString = getHourlyReport();
+            reportString = "hello world today";
         } else if (reportTypeDropdown.getValue().equals("Weekly Report")){
-            reportString = getWeeklyReport();
-        } else if (reportTypeDropdown.getValue().equals("Outfit Recommender")){
-            reportString = getOutfitRecommendation();
+            //reportString = getWeeklyReport();
+            reportString = "hello world week";
+        } else if (reportTypeDropdown.getValue().equals("Outfit Recommender")) {
+            //reportString = getOutfitRecommendation();
+            reportString = "hello world outfit";
         }
         
         reportField.setText(reportString);
@@ -280,11 +282,14 @@ public class UIMain extends Application {
         return reportTypeDropdown;
     }
 
-    public Button getStartButton() {
+    public Button getStartButton() throws IOException {
+        startButton.setOnAction(actionEvent -> {
+            reportTypeDropdown = getReportTypeDropdown();
+        });
         return startButton;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         launch(args);
     }
 }
