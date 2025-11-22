@@ -101,7 +101,7 @@ public class UIMain extends Application {
         return topRow;
     }
 
-    private HBox createSecondRow() throws IOException {
+    private HBox createSecondRow() {
         HBox secondRow = new HBox(10);
         secondRow.setAlignment(Pos.CENTER_LEFT);
 
