@@ -38,8 +38,9 @@ public class UIMain extends Application {
     DataFormatter dataFormatter = new DataFormatter();
     Converter converter = new Converter();
     OutfitRecommender outfitRecommender = new OutfitRecommender(converter);
+    CitiesDatabaseParser databaseParser = new CitiesDatabaseParser();
 
-    public UIMain() {
+    public UIMain() throws IOException {
     }
 
     @Override
@@ -134,7 +135,7 @@ public class UIMain extends Application {
         return secondRow;
     }
 
-    private HBox createThirdRow() {
+    private HBox createThirdRow() throws IOException {
         HBox secondRow = new HBox(10);
         secondRow.setAlignment(Pos.CENTER_LEFT);
 
@@ -166,17 +167,17 @@ public class UIMain extends Application {
         return zipcodeField;
     }
 
-    public TextArea getReportField() {
+    public TextArea getReportField() throws IOException {
         String reportString = "";
         if (reportTypeDropdown.getValue().equals("Today's Report")){
-            //reportString = getHourlyReport();
-            reportString = "hello world today";
+            reportString = getHourlyReport();
+            //reportString = "hello world today";
         } else if (reportTypeDropdown.getValue().equals("Weekly Report")){
-            //reportString = getWeeklyReport();
-            reportString = "hello world week";
+            reportString = getWeeklyReport();
+            //reportString = "hello world week";
         } else if (reportTypeDropdown.getValue().equals("Outfit Recommender")) {
-            //reportString = getOutfitRecommendation();
-            reportString = "hello world outfit";
+            reportString = getOutfitRecommendation();
+            //reportString = "hello world outfit";
         }
         
         reportField.setText(reportString);
@@ -190,12 +191,12 @@ public class UIMain extends Application {
         String units;
         String[] preferences = this.fileController.loadPreferences();
         if (preferences[0].equals("true")) {
-            link = api.createURLString(preferences[1]);
+            link = api.createURLString(databaseParser.getCoordinates(preferences[1]));
             units = preferences[2];
         } else {
             String location = zipcodeField.getText();
-            units = unitTypeDropdown.getValue();
-            link = api.createURLString(location);
+            units = unitTypeDropdown.getValue().toLowerCase();
+            link = api.createURLString(databaseParser.getCoordinates(location));
         }
 
         weatherData = api.getInputStreamFromURL(link);
@@ -224,7 +225,7 @@ public class UIMain extends Application {
             units = preferences[2];
         } else {
             String location = zipcodeField.getText();
-            units = unitTypeDropdown.getValue();
+            units = unitTypeDropdown.getValue().toLowerCase();
             link = api.createURLString(location);
         }
 
@@ -254,7 +255,7 @@ public class UIMain extends Application {
             units = preferences[2];
         } else {
             String location = zipcodeField.getText();
-            units = unitTypeDropdown.getValue();
+            units = unitTypeDropdown.getValue().toLowerCase();
             link = api.createURLString(location);
         }
 
@@ -283,7 +284,13 @@ public class UIMain extends Application {
         }
 
     public Button getStartButton() {
-        startButton.setOnAction(event -> reportTypeDropdown = getReportTypeDropdown());
+        startButton.setOnAction(event -> {
+            try {
+                reportField = getReportField();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         return startButton;
     }
