@@ -15,10 +15,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 //imports for our classes
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.net.*;
 
 public class UIMain extends Application {
 
@@ -107,7 +110,7 @@ public class UIMain extends Application {
         reportTypeDropdown = getReportTypeDropdown();
         reportTypeDropdown.getItems().addAll(
                 "Today's Report",
-                "Weekly Report",
+                "Daily Report",
                 "Outfit Recommender"
         );
         reportTypeDropdown.setPromptText("Select report type");
@@ -144,7 +147,7 @@ public class UIMain extends Application {
         reportField = getReportField();
         reportField.setEditable(false);
         reportField.setPromptText("Report: ");
-        reportField.setPrefWidth(350);
+        reportField.setPrefWidth(500);
 
         // Add components to second row (dropdown first, then start button)
         secondRow.getChildren().addAll(reportLabel, reportField);
@@ -172,8 +175,8 @@ public class UIMain extends Application {
         if (reportTypeDropdown.getValue().equals("Today's Report")){
             reportString = getHourlyReport();
             //reportString = "hello world today";
-        } else if (reportTypeDropdown.getValue().equals("Weekly Report")){
-            reportString = getWeeklyReport();
+        } else if (reportTypeDropdown.getValue().equals("Daily Report")){
+            reportString = getDailyReport();
             //reportString = "hello world week";
         } else if (reportTypeDropdown.getValue().equals("Outfit Recommender")) {
             reportString = getOutfitRecommendation();
@@ -215,32 +218,32 @@ public class UIMain extends Application {
         return reportString.toString();
     }
 
-    public String getWeeklyReport() throws IOException {
+    public String getDailyReport() throws IOException {
         String link;
         InputStream weatherData;
         String units;
         String[] preferences = this.fileController.loadPreferences();
         if (preferences[0].equals("true")) {
-            link = api.createURLString(preferences[1]);
+            link = api.createURLString(databaseParser.getCoordinates(preferences[1]));
             units = preferences[2];
         } else {
             String location = zipcodeField.getText();
             units = unitTypeDropdown.getValue().toLowerCase();
-            link = api.createURLString(location);
+            link = api.createURLString(databaseParser.getCoordinates(location));
         }
 
         weatherData = api.getInputStreamFromURL(link);
-        String hourlyForecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecastHourly");
-        InputStream hourlyForecastData = this.api.getInputStreamFromURL(hourlyForecastURLString);
-        this.dataParser.setWeatherData(hourlyForecastData);
-        this.dataParser.hourlyForecastData();
-        HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
+        String dailyForecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
+        InputStream dailyForecastData = this.api.getInputStreamFromURL(dailyForecastURLString);
+        this.dataParser.setWeatherData(dailyForecastData);
+        this.dataParser.forecastData();
+        HashMap<Integer, ArrayList<String>> dailyForecast = this.dataParser.getDailyForecast();
 
         StringBuilder reportString = new StringBuilder();
         int i;
-        for (i=1;i<=7;i++){
-            ArrayList<String> forecast = weeklyForecast.get(i);
-            reportString.append(this.dataFormatter.formatWeatherData(forecast, units, "Hourly"));
+        for (i=1;i<=13;i=i+2){
+            ArrayList<String> forecast = dailyForecast.get(i);
+            reportString.append(this.dataFormatter.formatWeatherData(forecast, units, "Daily"));
         }
         return reportString.toString();
     }
@@ -251,12 +254,12 @@ public class UIMain extends Application {
         String units;
         String[] preferences = this.fileController.loadPreferences();
         if (preferences[0].equals("true")) {
-            link = api.createURLString(preferences[1]);
+            link = api.createURLString(databaseParser.getCoordinates(preferences[1]));
             units = preferences[2];
         } else {
             String location = zipcodeField.getText();
             units = unitTypeDropdown.getValue().toLowerCase();
-            link = api.createURLString(location);
+            link = api.createURLString(databaseParser.getCoordinates(location));
         }
 
         weatherData = api.getInputStreamFromURL(link);
@@ -264,11 +267,11 @@ public class UIMain extends Application {
         InputStream forecastData = this.api.getInputStreamFromURL(forcastURLString);
         this.dataParser.setWeatherData(forecastData);
         this.dataParser.forecastData();
-        HashMap<Integer, ArrayList<String>> weeklyForecast = this.dataParser.getDailyForecast();
+        HashMap<Integer, ArrayList<String>> dailyForecast = this.dataParser.getDailyForecast();
         int i;
         double weekTemp = 0;
         for (i=1;i<=13;i=i+2){
-            ArrayList<String> forecast = weeklyForecast.get(i);
+            ArrayList<String> forecast = dailyForecast.get(i);
             weekTemp += Double.parseDouble(forecast.getFirst());
         }
         double averageTemp = weekTemp/7;
@@ -288,7 +291,15 @@ public class UIMain extends Application {
             try {
                 reportField = getReportField();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                if (e instanceof MalformedURLException) {
+                    reportField.setText("Sorry, there was a problem with the URL. Try again in a bit. ");
+                } else if (e instanceof UnknownHostException || e instanceof SocketException || e instanceof SocketTimeoutException) {
+                    reportField.setText("Sorry, there was a problem with your internet. Try again in a bit. ");
+                } else if (e instanceof FileNotFoundException) {
+                    reportField.setText("Sorry, something went wrong. Make sure your zipcode is correct. ");
+                } else {
+                    reportField.setText(e.toString());
+                }
             }
         });
 
