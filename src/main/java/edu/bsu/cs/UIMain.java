@@ -29,16 +29,16 @@ public class UIMain extends Application {
     // Main UI Components
     private Button settingsButton = new Button("Settings");
     private Button helpButton = new Button("Help");
-    private TextField zipcodeField = new TextField();
+    private final TextField zipcodeField = new TextField();
     private TextArea reportField = new TextArea();
-    private ComboBox<String> reportTypeDropdown = new ComboBox<>();
-    private ComboBox<String> unitTypeDropdown = new ComboBox<>();
+    private final ComboBox<String> reportTypeDropdown = new ComboBox<>();
+    private final ComboBox<String> unitTypeDropdown = new ComboBox<>();
     private Button startButton = new Button("Start");
 
     // Settings UI Components
-    private TextField locationPreferences = new TextField();
-    private ComboBox<String> unitPreferences = new ComboBox<>();
-    private ComboBox<String> themeDropdown = new ComboBox<>();
+    private final TextField locationPreferences = new TextField();
+    private final ComboBox<String> unitPreferences = new ComboBox<>();
+    private final ComboBox<String> themeDropdown = new ComboBox<>();
     private Button saveButton = new Button("Save Settings");
 
     // Our classes
@@ -52,6 +52,9 @@ public class UIMain extends Application {
 
     public UIMain() throws IOException {
     }
+
+
+    // Create the main stage
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -87,7 +90,6 @@ public class UIMain extends Application {
 
         // Zipcode label and text field
         Label zipcodeLabel = new Label("Zipcode:");
-        zipcodeField = getZipcodeField();
         zipcodeField.setPromptText("Enter zipcode");
         zipcodeField.setPrefWidth(245);
 
@@ -113,7 +115,6 @@ public class UIMain extends Application {
 
         // Report type label and dropdown
         Label reportTypeLabel = new Label("Report Type:");
-        reportTypeDropdown = getReportTypeDropdown();
         reportTypeDropdown.getItems().addAll(
                 "Today's Report",
                 "Daily Report",
@@ -125,7 +126,6 @@ public class UIMain extends Application {
 
         // Unit type label and dropdown
         Label unitTypeLabel = new Label("Unit: ");
-        unitTypeDropdown = getUnitTypeDropdown();
         unitTypeDropdown.getItems().addAll(
                 "Imperial",
                 "Metric"
@@ -150,7 +150,6 @@ public class UIMain extends Application {
 
         // Output area for report
         Label reportLabel = new Label("Output: ");
-        reportField = getReportField();
         reportField.setEditable(false);
         reportField.setPromptText("Report: ");
         reportField.setPrefWidth(500);
@@ -161,13 +160,7 @@ public class UIMain extends Application {
         return thirdRow;
     }
 
-
-    //Getter methods for UI components (for future implementation)
-
-    private Button getSettingsButton() {
-        settingsButton.setOnAction(event -> startSettingsStage());
-        return settingsButton;
-    }
+    // create the settings stage
 
     private void startSettingsStage(){
         VBox secondaryLayout = new VBox(15);
@@ -248,6 +241,7 @@ public class UIMain extends Application {
         HBox thirdRow = new HBox();
         thirdRow.setAlignment(Pos.CENTER);
 
+        saveButton = getSaveButton();
         saveButton.setPrefWidth(200);
 
         thirdRow.getChildren().addAll(saveButton);
@@ -255,16 +249,12 @@ public class UIMain extends Application {
         return thirdRow;
     }
 
-    private TextField getLocationPreferences(){
-        return locationPreferences;
-    }
 
-    private ComboBox<String> getUnitPreferences(){
-        return unitPreferences;
-    }
+    //Getter methods for UI components (for future implementation)
 
-    private ComboBox<String> getThemeDropdown(){
-        return themeDropdown;
+    private Button getSettingsButton() {
+        settingsButton.setOnAction(event -> startSettingsStage());
+        return settingsButton;
     }
 
     private Button getSaveButton(){
@@ -273,10 +263,6 @@ public class UIMain extends Application {
 
     private Button getHelpButton() {
         return helpButton;
-    }
-
-    private TextField getZipcodeField() {
-        return zipcodeField;
     }
 
     private TextArea getReportField() throws IOException {
@@ -386,14 +372,6 @@ public class UIMain extends Application {
         double averageTemp = weekTemp/7;
         return outfitRecommender.temperatureOutfitRecommender(averageTemp, units);
     }
-
-    private ComboBox<String> getReportTypeDropdown() {
-        return reportTypeDropdown;
-    }
-
-    private ComboBox<String> getUnitTypeDropdown(){
-        return unitTypeDropdown;
-        }
 
     private Button getStartButton() {
         startButton.setOnAction(event -> {
