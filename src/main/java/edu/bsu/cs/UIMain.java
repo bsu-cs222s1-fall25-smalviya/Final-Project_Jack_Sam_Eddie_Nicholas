@@ -144,7 +144,7 @@ public class UIMain extends Application {
         return secondRow;
     }
 
-    private HBox createThirdRow() throws IOException {
+    private HBox createThirdRow() {
         HBox thirdRow = new HBox(10);
         thirdRow.setAlignment(Pos.CENTER_LEFT);
 
