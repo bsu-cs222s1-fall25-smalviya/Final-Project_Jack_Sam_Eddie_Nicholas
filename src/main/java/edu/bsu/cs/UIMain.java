@@ -203,10 +203,12 @@ public class UIMain extends Application {
 
         // Unit type label and dropdown
         Label unitTypeLabel = new Label("Unit:");
-        unitPreferences.getItems().addAll(
-                "Imperial",
-                "Metric"
-        );
+        if (unitPreferences.getItems().isEmpty()) {
+            unitPreferences.getItems().addAll(
+                    "Imperial",
+                    "Metric"
+            );
+        }
         unitPreferences.setPrefWidth(115);
         unitPreferences.setValue("Pick a unit");
 
@@ -222,13 +224,15 @@ public class UIMain extends Application {
         secondRow.setSpacing(10);
 
         Label themeLabel = new Label("Theme:");
-        themeDropdown.getItems().addAll(
-                "None",
-                "Theme 1",
-                "Theme 2",
-                "Theme 3",
-                "Etc"
-        );
+        if (themeDropdown.getItems().isEmpty()) {
+            themeDropdown.getItems().addAll(
+                    "None",
+                    "Theme 1",
+                    "Theme 2",
+                    "Theme 3",
+                    "Etc"
+            );
+        }
         themeDropdown.setPrefWidth(317);
         themeDropdown.setValue("Pick a theme");
 
@@ -258,6 +262,16 @@ public class UIMain extends Application {
     }
 
     private Button getSaveButton(){
+        saveButton.setOnAction(event -> {
+            try {
+                saveSettings();
+                Stage stage = (Stage) saveButton.getScene().getWindow();
+                stage.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
         return saveButton;
     }
 
@@ -391,6 +405,17 @@ public class UIMain extends Application {
         });
 
         return startButton;
+    }
+
+    // other methods
+
+    private void saveSettings() throws IOException {
+        String[] preferences = new String[3];
+        preferences[0] = "true";
+        preferences[1] = databaseParser.getCoordinates(locationPreferences.getText());
+        preferences[2] = unitPreferences.getValue();
+
+        fileController.savePreferences(preferences);
     }
 
     static void main(String[] args) {

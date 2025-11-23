@@ -1,1 +1,1 @@
-false;40.1933,-85.3863;imperial;
+true;52.7213,174.111;Pick a unit;
