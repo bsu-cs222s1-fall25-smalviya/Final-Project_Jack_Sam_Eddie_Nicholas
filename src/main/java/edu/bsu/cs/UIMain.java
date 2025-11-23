@@ -13,6 +13,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 
 //imports for our classes
 import java.io.FileNotFoundException;
@@ -25,16 +26,22 @@ import java.net.*;
 
 public class UIMain extends Application {
 
-    // UI Components
+    // Main UI Components
     private Button settingsButton = new Button("Settings");
     private Button helpButton = new Button("Help");
-    private TextField zipcodeField = new TextField();
+    private final TextField zipcodeField = new TextField();
     private TextArea reportField = new TextArea();
-    private ComboBox<String> reportTypeDropdown = new ComboBox<>();
-    private ComboBox<String> unitTypeDropdown = new ComboBox<>();
+    private final ComboBox<String> reportTypeDropdown = new ComboBox<>();
+    private final ComboBox<String> unitTypeDropdown = new ComboBox<>();
     private Button startButton = new Button("Start");
-    
-    //Our classes
+
+    // Settings UI Components
+    private final TextField locationPreferences = new TextField();
+    private final ComboBox<String> unitPreferences = new ComboBox<>();
+    private final ComboBox<String> themeDropdown = new ComboBox<>();
+    private Button saveButton = new Button("Save Settings");
+
+    // Our classes
     FileController fileController = new FileController();
     WeatherServiceAPI api = new WeatherServiceAPI();
     APIDataParser dataParser = new APIDataParser();
@@ -45,6 +52,9 @@ public class UIMain extends Application {
 
     public UIMain() throws IOException {
     }
+
+
+    // Create the main stage
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -60,7 +70,7 @@ public class UIMain extends Application {
         // Add rows
         mainLayout.getChildren().addAll(topRow, secondRow, thirdRow);
 
-        Scene scene = new Scene(mainLayout, 600, 200);
+        Scene scene = new Scene(mainLayout, 600, 330);
 
         // Load CSS stylesheet
         String css = getClass().getResource("/edu/bsu/cs/style.css").toExternalForm();
@@ -74,14 +84,12 @@ public class UIMain extends Application {
         primaryStage.show();
     }
 
-
     private HBox createTopRow() {
         HBox topRow = new HBox(10);
         topRow.setAlignment(Pos.CENTER_LEFT);
 
         // Zipcode label and text field
         Label zipcodeLabel = new Label("Zipcode:");
-        zipcodeField = getZipcodeField();
         zipcodeField.setPromptText("Enter zipcode");
         zipcodeField.setPrefWidth(245);
 
@@ -107,7 +115,6 @@ public class UIMain extends Application {
 
         // Report type label and dropdown
         Label reportTypeLabel = new Label("Report Type:");
-        reportTypeDropdown = getReportTypeDropdown();
         reportTypeDropdown.getItems().addAll(
                 "Today's Report",
                 "Daily Report",
@@ -119,7 +126,6 @@ public class UIMain extends Application {
 
         // Unit type label and dropdown
         Label unitTypeLabel = new Label("Unit: ");
-        unitTypeDropdown = getUnitTypeDropdown();
         unitTypeDropdown.getItems().addAll(
                 "Imperial",
                 "Metric"
@@ -138,39 +144,128 @@ public class UIMain extends Application {
         return secondRow;
     }
 
-    private HBox createThirdRow() throws IOException {
-        HBox secondRow = new HBox(10);
-        secondRow.setAlignment(Pos.CENTER_LEFT);
+    private HBox createThirdRow() {
+        HBox thirdRow = new HBox(10);
+        thirdRow.setAlignment(Pos.CENTER_LEFT);
 
         // Output area for report
         Label reportLabel = new Label("Output: ");
-        reportField = getReportField();
         reportField.setEditable(false);
         reportField.setPromptText("Report: ");
         reportField.setPrefWidth(500);
 
         // Add components to second row (dropdown first, then start button)
-        secondRow.getChildren().addAll(reportLabel, reportField);
+        thirdRow.getChildren().addAll(reportLabel, reportField);
+
+        return thirdRow;
+    }
+
+    // create the settings stage
+
+    private void startSettingsStage(){
+        VBox secondaryLayout = new VBox(15);
+        secondaryLayout.setPadding(new Insets(20));
+        secondaryLayout.setAlignment(Pos.TOP_CENTER);
+
+        // Create rows
+        HBox topRow = createSettingsTopRow();
+        HBox secondRow = createSettingsSecondRow();
+        HBox thirdRow = createSettingsThirdRow();
+
+        // Add rows
+        secondaryLayout.getChildren().addAll(topRow, secondRow, thirdRow);
+
+        Scene scene = new Scene(secondaryLayout, 450, 170);
+
+        // Load CSS stylesheet
+        String css = getClass().getResource("/edu/bsu/cs/style.css").toExternalForm();
+        scene.getStylesheets().add(css);
+
+        Stage secondaryStage = new Stage();
+        secondaryStage.setScene(scene);
+        secondaryStage.initModality(Modality.APPLICATION_MODAL);
+
+        // Configure the stage
+        secondaryStage.setTitle("Settings");
+        secondaryStage.setScene(scene);
+        secondaryStage.setResizable(false);
+        secondaryStage.show();
+    }
+
+    private HBox createSettingsTopRow(){
+        HBox topRow = new HBox();
+        topRow.setAlignment(Pos.CENTER);
+        topRow.setSpacing(10);
+
+        Label locationLabel = new Label("Zipcode:");
+        locationPreferences.setPromptText("Enter zipcode");
+        locationPreferences.setPrefWidth(150);
+
+        // Unit type label and dropdown
+        Label unitTypeLabel = new Label("Unit:");
+        unitPreferences.getItems().addAll(
+                "Imperial",
+                "Metric"
+        );
+        unitPreferences.setPrefWidth(115);
+        unitPreferences.setValue("Pick a unit");
+
+        // Add components to top row
+        topRow.getChildren().addAll(locationLabel, locationPreferences, unitTypeLabel, unitPreferences);
+
+        return topRow;
+    }
+
+    private HBox createSettingsSecondRow(){
+        HBox secondRow = new HBox();
+        secondRow.setAlignment(Pos.CENTER);
+        secondRow.setSpacing(10);
+
+        Label themeLabel = new Label("Theme:");
+        themeDropdown.getItems().addAll(
+                "None",
+                "Theme 1",
+                "Theme 2",
+                "Theme 3",
+                "Etc"
+        );
+        themeDropdown.setPrefWidth(317);
+        themeDropdown.setValue("Pick a theme");
+
+        secondRow.getChildren().addAll(themeLabel, themeDropdown);
 
         return secondRow;
+    }
+
+    private HBox createSettingsThirdRow(){
+        HBox thirdRow = new HBox();
+        thirdRow.setAlignment(Pos.CENTER);
+
+        saveButton = getSaveButton();
+        saveButton.setPrefWidth(200);
+
+        thirdRow.getChildren().addAll(saveButton);
+
+        return thirdRow;
     }
 
 
     //Getter methods for UI components (for future implementation)
 
-    public Button getSettingsButton() {
+    private Button getSettingsButton() {
+        settingsButton.setOnAction(event -> startSettingsStage());
         return settingsButton;
     }
 
-    public Button getHelpButton() {
+    private Button getSaveButton(){
+        return saveButton;
+    }
+
+    private Button getHelpButton() {
         return helpButton;
     }
 
-    public TextField getZipcodeField() {
-        return zipcodeField;
-    }
-
-    public TextArea getReportField() throws IOException {
+    private TextArea getReportField() throws IOException {
         String reportString = "";
         if (reportTypeDropdown.getValue().equals("Today's Report")){
             reportString = getHourlyReport();
@@ -188,7 +283,7 @@ public class UIMain extends Application {
         return reportField;
     }
     
-    public String getHourlyReport() throws IOException {
+    private String getHourlyReport() throws IOException {
         String link;
         InputStream weatherData;
         String units;
@@ -218,7 +313,7 @@ public class UIMain extends Application {
         return reportString.toString();
     }
 
-    public String getDailyReport() throws IOException {
+    private String getDailyReport() throws IOException {
         String link;
         InputStream weatherData;
         String units;
@@ -248,7 +343,7 @@ public class UIMain extends Application {
         return reportString.toString();
     }
 
-    public String getOutfitRecommendation() throws IOException {
+    private String getOutfitRecommendation() throws IOException {
         String link;
         InputStream weatherData;
         String units;
@@ -278,15 +373,7 @@ public class UIMain extends Application {
         return outfitRecommender.temperatureOutfitRecommender(averageTemp, units);
     }
 
-    public ComboBox<String> getReportTypeDropdown() {
-        return reportTypeDropdown;
-    }
-
-    public ComboBox<String> getUnitTypeDropdown(){
-        return unitTypeDropdown;
-        }
-
-    public Button getStartButton() {
+    private Button getStartButton() {
         startButton.setOnAction(event -> {
             try {
                 reportField = getReportField();
