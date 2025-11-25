@@ -36,6 +36,7 @@ public class UIMain extends Application {
     private final ComboBox<String> unitPreferences = new ComboBox<>();
     private final ComboBox<String> themeDropdown = new ComboBox<>();
     private Button saveButton = new Button("Save Settings");
+    private Button resetButton = new Button("Reset Settings");
 
     // Our classes
     FileController fileController = new FileController();
@@ -248,11 +249,15 @@ public class UIMain extends Application {
     private HBox createSettingsThirdRow(){
         HBox thirdRow = new HBox();
         thirdRow.setAlignment(Pos.CENTER);
+        thirdRow.setSpacing(10);
 
         saveButton = getSaveButton();
         saveButton.setPrefWidth(200);
 
-        thirdRow.getChildren().addAll(saveButton);
+        resetButton = getResetButton();
+        resetButton.setPrefWidth(200);
+
+        thirdRow.getChildren().addAll(saveButton, resetButton);
 
         return thirdRow;
     }
@@ -283,6 +288,19 @@ public class UIMain extends Application {
         });
 
         return saveButton;
+    }
+
+    private Button getResetButton(){
+        resetButton.setOnAction(event -> {
+            try {
+                fileController.resetPreferences();
+                Stage stage = (Stage) resetButton.getScene().getWindow();
+                stage.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return resetButton;
     }
 
     private Button getHelpButton() {

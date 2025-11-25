@@ -1,1 +1,1 @@
-true;41.2185,-85.1705;Metric;
+false;40.1933,-85.3863;imperial;
