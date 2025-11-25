@@ -1,1 +1,1 @@
-true;52.7213,174.111;Pick a unit;
+true;41.2185,-85.1705;Metric;

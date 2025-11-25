@@ -5,11 +5,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -116,6 +112,7 @@ public class UIMain extends Application {
         // Report type label and dropdown
         Label reportTypeLabel = new Label("Report Type:");
         reportTypeDropdown.getItems().addAll(
+                "Select report type",
                 "Today's Report",
                 "Daily Report",
                 "Outfit Recommender"
@@ -127,6 +124,7 @@ public class UIMain extends Application {
         // Unit type label and dropdown
         Label unitTypeLabel = new Label("Unit: ");
         unitTypeDropdown.getItems().addAll(
+                "Pick a unit",
                 "Imperial",
                 "Metric"
         );
@@ -162,7 +160,7 @@ public class UIMain extends Application {
 
     // create the settings stage
 
-    private void startSettingsStage(){
+    private void startSettingsStage() throws FileNotFoundException {
         VBox secondaryLayout = new VBox(15);
         secondaryLayout.setPadding(new Insets(20));
         secondaryLayout.setAlignment(Pos.TOP_CENTER);
@@ -192,7 +190,7 @@ public class UIMain extends Application {
         secondaryStage.show();
     }
 
-    private HBox createSettingsTopRow(){
+    private HBox createSettingsTopRow() throws FileNotFoundException {
         HBox topRow = new HBox();
         topRow.setAlignment(Pos.CENTER);
         topRow.setSpacing(10);
@@ -205,12 +203,18 @@ public class UIMain extends Application {
         Label unitTypeLabel = new Label("Unit:");
         if (unitPreferences.getItems().isEmpty()) {
             unitPreferences.getItems().addAll(
+                    "Pick a unit",
                     "Imperial",
                     "Metric"
             );
         }
         unitPreferences.setPrefWidth(115);
-        unitPreferences.setValue("Pick a unit");
+        String[] preferences = fileController.loadPreferences();
+        if (preferences[0].equals("true")){
+            unitPreferences.setValue(preferences[2]);
+        } else {
+            unitPreferences.setValue("Pick a unit");
+        }
 
         // Add components to top row
         topRow.getChildren().addAll(locationLabel, locationPreferences, unitTypeLabel, unitPreferences);
@@ -257,7 +261,13 @@ public class UIMain extends Application {
     //Getter methods for UI components (for future implementation)
 
     private Button getSettingsButton() {
-        settingsButton.setOnAction(event -> startSettingsStage());
+        settingsButton.setOnAction(event -> {
+            try {
+                startSettingsStage();
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        });
         return settingsButton;
     }
 
@@ -281,18 +291,23 @@ public class UIMain extends Application {
 
     private TextArea getReportField() throws IOException {
         String reportString = "";
-        if (reportTypeDropdown.getValue().equals("Today's Report")){
-            reportString = getHourlyReport();
-            //reportString = "hello world today";
-        } else if (reportTypeDropdown.getValue().equals("Daily Report")){
-            reportString = getDailyReport();
-            //reportString = "hello world week";
-        } else if (reportTypeDropdown.getValue().equals("Outfit Recommender")) {
-            reportString = getOutfitRecommendation();
-            //reportString = "hello world outfit";
+        try {
+            if (reportTypeDropdown.getValue().equals("Today's Report")) {
+                reportString = getHourlyReport();
+                //reportString = "hello world today";
+            } else if (reportTypeDropdown.getValue().equals("Daily Report")) {
+                reportString = getDailyReport();
+                //reportString = "hello world week";
+            } else if (reportTypeDropdown.getValue().equals("Outfit Recommender")) {
+                reportString = getOutfitRecommendation();
+                //reportString = "hello world outfit";
+            }
+            reportField.setText(reportString);
+        } catch (Exception e){
+            if (e instanceof IllegalArgumentException){
+                reportField.setText("Sorry, you must provide a zipcode if you're not using your set preferences. ");
+            }
         }
-        
-        reportField.setText(reportString);
 
         return reportField;
     }
@@ -302,13 +317,16 @@ public class UIMain extends Application {
         InputStream weatherData;
         String units;
         String[] preferences = this.fileController.loadPreferences();
-        if (preferences[0].equals("true")) {
-            link = api.createURLString(databaseParser.getCoordinates(preferences[1]));
-            units = preferences[2];
-        } else {
+        if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
+            if (zipcodeField.getText().isEmpty()){
+                throw new IllegalArgumentException("Empty zipcode");
+            }
             String location = zipcodeField.getText();
             units = unitTypeDropdown.getValue().toLowerCase();
             link = api.createURLString(databaseParser.getCoordinates(location));
+        } else {
+            link = api.createURLString(preferences[1]);
+            units = preferences[2];
         }
 
         weatherData = api.getInputStreamFromURL(link);
@@ -332,13 +350,16 @@ public class UIMain extends Application {
         InputStream weatherData;
         String units;
         String[] preferences = this.fileController.loadPreferences();
-        if (preferences[0].equals("true")) {
-            link = api.createURLString(databaseParser.getCoordinates(preferences[1]));
-            units = preferences[2];
-        } else {
+        if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
+            if (zipcodeField.getText().isEmpty()){
+                throw new IllegalArgumentException("Empty zipcode");
+            }
             String location = zipcodeField.getText();
             units = unitTypeDropdown.getValue().toLowerCase();
             link = api.createURLString(databaseParser.getCoordinates(location));
+        } else {
+            link = api.createURLString(preferences[1]);
+            units = preferences[2];
         }
 
         weatherData = api.getInputStreamFromURL(link);
@@ -362,13 +383,16 @@ public class UIMain extends Application {
         InputStream weatherData;
         String units;
         String[] preferences = this.fileController.loadPreferences();
-        if (preferences[0].equals("true")) {
-            link = api.createURLString(databaseParser.getCoordinates(preferences[1]));
-            units = preferences[2];
-        } else {
+        if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
+            if (zipcodeField.getText().isEmpty()){
+                throw new IllegalArgumentException("Empty zipcode");
+            }
             String location = zipcodeField.getText();
             units = unitTypeDropdown.getValue().toLowerCase();
             link = api.createURLString(databaseParser.getCoordinates(location));
+        } else {
+            link = api.createURLString(preferences[1]);
+            units = preferences[2];
         }
 
         weatherData = api.getInputStreamFromURL(link);
@@ -398,7 +422,7 @@ public class UIMain extends Application {
                     reportField.setText("Sorry, there was a problem with your internet. Try again in a bit. ");
                 } else if (e instanceof FileNotFoundException) {
                     reportField.setText("Sorry, something went wrong. Make sure your zipcode is correct. ");
-                } else {
+                }  else {
                     reportField.setText(e.toString());
                 }
             }
@@ -411,11 +435,38 @@ public class UIMain extends Application {
 
     private void saveSettings() throws IOException {
         String[] preferences = new String[3];
-        preferences[0] = "true";
-        preferences[1] = databaseParser.getCoordinates(locationPreferences.getText());
-        preferences[2] = unitPreferences.getValue();
+        String locationPreference = locationPreferences.getText();
+        String unitPreference = unitPreferences.getValue();
 
+        boolean settingsAlertCalled = false;
+
+        if (locationPreference.length()==5 && locationPreference.chars().allMatch(Character::isDigit)){
+            preferences[1] = databaseParser.getCoordinates(locationPreference);
+            preferences[0] = "true";
+        } else {
+            preferences[0] = "false";
+            callSettingsAlert();
+            settingsAlertCalled = true;
+        }
+
+        if (unitPreference.equals("Imperial")||unitPreference.equals("Metric")){
+            preferences[2] = unitPreference;
+            preferences[0] = "true";
+        } else{
+            preferences[0] = "false";
+            if (!settingsAlertCalled) {
+                callSettingsAlert();
+            }
+        }
         fileController.savePreferences(preferences);
+    }
+
+    public void callSettingsAlert() {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Settings Alert");
+        alert.setHeaderText("Invalid settings");
+        alert.setContentText("Make sure you set the zipcode to be 5 digits and the units to be a valid option!");
+        alert.showAndWait();
     }
 
     static void main(String[] args) {
