@@ -53,7 +53,7 @@ public class UIMain extends Application {
     // Create the main stage
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) {
         VBox mainLayout = new VBox(15);
         mainLayout.setPadding(new Insets(20));
         mainLayout.setAlignment(Pos.TOP_CENTER);
@@ -304,9 +304,7 @@ public class UIMain extends Application {
             }
             reportField.setText(reportString);
         } catch (Exception e){
-            if (e instanceof IllegalArgumentException){
-                reportField.setText("Sorry, you must provide a zipcode if you're not using your set preferences. ");
-            }
+            reportField.setText("Sorry, you must provide a zipcode if you're not using your set preferences. ");
         }
 
         return reportField;
