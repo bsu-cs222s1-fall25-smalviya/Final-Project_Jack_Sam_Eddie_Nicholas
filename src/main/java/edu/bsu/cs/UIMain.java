@@ -37,6 +37,7 @@ public class UIMain extends Application {
     private final ComboBox<String> themeDropdown = new ComboBox<>();
     private Button saveButton = new Button("Save Settings");
     private Button resetButton = new Button("Reset Settings");
+    private String css = "/edu/bsu/cs/light-style.css";
 
     // Our classes
     FileController fileController = new FileController();
@@ -70,10 +71,8 @@ public class UIMain extends Application {
         Scene scene = new Scene(mainLayout, 600, 330);
 
         // Load CSS stylesheet
-        String css = getClass().getResource("/edu/bsu/cs/nature-style.css").toExternalForm();
+        String css = getClass().getResource(this.css).toExternalForm();
         scene.getStylesheets().add(css);
-
-
 
         // Configure the stage
         primaryStage.setTitle("Weather App");
@@ -178,7 +177,7 @@ public class UIMain extends Application {
         Scene scene = new Scene(secondaryLayout, 450, 170);
 
         // Load CSS stylesheet
-        String css = getClass().getResource("/edu/bsu/cs/style.css").toExternalForm();
+        String css = getClass().getResource(this.css).toExternalForm();
         scene.getStylesheets().add(css);
 
         Stage secondaryStage = new Stage();
@@ -233,10 +232,12 @@ public class UIMain extends Application {
         if (themeDropdown.getItems().isEmpty()) {
             themeDropdown.getItems().addAll(
                     "None",
-                    "Theme 1",
-                    "Theme 2",
-                    "Theme 3",
-                    "Etc"
+                    "Light Mode",
+                    "Dark Mode",
+                    "Ball State",
+                    "Cityscape",
+                    "Frutiger Aero",
+                    "Nature"
             );
         }
         themeDropdown.setPrefWidth(317);
@@ -457,7 +458,7 @@ public class UIMain extends Application {
 
         boolean settingsAlertCalled = false;
 
-        if (locationPreference.length()==5 && locationPreference.chars().allMatch(Character::isDigit)){
+        if (locationPreference.length()==5 && locationPreference.chars().allMatch(Character::isDigit)) {
             preferences[1] = databaseParser.getCoordinates(locationPreference);
             preferences[0] = "true";
         } else {
@@ -465,13 +466,26 @@ public class UIMain extends Application {
             callSettingsAlert();
             settingsAlertCalled = true;
         }
-
         if (unitPreference.equals("Imperial")||unitPreference.equals("Metric")){
             preferences[2] = unitPreference;
             preferences[0] = "true";
         } else{
             preferences[0] = "false";
             if (!settingsAlertCalled) {
+                callSettingsAlert();
+            }
+        }
+        if (!themeDropdown.getValue().equals("None") && !themeDropdown.getValue().isEmpty() && !themeDropdown.getValue().equals("Pick a theme")){
+            /*if statements to set background
+                    "Light Mode",
+                    "Dark Mode",
+                    "Ball State",
+                    "Cityscape",
+                    "Frutiger Aero",
+                    "Nature"
+             */
+        } else{
+            if(!settingsAlertCalled){
                 callSettingsAlert();
             }
         }
@@ -482,7 +496,7 @@ public class UIMain extends Application {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Settings Alert");
         alert.setHeaderText("Invalid settings");
-        alert.setContentText("Make sure you set the zipcode to be 5 digits and the units to be a valid option!");
+        alert.setContentText("If you wish to set a default zipcode and unit, make sure you set the zipcode to be 5 digits and the units to be a valid option!\n\nIf you wish to use a special background, make sure you set it to a valid option!");
         alert.showAndWait();
     }
 
