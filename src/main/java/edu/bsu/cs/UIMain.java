@@ -37,7 +37,7 @@ public class UIMain extends Application {
     private final ComboBox<String> themeDropdown = new ComboBox<>();
     private Button saveButton = new Button("Save Settings");
     private Button resetButton = new Button("Reset Settings");
-    private String css = "/edu/bsu/cs/light-style.css";
+    private String css = "light-style";
 
     // Our classes
     FileController fileController = new FileController();
@@ -71,7 +71,7 @@ public class UIMain extends Application {
         Scene scene = new Scene(mainLayout, 600, 330);
 
         // Load CSS stylesheet
-        String css = getClass().getResource(this.css).toExternalForm();
+        String css = getClass().getResource("/edu/bsu/cs/" + this.css + ".css").toExternalForm();
         scene.getStylesheets().add(css);
 
         // Configure the stage
@@ -177,7 +177,7 @@ public class UIMain extends Application {
         Scene scene = new Scene(secondaryLayout, 450, 170);
 
         // Load CSS stylesheet
-        String css = getClass().getResource(this.css).toExternalForm();
+        String css = getClass().getResource("/edu/bsu/cs/" + this.css + ".css").toExternalForm();
         scene.getStylesheets().add(css);
 
         Stage secondaryStage = new Stage();
@@ -232,7 +232,6 @@ public class UIMain extends Application {
         if (themeDropdown.getItems().isEmpty()) {
             themeDropdown.getItems().addAll(
                     "None",
-                    "Light Mode",
                     "Dark Mode",
                     "Ball State",
                     "Cityscape",
@@ -241,7 +240,28 @@ public class UIMain extends Application {
             );
         }
         themeDropdown.setPrefWidth(317);
-        themeDropdown.setValue("Pick a theme");
+        String themeDropdownText = "";
+        switch (this.css){
+            case "light-style":
+                themeDropdownText = "None";
+                break;
+            case "dark-style":
+                themeDropdownText = "Dark Mode";
+                break;
+            case "ball-state-style":
+                themeDropdownText = "Ball State";
+                break;
+            case "city-style":
+                themeDropdownText = "Cityscape";
+                break;
+            case "frutiger-aero":
+                themeDropdownText = "Frutiger Aero";
+                break;
+            case "nature-style":
+                themeDropdownText = "Nature";
+                break;
+        }
+        themeDropdown.setValue(themeDropdownText);
 
         secondRow.getChildren().addAll(themeLabel, themeDropdown);
 
@@ -469,27 +489,34 @@ public class UIMain extends Application {
         if (unitPreference.equals("Imperial")||unitPreference.equals("Metric")){
             preferences[2] = unitPreference;
             preferences[0] = "true";
-        } else{
+        } else {
             preferences[0] = "false";
             if (!settingsAlertCalled) {
                 callSettingsAlert();
             }
         }
-        if (!themeDropdown.getValue().equals("None") && !themeDropdown.getValue().isEmpty() && !themeDropdown.getValue().equals("Pick a theme")){
-            /*if statements to set background
-                    "Light Mode",
-                    "Dark Mode",
-                    "Ball State",
-                    "Cityscape",
-                    "Frutiger Aero",
-                    "Nature"
-             */
-        } else{
-            if(!settingsAlertCalled){
-                callSettingsAlert();
-            }
-        }
         fileController.savePreferences(preferences);
+
+        switch (themeDropdown.getValue()) {
+            case "None":
+                css = "light-style";
+                break;
+            case "Dark Mode":
+                css = "dark-style";
+                break;
+            case "Ball State":
+                css = "ball-state-style";
+                break;
+            case "Cityscape":
+                css = "city-style";
+                break;
+            case "Frutiger Aero":
+                css = "frutiger-aero";
+                break;
+            case "Nature":
+                css = "nature-style";
+                break;
+        }
     }
 
     public void callSettingsAlert() {
