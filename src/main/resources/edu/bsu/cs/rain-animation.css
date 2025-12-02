@@ -1,0 +1,83 @@
+/* JavaFX-Compatible Rain Animation */
+/* This uses only features supported by JavaFX CSS */
+
+/* Rain overlay - adds subtle blue tint to the entire scene */
+.root {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(100, 130, 180, 0.05),
+            rgba(100, 130, 180, 0.08)
+            ),
+            derive(-fx-background-primary, 0%);
+}
+
+/* Subtle dampness/wet effect on all UI elements */
+VBox {
+    -fx-effect: dropshadow(gaussian, rgba(100, 130, 180, 0.1), 8, 0.3, 0, 2);
+}
+
+/* Enhanced shadow effects for buttons to look "wet" */
+.button {
+    -fx-effect: dropshadow(gaussian, rgba(120, 150, 200, 0.25), 4, 0.4, 0, 1);
+}
+
+.button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(120, 150, 200, 0.35), 5, 0.5, 0, 1);
+}
+
+/* Glass/wet effect on text fields */
+.text-field {
+    -fx-effect: dropshadow(gaussian, rgba(120, 150, 200, 0.2), 3, 0.5, 0, 1);
+    -fx-background-color:
+            linear-gradient(to bottom,
+            derive(-fx-input-bg, -2%),
+            derive(-fx-input-bg, 2%)
+            );
+}
+
+.text-field:focused {
+    -fx-effect: dropshadow(gaussian, rgba(100, 150, 220, 0.4), 4, 0.6, 0, 1);
+}
+
+/* Wet/glossy effect on text area */
+.text-area {
+    -fx-effect: dropshadow(gaussian, rgba(100, 130, 180, 0.25), 5, 0.4, 0, 1);
+    -fx-background-color:
+            linear-gradient(to bottom,
+            derive(-fx-input-bg, -3%),
+            derive(-fx-input-bg, 1%)
+            );
+}
+
+/* Enhanced dropdown effect */
+.combo-box {
+    -fx-effect: dropshadow(gaussian, rgba(120, 150, 200, 0.2), 3, 0.5, 0, 1);
+}
+
+/* Fog/mist effect at bottom of containers */
+HBox:last-child {
+    -fx-effect: dropshadow(gaussian, rgba(200, 210, 230, 0.3), 10, 0.5, 0, -3);
+}
+
+/* Rainy atmosphere - slightly darken labels */
+.label {
+    -fx-text-fill: derive(-fx-text-primary, -5%);
+}
+
+/* Add a subtle blue tint to borders */
+.button {
+    -fx-border-color: derive(-fx-button-border, -10% bluer);
+}
+
+.text-field {
+    -fx-border-color: derive(-fx-input-border, -5% bluer);
+}
+
+.text-field:focused {
+    -fx-border-color: derive(-fx-input-focus, 10% bluer);
+}
+
+/* Rainy day look - slightly desaturated and cooler */
+#startButton {
+    -fx-effect: dropshadow(gaussian, rgba(100, 150, 200, 0.3), 5, 0.5, 0, 1);
+}

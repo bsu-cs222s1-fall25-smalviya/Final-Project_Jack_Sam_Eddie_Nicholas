@@ -26,4 +26,27 @@ public class Converter {
         float kUnit = (float) (mUnit * 1.609344);
         return Math.round(kUnit);
     }
+    public String convertWindSpeed(String windSpeed, String targetUnit) {
+        if (targetUnit.equalsIgnoreCase("Metric") || targetUnit.equalsIgnoreCase("M")) {
+            // Extract number and direction from strings like "8 mph WNW"
+            String[] parts = windSpeed.trim().split("\\s+");
+
+            if (parts.length >= 2) {
+                try {
+                    // Parse the speed value
+                    int mph = Integer.parseInt(parts[0]);
+                    int kmh = milesToKilometers(mph);
+
+                    // Get direction
+                    String direction = parts[parts.length - 1];
+                    return kmh + " km/h " + direction;
+                } catch (NumberFormatException e) {
+                    // If parsing fails, return original
+                    return windSpeed;
+                }
+            }
+        }
+        return windSpeed;
+    }
+
 }
