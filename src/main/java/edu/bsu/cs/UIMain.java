@@ -37,6 +37,7 @@ public class UIMain extends Application {
     private final ComboBox<String> themeDropdown = new ComboBox<>();
     private Button saveButton = new Button("Save Settings");
     private Button resetButton = new Button("Reset Settings");
+    private String css = "light-style";
 
     // Our classes
     FileController fileController = new FileController();
@@ -70,10 +71,8 @@ public class UIMain extends Application {
         Scene scene = new Scene(mainLayout, 600, 330);
 
         // Load CSS stylesheet
-        String css = getClass().getResource("/edu/bsu/cs/nature-style.css").toExternalForm();
+        String css = getClass().getResource("/edu/bsu/cs/" + this.css + ".css").toExternalForm();
         scene.getStylesheets().add(css);
-
-
 
         // Configure the stage
         primaryStage.setTitle("Weather App");
@@ -178,7 +177,7 @@ public class UIMain extends Application {
         Scene scene = new Scene(secondaryLayout, 450, 170);
 
         // Load CSS stylesheet
-        String css = getClass().getResource("/edu/bsu/cs/style.css").toExternalForm();
+        String css = getClass().getResource("/edu/bsu/cs/" + this.css + ".css").toExternalForm();
         scene.getStylesheets().add(css);
 
         Stage secondaryStage = new Stage();
@@ -198,6 +197,10 @@ public class UIMain extends Application {
         topRow.setSpacing(10);
 
         Label locationLabel = new Label("Zipcode:");
+        String[] preferences = fileController.loadPreferences();
+        if (preferences[0].equals("false")){
+            locationPreferences.clear();
+        }
         locationPreferences.setPromptText("Enter zipcode");
         locationPreferences.setPrefWidth(150);
 
@@ -211,7 +214,6 @@ public class UIMain extends Application {
             );
         }
         unitPreferences.setPrefWidth(115);
-        String[] preferences = fileController.loadPreferences();
         if (preferences[0].equals("true")){
             unitPreferences.setValue(preferences[2]);
         } else {
@@ -233,14 +235,24 @@ public class UIMain extends Application {
         if (themeDropdown.getItems().isEmpty()) {
             themeDropdown.getItems().addAll(
                     "None",
-                    "Theme 1",
-                    "Theme 2",
-                    "Theme 3",
-                    "Etc"
+                    "Dark Mode",
+                    "Ball State",
+                    "Cityscape",
+                    "Frutiger Aero",
+                    "Nature"
             );
         }
         themeDropdown.setPrefWidth(317);
-        themeDropdown.setValue("Pick a theme");
+        String themeDropdownText = switch (this.css) {
+            case "light-style" -> "None";
+            case "dark-style" -> "Dark Mode";
+            case "ball-state-style" -> "Ball State";
+            case "city-style" -> "Cityscape";
+            case "frutiger-aero" -> "Frutiger Aero";
+            case "nature-style" -> "Nature";
+            default -> "";
+        };
+        themeDropdown.setValue(themeDropdownText);
 
         secondRow.getChildren().addAll(themeLabel, themeDropdown);
 
@@ -270,6 +282,8 @@ public class UIMain extends Application {
         settingsButton.setOnAction(event -> {
             try {
                 startSettingsStage();
+                //Stage stage = (Stage) settingsButton.getScene().getWindow();
+                //stage.close();
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -281,11 +295,16 @@ public class UIMain extends Application {
         saveButton.setOnAction(event -> {
             try {
                 saveSettings();
+                Scene scene = settingsButton.getScene();
+                scene.getStylesheets().clear();
+                String css = getClass().getResource("/edu/bsu/cs/" + this.css + ".css").toExternalForm();
+                scene.getStylesheets().add(css);
                 Stage stage = (Stage) saveButton.getScene().getWindow();
                 stage.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            //start();
         });
 
         return saveButton;
@@ -294,7 +313,12 @@ public class UIMain extends Application {
     private Button getResetButton(){
         resetButton.setOnAction(event -> {
             try {
-                fileController.resetPreferences();
+                fileController.savePreferences(new String[] {"false","",""});
+                Scene scene = settingsButton.getScene();
+                scene.getStylesheets().clear();
+                this.css = "light-style";
+                String css = getClass().getResource("/edu/bsu/cs/light-style.css").toExternalForm();
+                scene.getStylesheets().add(css);
                 Stage stage = (Stage) resetButton.getScene().getWindow();
                 stage.close();
             } catch (IOException e) {
@@ -313,17 +337,14 @@ public class UIMain extends Application {
         try {
             if (reportTypeDropdown.getValue().equals("Today's Report")) {
                 reportString = getHourlyReport();
-                //reportString = "hello world today";
             } else if (reportTypeDropdown.getValue().equals("Daily Report")) {
                 reportString = getDailyReport();
-                //reportString = "hello world week";
             } else if (reportTypeDropdown.getValue().equals("Outfit Recommender")) {
                 reportString = getOutfitRecommendation();
-                //reportString = "hello world outfit";
             }
             reportField.setText(reportString);
         } catch (Exception e){
-            reportField.setText("Sorry, you must provide a zipcode if you're not using your set preferences. ");
+            reportField.setText("Sorry, if you want to use your preferences, you must leave zipcode blank and not set unit. If you do not wish to use your preferences, you must provide a zipcode and unit. ");
         }
 
         return reportField;
@@ -334,16 +355,16 @@ public class UIMain extends Application {
         InputStream weatherData;
         String units;
         String[] preferences = this.fileController.loadPreferences();
-        if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
-            if (zipcodeField.getText().isEmpty()){
-                throw new IllegalArgumentException("Empty zipcode");
+        if (zipcodeField.getText().isEmpty()&&unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
+            link = api.createURLString(preferences[1]);
+            units = preferences[2];
+        } else {
+            if (zipcodeField.getText().isEmpty()||unitTypeDropdown.getValue().equals("Pick a unit")){
+                throw new IllegalArgumentException("Empty zipcode/unit");
             }
             String location = zipcodeField.getText();
             units = unitTypeDropdown.getValue().toLowerCase();
             link = api.createURLString(databaseParser.getCoordinates(location));
-        } else {
-            link = api.createURLString(preferences[1]);
-            units = preferences[2];
         }
 
         weatherData = api.getInputStreamFromURL(link);
@@ -367,7 +388,18 @@ public class UIMain extends Application {
         InputStream weatherData;
         String units;
         String[] preferences = this.fileController.loadPreferences();
-        if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
+        if (zipcodeField.getText().isEmpty()&&unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
+            link = api.createURLString(preferences[1]);
+            units = preferences[2];
+        } else {
+            if (zipcodeField.getText().isEmpty()||unitTypeDropdown.getValue().equals("Pick a unit")){
+                throw new IllegalArgumentException("Empty zipcode/unit");
+            }
+            String location = zipcodeField.getText();
+            units = unitTypeDropdown.getValue().toLowerCase();
+            link = api.createURLString(databaseParser.getCoordinates(location));
+        }
+        /*if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
             if (zipcodeField.getText().isEmpty()){
                 throw new IllegalArgumentException("Empty zipcode");
             }
@@ -377,7 +409,7 @@ public class UIMain extends Application {
         } else {
             link = api.createURLString(preferences[1]);
             units = preferences[2];
-        }
+        }*/
 
         weatherData = api.getInputStreamFromURL(link);
         String dailyForecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
@@ -400,7 +432,18 @@ public class UIMain extends Application {
         InputStream weatherData;
         String units;
         String[] preferences = this.fileController.loadPreferences();
-        if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
+        if (zipcodeField.getText().isEmpty()&&unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
+            link = api.createURLString(preferences[1]);
+            units = preferences[2];
+        } else {
+            if (zipcodeField.getText().isEmpty()||unitTypeDropdown.getValue().equals("Pick a unit")){
+                throw new IllegalArgumentException("Empty zipcode/unit");
+            }
+            String location = zipcodeField.getText();
+            units = unitTypeDropdown.getValue().toLowerCase();
+            link = api.createURLString(databaseParser.getCoordinates(location));
+        }
+        /*if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
             if (zipcodeField.getText().isEmpty()){
                 throw new IllegalArgumentException("Empty zipcode");
             }
@@ -410,7 +453,7 @@ public class UIMain extends Application {
         } else {
             link = api.createURLString(preferences[1]);
             units = preferences[2];
-        }
+        }*/
 
         weatherData = api.getInputStreamFromURL(link);
         String forcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
@@ -457,7 +500,7 @@ public class UIMain extends Application {
 
         boolean settingsAlertCalled = false;
 
-        if (locationPreference.length()==5 && locationPreference.chars().allMatch(Character::isDigit)){
+        if (locationPreference.length()==5 && locationPreference.chars().allMatch(Character::isDigit)) {
             preferences[1] = databaseParser.getCoordinates(locationPreference);
             preferences[0] = "true";
         } else {
@@ -465,24 +508,33 @@ public class UIMain extends Application {
             callSettingsAlert();
             settingsAlertCalled = true;
         }
-
         if (unitPreference.equals("Imperial")||unitPreference.equals("Metric")){
             preferences[2] = unitPreference;
             preferences[0] = "true";
-        } else{
+        } else {
             preferences[0] = "false";
             if (!settingsAlertCalled) {
                 callSettingsAlert();
             }
         }
         fileController.savePreferences(preferences);
+
+        css = switch (themeDropdown.getValue()){
+            case "None" -> "light-style";
+            case "Dark Mode" -> "dark-style";
+            case "Ball State" -> "ball-state-style";
+            case "Cityscape" -> "city-style";
+            case "Frutiger Aero" -> "frutiger-aero";
+            case "Nature" -> "nature-style";
+            default -> "";
+        };
     }
 
     public void callSettingsAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Settings Alert");
         alert.setHeaderText("Invalid settings");
-        alert.setContentText("Make sure you set the zipcode to be 5 digits and the units to be a valid option!");
+        alert.setContentText("If you wish to set a default zipcode and unit, make sure you set the zipcode to be 5 digits and the units to be a valid option!");
         alert.showAndWait();
     }
 
