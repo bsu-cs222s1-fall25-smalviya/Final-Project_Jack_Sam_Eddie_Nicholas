@@ -240,27 +240,15 @@ public class UIMain extends Application {
             );
         }
         themeDropdown.setPrefWidth(317);
-        String themeDropdownText = "";
-        switch (this.css){
-            case "light-style":
-                themeDropdownText = "None";
-                break;
-            case "dark-style":
-                themeDropdownText = "Dark Mode";
-                break;
-            case "ball-state-style":
-                themeDropdownText = "Ball State";
-                break;
-            case "city-style":
-                themeDropdownText = "Cityscape";
-                break;
-            case "frutiger-aero":
-                themeDropdownText = "Frutiger Aero";
-                break;
-            case "nature-style":
-                themeDropdownText = "Nature";
-                break;
-        }
+        String themeDropdownText = switch (this.css) {
+            case "light-style" -> "None";
+            case "dark-style" -> "Dark Mode";
+            case "ball-state-style" -> "Ball State";
+            case "city-style" -> "Cityscape";
+            case "frutiger-aero" -> "Frutiger Aero";
+            case "nature-style" -> "Nature";
+            default -> "";
+        };
         themeDropdown.setValue(themeDropdownText);
 
         secondRow.getChildren().addAll(themeLabel, themeDropdown);
@@ -291,6 +279,8 @@ public class UIMain extends Application {
         settingsButton.setOnAction(event -> {
             try {
                 startSettingsStage();
+                //Stage stage = (Stage) settingsButton.getScene().getWindow();
+                //stage.close();
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -302,11 +292,15 @@ public class UIMain extends Application {
         saveButton.setOnAction(event -> {
             try {
                 saveSettings();
+                Scene scene = settingsButton.getScene();
+                String css = getClass().getResource("/edu/bsu/cs/" + this.css + ".css").toExternalForm();
+                scene.getStylesheets().add(css);
                 Stage stage = (Stage) saveButton.getScene().getWindow();
                 stage.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            //start();
         });
 
         return saveButton;
@@ -497,33 +491,22 @@ public class UIMain extends Application {
         }
         fileController.savePreferences(preferences);
 
-        switch (themeDropdown.getValue()) {
-            case "None":
-                css = "light-style";
-                break;
-            case "Dark Mode":
-                css = "dark-style";
-                break;
-            case "Ball State":
-                css = "ball-state-style";
-                break;
-            case "Cityscape":
-                css = "city-style";
-                break;
-            case "Frutiger Aero":
-                css = "frutiger-aero";
-                break;
-            case "Nature":
-                css = "nature-style";
-                break;
-        }
+        css = switch (themeDropdown.getValue()){
+            case "None" -> "light-style";
+            case "Dark Mode" -> "dark-style";
+            case "Ball State" -> "ball-state-style";
+            case "Cityscape" -> "city-style";
+            case "Frutiger Aero" -> "frutiger-aero";
+            case "Nature" -> "nature-style";
+            default -> "";
+        };
     }
 
     public void callSettingsAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Settings Alert");
         alert.setHeaderText("Invalid settings");
-        alert.setContentText("If you wish to set a default zipcode and unit, make sure you set the zipcode to be 5 digits and the units to be a valid option!\n\nIf you wish to use a special background, make sure you set it to a valid option!");
+        alert.setContentText("If you wish to set a default zipcode and unit, make sure you set the zipcode to be 5 digits and the units to be a valid option!");
         alert.showAndWait();
     }
 
