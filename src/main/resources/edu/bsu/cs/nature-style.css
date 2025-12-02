@@ -1,0 +1,288 @@
+.root {
+
+    -fx-background-primary: #2D5016;
+    -fx-background-secondary: #3A6B1E;
+
+    -fx-text-primary: #F5F5DC;
+    -fx-text-secondary: #E8E8D0;
+
+    -fx-button-bg: linear-gradient(to bottom, rgba(90, 130, 60, 0.85), rgba(70, 100, 45, 0.85));
+    -fx-button-border: rgba(245, 245, 220, 0.7);
+    -fx-button-text: #F5F5DC;
+    -fx-button-hover: rgba(110, 160, 75, 0.9);
+
+    -fx-input-bg: rgba(139, 115, 85, 0.75);
+    -fx-input-border: rgba(205, 183, 158, 0.8);
+    -fx-input-focus: #8BC34A;
+
+    -fx-accent: #8BC34A;
+}
+
+.root {
+    -fx-background-image: url("/edu/bsu/cs/nature.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-font-family: "Verdana", "Trebuchet MS", "Arial";
+    -fx-font-size: 14px;
+}
+
+VBox {
+    -fx-background-color: rgba(45, 80, 22, 0.75);
+    -fx-background-radius: 12px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(0, 0, 0, 0.6), 15, 0.4, 0, 4),
+            innershadow(gaussian, rgba(139, 173, 60, 0.2), 8, 0.3, 0, 1);
+    -fx-padding: 15px;
+    -fx-border-color: rgba(139, 173, 60, 0.5);
+    -fx-border-width: 2px;
+    -fx-border-radius: 12px;
+}
+
+HBox {
+    -fx-background-color: transparent;
+}
+
+.button {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(90, 130, 60, 0.9) 0%,
+            rgba(70, 100, 45, 0.9) 100%
+            );
+    -fx-text-fill: #F5F5DC;
+    -fx-border-color: rgba(139, 173, 60, 0.7);
+    -fx-border-width: 2px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 6, 0.4, 0, 2);
+}
+
+.button:hover {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(110, 160, 75, 0.95) 0%,
+            rgba(90, 130, 60, 0.95) 100%
+            );
+    -fx-border-color: #8BC34A;
+    -fx-effect:
+            dropshadow(gaussian, rgba(139, 195, 74, 0.6), 10, 0.6, 0, 0),
+            dropshadow(gaussian, rgba(0, 0, 0, 0.4), 4, 0.3, 0, 2);
+}
+
+.button:pressed {
+    -fx-background-color: rgba(50, 75, 35, 0.95);
+    -fx-scale-y: 0.97;
+    -fx-scale-x: 0.97;
+}
+
+#startButton {
+    -fx-font-weight: bold;
+    -fx-border-width: 3px;
+    -fx-border-color: #8BC34A;
+    -fx-effect:
+            dropshadow(gaussian, rgba(139, 195, 74, 0.7), 12, 0.6, 0, 0),
+            dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0.4, 0, 2);
+}
+
+#startButton:hover {
+    -fx-effect:
+            dropshadow(gaussian, rgba(139, 195, 74, 0.9), 15, 0.7, 0, 0),
+            dropshadow(gaussian, rgba(0, 0, 0, 0.5), 5, 0.4, 0, 2);
+}
+
+#settingsButton {
+    -fx-border-color: rgba(139, 173, 60, 0.6);
+}
+
+#settingsButton:hover {
+    -fx-border-color: #8BC34A;
+}
+
+#helpButton {
+    -fx-border-color: rgba(139, 173, 60, 0.6);
+}
+
+#helpButton:hover {
+    -fx-border-color: #8BC34A;
+}
+
+.text-field {
+    -fx-background-color: rgba(139, 115, 85, 0.85);
+    -fx-text-fill: #F5F5DC;
+    -fx-border-color: rgba(205, 183, 158, 0.8);
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 6px 10px;
+    -fx-font-weight: 500;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0.4, 0, 1);
+}
+
+.text-field:focused {
+    -fx-border-color: #8BC34A;
+    -fx-border-width: 3px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(139, 195, 74, 0.6), 8, 0.5, 0, 0),
+            innershadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0.4, 0, 1);
+}
+
+.text-field .text {
+    -fx-fill: #F5F5DC;
+}
+
+.text-field .prompt-text {
+    -fx-fill: rgba(245, 245, 220, 0.5);
+}
+
+.text-area {
+    -fx-background-color: rgba(80, 100, 50, 0.7);
+    -fx-text-fill: #F5F5DC;
+    -fx-border-color: rgba(139, 173, 60, 0.7);
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-weight: 500;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.3, 0, 1);
+}
+
+.text-area:focused {
+    -fx-border-color: #8BC34A;
+    -fx-border-width: 3px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(139, 195, 74, 0.6), 8, 0.5, 0, 0);
+}
+
+.text-area .content {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .content {
+    -fx-background-color: transparent;
+}
+
+.text-area .text {
+    -fx-fill: #F5F5DC;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.7), 2, 0.8, 0, 1);
+}
+
+.combo-box {
+    -fx-background-color: rgba(139, 115, 85, 0.85);
+    -fx-border-color: rgba(205, 183, 158, 0.8);
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.4), 5, 0.4, 0, 1);
+}
+
+.combo-box:focused {
+    -fx-border-color: #8BC34A;
+    -fx-border-width: 3px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(139, 195, 74, 0.6), 8, 0.5, 0, 0);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #F5F5DC;
+    -fx-font-weight: 500;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: rgba(70, 100, 45, 0.95);
+    -fx-border-color: #8BC34A;
+    -fx-border-width: 2px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 12, 0.5, 0, 3);
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #F5F5DC;
+    -fx-padding: 8px 12px;
+    -fx-font-weight: 500;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: rgba(139, 195, 74, 0.4);
+    -fx-text-fill: #FFFFFF;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: rgba(139, 195, 74, 0.7);
+    -fx-text-fill: #2D5016;
+    -fx-font-weight: bold;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: rgba(90, 130, 60, 0.7);
+}
+
+.combo-box .arrow {
+    -fx-background-color: #8BC34A;
+}
+
+.label {
+    -fx-text-fill: #F5F5DC;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.8), 2, 0.7, 0, 1);
+}
+
+HBox > .label {
+    -fx-font-weight: 600;
+}
+
+#titleLabel {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #F5F5DC;
+    -fx-effect:
+            dropshadow(gaussian, rgba(139, 195, 74, 0.8), 10, 0.7, 0, 0),
+            dropshadow(gaussian, rgba(0, 0, 0, 0.8), 3, 0.6, 0, 2);
+}
+
+.scroll-bar {
+    -fx-background-color: rgba(70, 100, 45, 0.5);
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: rgba(139, 195, 74, 0.8);
+    -fx-background-radius: 6px;
+    -fx-border-color: rgba(205, 183, 158, 0.5);
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: rgba(139, 195, 74, 0.95);
+}
+
+.scroll-bar .track {
+    -fx-background-color: rgba(45, 80, 22, 0.6);
+    -fx-background-radius: 6px;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: rgba(70, 100, 45, 0.7);
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: #8BC34A;
+}s

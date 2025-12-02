@@ -70,8 +70,9 @@ public class UIMain extends Application {
         Scene scene = new Scene(mainLayout, 600, 330);
 
         // Load CSS stylesheet
-        String css = getClass().getResource("/edu/bsu/cs/style.css").toExternalForm();
+        String css = getClass().getResource("/edu/bsu/cs/nature-style.css").toExternalForm();
         scene.getStylesheets().add(css);
+
 
 
         // Configure the stage

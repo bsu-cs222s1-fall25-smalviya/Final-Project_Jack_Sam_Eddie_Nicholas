@@ -65,11 +65,11 @@ public class DataFormatter {
             precipValue = weatherData.get(1);
             dewPointValue = Double.parseDouble(weatherData.get(2));
             humidityValue = weatherData.get(3);
-            windValue = weatherData.get(4);
+            windValue = converter.convertWindSpeed(weatherData.get(4), desiredUnit);
         } else {
             tempValue = Double.parseDouble(weatherData.get(0));
             precipValue = weatherData.get(1);
-            windValue = weatherData.get(2);
+            windValue = converter.convertWindSpeed(weatherData.get(2), desiredUnit);
         }
 
         String tempUnitLabel;

@@ -1,0 +1,312 @@
+.root {
+
+    -fx-background-primary: #4A9EE0;
+    -fx-background-secondary: #6BB4ED;
+
+    -fx-text-primary: #FFFFFF;
+    -fx-text-secondary: #E8F4FA;
+
+    -fx-button-bg: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.6));
+    -fx-button-border: rgba(255, 255, 255, 0.6);
+    -fx-button-text: #2C3E50;
+    -fx-button-hover: rgba(255, 255, 255, 0.9);
+
+    -fx-input-bg: rgba(255, 255, 255, 0.7);
+    -fx-input-border: rgba(255, 255, 255, 0.8);
+    -fx-input-focus: #7FD957;
+
+    -fx-accent: #7FD957;
+}
+
+.root {
+    -fx-background-image: url("/edu/bsu/cs/old-future.jpg");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+    -fx-background-repeat: no-repeat;
+    -fx-font-family: "Segoe UI", "Tahoma", sans-serif;
+    -fx-font-size: 14px;
+}
+
+VBox {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.6) 0%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.5) 100%
+            );
+    -fx-background-radius: 12px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(0, 0, 0, 0.3), 15, 0.3, 0, 5),
+            innershadow(gaussian, rgba(255, 255, 255, 0.5), 10, 0.5, 0, 1);
+    -fx-padding: 15px;
+    -fx-border-color: rgba(255, 255, 255, 0.7);
+    -fx-border-width: 1px;
+    -fx-border-radius: 12px;
+}
+
+HBox {
+    -fx-background-color: transparent;
+}
+
+.button {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.85) 0%,
+            rgba(255, 255, 255, 0.65) 48%,
+            rgba(255, 255, 255, 0.55) 52%,
+            rgba(255, 255, 255, 0.75) 100%
+            );
+    -fx-text-fill: #2C3E50;
+    -fx-border-color: rgba(255, 255, 255, 0.8);
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 8px 16px;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-cursor: hand;
+    -fx-effect:
+            dropshadow(gaussian, rgba(0, 0, 0, 0.2), 5, 0.4, 0, 2),
+            innershadow(gaussian, rgba(255, 255, 255, 0.6), 8, 0.5, 0, 1);
+}
+
+.button:hover {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.95) 0%,
+            rgba(255, 255, 255, 0.75) 48%,
+            rgba(255, 255, 255, 0.65) 52%,
+            rgba(255, 255, 255, 0.85) 100%
+            );
+    -fx-effect:
+            dropshadow(gaussian, rgba(127, 217, 87, 0.5), 10, 0.6, 0, 0),
+            innershadow(gaussian, rgba(255, 255, 255, 0.7), 10, 0.6, 0, 1);
+}
+
+.button:pressed {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.6) 0%,
+            rgba(255, 255, 255, 0.8) 100%
+            );
+    -fx-scale-y: 0.98;
+    -fx-scale-x: 0.98;
+}
+
+#startButton {
+    -fx-font-weight: bold;
+    -fx-border-width: 2px;
+    -fx-border-color: rgba(127, 217, 87, 0.8);
+    -fx-effect:
+            dropshadow(gaussian, rgba(127, 217, 87, 0.6), 12, 0.6, 0, 0),
+            innershadow(gaussian, rgba(255, 255, 255, 0.8), 10, 0.6, 0, 1);
+}
+
+#startButton:hover {
+    -fx-effect:
+            dropshadow(gaussian, rgba(127, 217, 87, 0.8), 15, 0.7, 0, 0),
+            innershadow(gaussian, rgba(255, 255, 255, 0.9), 12, 0.7, 0, 1);
+}
+
+#settingsButton {
+    -fx-border-color: rgba(200, 200, 200, 0.6);
+}
+
+#helpButton {
+    -fx-border-color: rgba(200, 200, 200, 0.6);
+}
+
+.text-field {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(255, 255, 255, 0.9) 100%
+            );
+    -fx-text-fill: #2C3E50;
+    -fx-border-color: rgba(255, 255, 255, 0.9);
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-padding: 6px 10px;
+    -fx-font-weight: 500;
+    -fx-effect:
+            innershadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
+}
+
+.text-field:focused {
+    -fx-border-color: #7FD957;
+    -fx-border-width: 2px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(127, 217, 87, 0.5), 8, 0.5, 0, 0),
+            innershadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
+}
+
+.text-field .text {
+    -fx-fill: #2C3E50;
+}
+
+.text-field .prompt-text {
+    -fx-fill: rgba(44, 62, 80, 0.5);
+}
+
+.text-area {
+    -fx-background-color: rgba(255, 255, 255, 0.75);
+    -fx-text-fill: #2C3E50;
+    -fx-border-color: rgba(255, 255, 255, 0.9);
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-font-weight: 500;
+    -fx-effect:
+            innershadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
+}
+
+.text-area:focused {
+    -fx-border-color: #7FD957;
+    -fx-border-width: 2px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(127, 217, 87, 0.5), 8, 0.5, 0, 0);
+}
+
+.text-area .content {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .content {
+    -fx-background-color: transparent;
+}
+
+.text-area .text {
+    -fx-fill: #2C3E50;
+    -fx-font-weight: 600;
+}
+
+.combo-box {
+    -fx-background-color:
+            linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.8) 0%,
+            rgba(255, 255, 255, 0.9) 100%
+            );
+    -fx-border-color: rgba(255, 255, 255, 0.9);
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-effect: innershadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.3, 0, 1);
+}
+
+.combo-box:focused {
+    -fx-border-color: #7FD957;
+    -fx-border-width: 2px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(127, 217, 87, 0.5), 8, 0.5, 0, 0);
+}
+
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2C3E50;
+    -fx-font-weight: 500;
+}
+
+.combo-box-popup .list-view {
+    -fx-background-color: rgba(255, 255, 255, 0.95);
+    -fx-border-color: rgba(127, 217, 87, 0.7);
+    -fx-border-width: 1px;
+    -fx-border-radius: 6px;
+    -fx-background-radius: 6px;
+    -fx-effect:
+            dropshadow(gaussian, rgba(0, 0, 0, 0.3), 12, 0.4, 0, 3);
+}
+
+.combo-box-popup .list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #2C3E50;
+    -fx-padding: 8px 12px;
+    -fx-font-weight: 500;
+}
+
+.combo-box-popup .list-view .list-cell:hover {
+    -fx-background-color: rgba(127, 217, 87, 0.3);
+    -fx-text-fill: #1A5C2E;
+}
+
+.combo-box-popup .list-view .list-cell:selected {
+    -fx-background-color: rgba(127, 217, 87, 0.6);
+    -fx-text-fill: #1A5C2E;
+    -fx-font-weight: bold;
+}
+
+.combo-box .arrow-button {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+}
+
+.combo-box .arrow {
+    -fx-background-color: #4A9EE0;
+}
+
+.label {
+    -fx-text-fill: #2C3E50;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.8), 1, 1.0, 0, 1);
+}
+
+HBox > .label {
+    -fx-font-weight: 600;
+}
+
+#titleLabel {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-effect:
+            dropshadow(gaussian, rgba(127, 217, 87, 0.8), 10, 0.7, 0, 0),
+            dropshadow(gaussian, rgba(0, 0, 0, 0.4), 3, 0.5, 0, 2);
+}
+
+.scroll-bar {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
+
+.scroll-bar .thumb {
+    -fx-background-color:
+            linear-gradient(to right,
+            rgba(127, 217, 87, 0.7),
+            rgba(74, 158, 224, 0.7)
+            );
+    -fx-background-radius: 8px;
+    -fx-border-color: rgba(255, 255, 255, 0.5);
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color:
+            linear-gradient(to right,
+            rgba(127, 217, 87, 0.9),
+            rgba(74, 158, 224, 0.9)
+            );
+}
+
+.scroll-bar .track {
+    -fx-background-color: rgba(255, 255, 255, 0.4);
+    -fx-background-radius: 8px;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-radius: 6px;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: #4A9EE0;
+}
