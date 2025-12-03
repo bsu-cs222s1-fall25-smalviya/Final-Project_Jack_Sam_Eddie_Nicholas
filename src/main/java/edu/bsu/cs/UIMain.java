@@ -10,6 +10,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
+import javafx.scene.chart.*;
+import javafx.scene.layout.StackPane;
+import javafx.scene.control.Tooltip;
 
 //imports for our classes
 import java.io.FileNotFoundException;
@@ -30,6 +33,9 @@ public class UIMain extends Application {
     private final ComboBox<String> reportTypeDropdown = new ComboBox<>();
     private final ComboBox<String> unitTypeDropdown = new ComboBox<>();
     private Button startButton = new Button("Start");
+    private BarChart<String, Number> temperatureChart;
+    private StackPane diagramStack;
+    private Button toggleViewButton = new Button("Toggle View");
 
     // Settings UI Components
     private final TextField locationPreferences = new TextField();
@@ -64,15 +70,18 @@ public class UIMain extends Application {
         HBox topRow = createTopRow();
         HBox secondRow = createSecondRow();
         HBox thirdRow = createThirdRow();
+        HBox fourthRow = createFourthRow();
 
         // Add rows
-        mainLayout.getChildren().addAll(topRow, secondRow, thirdRow);
+        mainLayout.getChildren().addAll(topRow, secondRow, thirdRow, fourthRow);
 
         Scene scene = new Scene(mainLayout, 600, 330);
 
         // Load CSS stylesheet
         String css = getClass().getResource("/edu/bsu/cs/" + this.css + ".css").toExternalForm();
+        String tempChartCSS = getClass().getResource("/edu/bsu/cs/temperatureChart.css").toExternalForm();
         scene.getStylesheets().add(css);
+        scene.getStylesheets().add(tempChartCSS);
 
         // Configure the stage
         primaryStage.setTitle("Weather App");
@@ -153,10 +162,43 @@ public class UIMain extends Application {
         reportField.setPromptText("Report: ");
         reportField.setPrefWidth(500);
 
+        //Added the Bar chart to the third Row
+        //Graph set up
+        CategoryAxis xAxis = new CategoryAxis();
+        xAxis.setLabel("Day");
+
+        NumberAxis yAxis = new NumberAxis();
+        yAxis.setLabel("Temp");
+
+        temperatureChart = new BarChart<>(xAxis, yAxis);
+        temperatureChart.setTitle("Weekly Temperatures");
+        temperatureChart.setLegendVisible(false);
+        temperatureChart.setAnimated(true);
+        temperatureChart.setPrefWidth(500);
+        temperatureChart.setPrefHeight(200);
+        temperatureChart.setBarGap(5);
+        temperatureChart.setCategoryGap(15);
+
+        diagramStack = new StackPane(reportField, temperatureChart);
+        reportField.setVisible(true);
+        temperatureChart.setVisible(false);
+
+        temperatureChart.getStyleClass().add("tempChart");
+
         // Add components to second row (dropdown first, then start button)
-        thirdRow.getChildren().addAll(reportLabel, reportField);
+        thirdRow.getChildren().addAll(reportLabel, diagramStack);
 
         return thirdRow;
+    }
+
+    private HBox createFourthRow() {
+        HBox fourthRow = new HBox(10);
+        fourthRow.setAlignment(Pos.CENTER_LEFT);
+
+        toggleViewButton.setOnAction(e -> toggleOutputView());
+        fourthRow.getChildren().add(toggleViewButton);
+
+        return fourthRow;
     }
 
     // create the settings stage
@@ -329,17 +371,31 @@ public class UIMain extends Application {
     }
 
     private Button getHelpButton(){
-    helpButton.setOnAction(event -> {reportField.setText(
+        helpButton.setOnAction(event -> {reportField.setText(
                 "How to Use the Weather App:\n" +
                         "- Enter a zipcode in the Zipcode field.\n" +
                         "- Choose a report type (Today's Report, Daily, or Outfit).\n" +
                         "- Select units (Imperial or Metric).\n" +
                         "- Click Start to generate your report.\n" +
                         "- Settings allows you to save preferences.");
-    });
+        });
 
-    return helpButton;
-}
+        return helpButton;
+    }
+
+    //Toggle Button for Diagrams
+    private void toggleOutputView(){
+        boolean showingReport = reportField.isVisible();
+        reportField.setVisible(!showingReport);
+        temperatureChart.setVisible(showingReport);
+
+        if (showingReport) {
+            toggleViewButton.setText("Show Weather Report");
+        } else{
+            toggleViewButton.setText("Show Chart");
+        }
+    }
+
     private TextArea getReportField() throws IOException {
         String reportString = "";
         try {
@@ -407,17 +463,6 @@ public class UIMain extends Application {
             units = unitTypeDropdown.getValue().toLowerCase();
             link = api.createURLString(databaseParser.getCoordinates(location));
         }
-        /*if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
-            if (zipcodeField.getText().isEmpty()){
-                throw new IllegalArgumentException("Empty zipcode");
-            }
-            String location = zipcodeField.getText();
-            units = unitTypeDropdown.getValue().toLowerCase();
-            link = api.createURLString(databaseParser.getCoordinates(location));
-        } else {
-            link = api.createURLString(preferences[1]);
-            units = preferences[2];
-        }*/
 
         weatherData = api.getInputStreamFromURL(link);
         String dailyForecastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
@@ -432,6 +477,9 @@ public class UIMain extends Application {
             ArrayList<String> forecast = dailyForecast.get(i);
             reportString.append(this.dataFormatter.formatWeatherData(forecast, units, "Daily"));
         }
+
+        updateTemperatureChart(dailyForecast, units);
+
         return reportString.toString();
     }
 
@@ -451,17 +499,6 @@ public class UIMain extends Application {
             units = unitTypeDropdown.getValue().toLowerCase();
             link = api.createURLString(databaseParser.getCoordinates(location));
         }
-        /*if (!unitTypeDropdown.getValue().equalsIgnoreCase("Pick a unit")) {
-            if (zipcodeField.getText().isEmpty()){
-                throw new IllegalArgumentException("Empty zipcode");
-            }
-            String location = zipcodeField.getText();
-            units = unitTypeDropdown.getValue().toLowerCase();
-            link = api.createURLString(databaseParser.getCoordinates(location));
-        } else {
-            link = api.createURLString(preferences[1]);
-            units = preferences[2];
-        }*/
 
         weatherData = api.getInputStreamFromURL(link);
         String forcastURLString = this.dataParser.parseWeatherAPILink(weatherData, "forecast");
@@ -544,6 +581,56 @@ public class UIMain extends Application {
         alert.setHeaderText("Invalid settings");
         alert.setContentText("If you wish to set a default zipcode and unit, make sure you set the zipcode to be 5 digits and the units to be a valid option!");
         alert.showAndWait();
+    }
+
+    private void updateTemperatureChart(HashMap<Integer, ArrayList<String>> dailyForecast, String units) {
+        if (temperatureChart == null) {
+            return;
+        }
+        temperatureChart.getData().clear();
+        String unitsOfTemp = units.equalsIgnoreCase("imperial") ? "°F" : "°C";
+
+        // Update axis label
+        NumberAxis yAxis = (NumberAxis) temperatureChart.getYAxis();
+        yAxis.setLabel("Temperature (" + unitsOfTemp + ")");
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        int dayNumber = 1;
+        double minTemp = Double.POSITIVE_INFINITY;
+        double maxTemp = Double.NEGATIVE_INFINITY;
+        for (int i = 1; i <= 13; i += 2) {
+            ArrayList<String> forecast = dailyForecast.get(i);
+            if (forecast == null || forecast.isEmpty()) {
+                continue;
+            }
+
+            try {
+                double temp = Double.parseDouble(forecast.getFirst());
+                String dayLabel = "Day " + dayNumber;
+                series.getData().add(new XYChart.Data<>(dayLabel, temp));
+
+                //help better format axis for graph
+                minTemp = Math.min(minTemp, temp);
+                maxTemp = Math.max(maxTemp, temp);
+                dayNumber++;
+            } catch (NumberFormatException _) {
+            }
+        }
+
+        temperatureChart.getData().add(series);
+
+        double padding = 5.0;
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(Math.floor(minTemp - padding));
+        yAxis.setUpperBound(Math.floor(maxTemp + padding));
+        yAxis.setTickUnit(5);
+
+        for (XYChart.Data<String, Number> data : series.getData()) {
+            String toolText = data.getXValue() + ": "  + data.getYValue() + " "  + unitsOfTemp;
+            Tooltip tooltip = new Tooltip(toolText);
+            Tooltip.install(data.getNode(), tooltip);
+        }
     }
 
     static void main(String[] args) {

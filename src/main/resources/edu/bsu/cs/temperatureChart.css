@@ -1,0 +1,12 @@
+/* src/main/resources/edu/bsu/cs/temperatureChart.css */
+.tempChart {
+    -fx-background-color: transparent;
+}
+
+.tempChart .chart-plot-background {
+    -fx-background-color: white;
+}
+
+.tempChart .chart-bar {
+    -fx-bar-fill: #42a5f5;
+}
