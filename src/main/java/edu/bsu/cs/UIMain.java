@@ -328,10 +328,18 @@ public class UIMain extends Application {
         return resetButton;
     }
 
-    private Button getHelpButton() {
-        return helpButton;
-    }
+    private Button getHelpButton(){
+    helpButton.setOnAction(event -> {reportField.setText(
+                "How to Use the Weather App:\n" +
+                        "- Enter a zipcode in the Zipcode field.\n" +
+                        "- Choose a report type (Today's Report, Daily, or Outfit).\n" +
+                        "- Select units (Imperial or Metric).\n" +
+                        "- Click Start to generate your report.\n" +
+                        "- Settings allows you to save preferences.");
+    });
 
+    return helpButton;
+}
     private TextArea getReportField() throws IOException {
         String reportString = "";
         try {
