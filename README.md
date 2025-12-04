@@ -34,7 +34,8 @@ How to run Graphical User Interface (GUI)
 5. Then in the Report Type: drop down box select one of the three reports you would like (ex Today’s Report).
 6. Then in the Unit: drop down box pick either Imperial or Metric (ex Imperial)
 7. Finally click on the Start button for the Weather App to Output the report.
-8. To close the app click on the X on the top right of the pop up
+8. 12. You can change the output to a bar graph by pressing Toggle View button and the press the button again to go back to Output
+9. To close the app click on the X on the top right of the pop up
 
 Alternative steps
 You can also save your preferences like number 2 Set preferences from Original Command Line Interface (CLI)
@@ -46,7 +47,8 @@ You can also save your preferences like number 2 Set preferences from Original C
 9. If unhappy with settings click the Reset Setting Button
 10. Then in the Unit: drop down box pick either Imperial or Metric (ex Imperial)
 11. Finally click on the Start button for the Weather App to Output the report.
-12. To close the app click on the X on the top right of the pop up
+12. You can change the output to a bar graph by pressing Toggle View button and the press the button again to go back to Output
+13. To close the app click on the X on the top right of the pop up
 
 
 ## Dependencies

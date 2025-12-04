@@ -39,42 +39,5 @@ public class OutfitRecommender {
         }
         return temperatureRecommendation;
     }
-//current iteration theses are not used but will for iteration 3
-protected String precipitationOutfitRecommender(double precipitation) {
-    String precipitationrecommendation = "";
-    //chance of water falling from the sky, ice, snow, rain
-    if (precipitation < 0.00) {
-        precipitationrecommendation = "Somehow it got drier, carry water bottle";
-    } else if (precipitation <= 0.00) {
-        precipitationrecommendation = "Dress for the temperature and winds.";
-    } else if (precipitation <= 50.00) {
-        precipitationrecommendation = "make sure to carry some rain gear like a rain jacket and a jacket as it have 50/50 chance for rain.";
-    } else {
-        precipitationrecommendation = "wear carry rain gear like umbrella, boots, pants,  and try to find shelter as best you can to prevent getting wett";
-    }
-    return precipitationrecommendation;
-}
-
-//https://www.snickersworkwear.com/list/product-guide/dress-for-windy-weather
-    //found info here
-protected String windspeedOutfitRecommender(double windspeed, String unit) {
-    String windspeedRecommendation = "";
-    //if unit is kilometers, convert to miles
-//miles per secound
-    if (windspeed < 2.00) {
-        windspeedRecommendation = "wind speed is low enough to not really need wind resistant clothes";
-    } else if (windspeed <= 6.00) {
-        windspeedRecommendation = "Dress for the temperature";
-    } else if (windspeed <= 10.00) {
-        windspeedRecommendation = "starting to get cold, dress for 50 degrees fahrenheit";
-    } else if (windspeed <= 14.00) {
-        windspeedRecommendation = "start wearing some wind resistant clothes";
-    } else if (windspeed <= 18.00) {
-        windspeedRecommendation = "look for breath ability features of your workwear to secure it can ventilate your body heat, layer up and wear cold weather gear";
-    } else {
-        windspeedRecommendation = "try to find shelter as best you can to prevent wind from ripping through your layers,look for breath ability features of your workwear to secure it can ventilate your body heat, layer up and wear cold weather gear";
-    }
-    return windspeedRecommendation;
-    }
 }
 

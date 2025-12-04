@@ -369,15 +369,17 @@ public class UIMain extends Application {
         });
         return resetButton;
     }
-
+//this gives the how to run the app
     private Button getHelpButton(){
         helpButton.setOnAction(event -> {reportField.setText(
+                //tells how to run
                 "How to Use the Weather App:\n" +
-                        "- Enter a zipcode in the Zipcode field.\n" +
+                        "- Enter a zipcode in the Zipcode field. Example 47374\n" +
                         "- Choose a report type (Today's Report, Daily, or Outfit).\n" +
                         "- Select units (Imperial or Metric).\n" +
                         "- Click Start to generate your report.\n" +
-                        "- Settings allows you to save preferences.");
+                        "- Click the Toggle button to change output to a bar graph, hover over the bars to get more information.\n" +
+                        "- Settings allows you to save preferences, and set a theme for the app from a list of 6 choices.");
         });
 
         return helpButton;
