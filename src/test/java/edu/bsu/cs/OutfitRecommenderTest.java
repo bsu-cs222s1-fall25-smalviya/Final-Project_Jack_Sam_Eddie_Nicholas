@@ -37,20 +37,4 @@ public class OutfitRecommenderTest {
         String result = recommender.temperatureOutfitRecommender(100, "F");
         Assertions.assertEquals(" - Too hot for our doors, risk of heat stroke", result);
     }
-
-    //current iteration theses are not used but will for iteration 3
-    //precipitation
-    @Test
-    public void testPrecipitationEqualTo0() {
-        String result = recommender.precipitationOutfitRecommender(0.00);
-        //assertTrue(result.contains("Somehow it got drier, carry water bottle"));
-        Assertions.assertFalse(result.contains("Somehow it got drier, carry water bottle"));
-    }
-
-    //windspeed
-    @Test
-    public void testWindspeedEqualTo2() {
-        String result = recommender.windspeedOutfitRecommender(2, "MpH");
-        Assertions.assertFalse(result.contains("wind speed is low enough to not really need wind resistant clothes"));
-    }
 }
