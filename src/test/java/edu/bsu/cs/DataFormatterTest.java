@@ -46,7 +46,7 @@ public class DataFormatterTest {
         Next Day:
            -  Temperature: 22 degrees C
            -  Precipitation: 0%
-           -  Wind: 7 mph NNE
+           -  Wind: 11 km/h NNE
            -  Humidity: 34%
            -  Dew Point: 5 degrees C
         """;
